@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/main.css') }}">
+  <head>
+    <title>Googleplex Demo</title>
+  </head>
+  <body>
+    <h1>Googleplex Demo</h1>
+    <table class="table table-striped">
+      <tbody>
+      {% for l in lists %}
+        <tr>
+          <td>
+            <h3>{{ l.name }} - {{ l.author }}: {{ l.publication_date }}</h3>
+            {% for bs in l.bestsellers %}
+            <p><b>&emsp;{{ loop.index }}</b>: "{{ bs.name }}" - {{ bs.author }}: {{ bs.publication_date }} ({{ bs.reviews | length }} reviews)</p>
+            {% endfor %}
+            <b>Tags: <b>{% for t in l.tags %}{% if loop.index != 1 %}, {% endif %}<a style="color:red;">{{ t }}</a>{% endfor %}
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </body>
+</html>
