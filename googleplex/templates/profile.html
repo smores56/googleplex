@@ -3,6 +3,61 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="style.css">
 
+<style>
+
+.container {
+  font-family: 'Roboto', sans-serif;
+  position: relative;
+  width: 150px;
+  height: 30px;
+  border: thin solid #000;
+  cursor: pointer;
+}
+
+.switch {
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  background-color: #000;
+  transition: all 0.15s ease;
+  left: 0;
+  z-index: 1;
+}
+
+.container.activity {
+
+  border: thin solid #000;
+}
+
+.container.activity .switch {
+  left: 50%;
+  background-color: #000;
+}
+
+
+.label {
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  text-align: center;
+  padding-top: 5px;
+}
+
+.label.right {
+  left: 50%;
+}
+</style>
+
+<script>
+    function onContainerClick (event) {
+        if(event.classList.contains('activity')) {
+            event.classList.remove('activity');
+        } else {
+            event.classList.add('activity');
+        }
+    }
+</script>
+
 <html>
   <body>
       <div class="w3-bar w3-black"> <!-- header bar -->
@@ -18,6 +73,17 @@
       </div>
       <center class="profile_box">
           <!-- toggle switch -->
+            <div class="container" id="container" onclick="onContainerClick(this)">
+              <div class="switch" id="switch">
+              </div>
+              <div class="label left">
+                Activity
+              </div>
+              <div class="label right">
+                Profile
+              </div>
+            </div>
+
           <!-- Information box-->
       </center>
   </body>
