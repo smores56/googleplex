@@ -41,19 +41,51 @@
   height: 100%;
   text-align: center;
   padding-top: 5px;
+  z-index: 2;
 }
 
 .label.right {
   left: 50%;
+  z-index: 2;
 }
+
+.unselectable {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.profile_box {
+    /*display: inline-flex;*/
+    font: "Roboto";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    margin: auto;
+    background-color: #c0c0c0;
+    overflow: hidden;
+    border-radius: 10px;
+    /*padding: 10px;*/
+}
+
 </style>
 
 <script>
     function onContainerClick (event) {
         if(event.classList.contains('activity')) {
             event.classList.remove('activity');
+            document.getElementById("activityLabel").style.color = "white";
+            document.getElementById("profileLabel").style.color = "black";
+            document.getElementById("profileTable").hidden = false;
         } else {
             event.classList.add('activity');
+            document.getElementById("activityLabel").style.color = "black";
+            document.getElementById("profileLabel").style.color = "white";
+            document.getElementById("profileTable").hidden = true;
         }
     }
 </script>
@@ -71,20 +103,38 @@
         <a href="profile.html" class="w3-bar-item w3-button w3-right w3-padding-16">Profile</a>
         <a href="submit.html" class="w3-bar-item w3-button w3-right w3-padding-16">Submit a List</a>
       </div>
-      <center class="profile_box">
           <!-- toggle switch -->
+          <center>
             <div class="container" id="container" onclick="onContainerClick(this)">
-              <div class="switch" id="switch">
-              </div>
-              <div class="label left">
+              <div class="label left unselectable" id="activityLabel" style="color: white;">
                 Activity
               </div>
-              <div class="label right">
+              <div class="label right unselectable" id="profileLabel">
                 Profile
               </div>
+              <div class="switch" id="switch">
+              </div>
             </div>
+          <br/>
+        </center>
 
-          <!-- Information box-->
+        <!-- Information box-->
+        <center class="profile_box">
+          <table id="profileTable" cellpadding=10px>
+            <tr>
+              <td>
+                <font size="2">Username:<br/></font>
+                gburdell <br/>
+                <font size="2">Name:<br/></font>
+                George Burdell <br/>
+                <font size="2">E-mail:<br/></font>
+                gburdell@gatech.edu
+              </td>
+              <td>
+                <img src="profile_picture.jpg" height=150px width=150px>
+              </td>
+            </tr>
+          </table>
       </center>
   </body>
 </html>
