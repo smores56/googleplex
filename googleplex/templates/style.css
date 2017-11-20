@@ -19,14 +19,21 @@
     box-shadow: 0 0 10px #9ecaed;
 }
 
+.search_bar_top {
+    display: inline-flex;
+    /*position: absolute;*/
+    /*top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);*/
+    margin: auto;
+}
+
 .search_button {
     background-image: url("search_img.png");
     background-size: 28.29px 28.29px;
     height: 28.29px;
     width: 28.29px;
     margin: 2px;
-    /*background-color: Transparent;
-    background-repeat:no-repeat;*/
     border: none;
     cursor:pointer;
     overflow: hidden;
@@ -35,4 +42,8 @@
 .search_button:focus, .search_button:active, .search_button:hover {
     background-image: url("search_img_mouse_over.png");
     background-size: 28.29px 28.29px;
+}
+
+.profile_box {
+
 }
