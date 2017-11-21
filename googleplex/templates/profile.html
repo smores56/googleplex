@@ -7,7 +7,10 @@
 
 .container {
   font-family: 'Roboto', sans-serif;
-  position: relative;
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
   width: 150px;
   height: 30px;
   border: thin solid #000;
@@ -62,14 +65,35 @@
     /*display: inline-flex;*/
     font: "Roboto";
     position: absolute;
-    top: 50%;
+    top: 30%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
     margin: auto;
-    background-color: #c0c0c0;
+    background-color: #dadada;
     overflow: hidden;
     border-radius: 10px;
     /*padding: 10px;*/
+}
+
+.activity_page {
+  font: "Roboto";
+  /*position: relative;
+  top: 0%;*/
+  height: 100%;
+  /*left: 50%;
+  transform: translateX(-50%) translateY(-50%);*/
+  margin: auto;
+  background-color: #dadada;
+  overflow: hidden;
+  border-radius: 10px;
+  padding: 5px;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 10px;
+  display: block;
 }
 
 </style>
@@ -81,46 +105,48 @@
             document.getElementById("activityLabel").style.color = "white";
             document.getElementById("profileLabel").style.color = "black";
             document.getElementById("profileTable").hidden = false;
+            document.getElementById("activityPage").hidden = true;
         } else {
             event.classList.add('activity');
             document.getElementById("activityLabel").style.color = "black";
             document.getElementById("profileLabel").style.color = "white";
             document.getElementById("profileTable").hidden = true;
+            document.getElementById("activityPage").hidden = false;
         }
     }
 </script>
 
 <html>
-  <body>
+  <body height=100%>
       <div class="w3-bar w3-black"> <!-- header bar -->
         <a href="index.html" class="w3-bar-item w3-button w3-left w3-hover-none w3-hover-text-white w3-padding-16">Bestseller List Tracker</a>
         <span class="w3-bar-item w3-left w3-hover-none w3-center">
           <center class="search_bar_top">
             <input class="search_bar" type="text" size="40" name="search">
-            <input type="button" class="search_button">
+            <input type="button" class="search_button_dark">
           </center>
         </span>
         <a href="profile.html" class="w3-bar-item w3-button w3-right w3-padding-16">Profile</a>
         <a href="submit.html" class="w3-bar-item w3-button w3-right w3-padding-16">Submit a List</a>
       </div>
-          <!-- toggle switch -->
-          <center>
-            <div class="container" id="container" onclick="onContainerClick(this)">
-              <div class="label left unselectable" id="activityLabel" style="color: white;">
-                Activity
-              </div>
-              <div class="label right unselectable" id="profileLabel">
-                Profile
-              </div>
-              <div class="switch" id="switch">
-              </div>
-            </div>
-          <br/>
-        </center>
+      <!-- toggle switch -->
+      <center>
+        <div class="container" id="container" onclick="onContainerClick(this)">
+          <div class="label left unselectable" id="activityLabel" style="color: white;">
+            Activity
+          </div>
+          <div class="label right unselectable" id="profileLabel">
+            Profile
+          </div>
+          <div class="switch" id="switch">
+          </div>
+        </div>
+        <br/>
+      </center>
 
         <!-- Information box-->
-        <center class="profile_box">
-          <table id="profileTable" cellpadding=10px>
+        <center class="profile_box" id="profileTable">
+          <table cellpadding=10px>
             <tr>
               <td>
                 <font size="2">Username:<br/></font>
@@ -135,6 +161,32 @@
               </td>
             </tr>
           </table>
+      </center>
+
+      <center id="activityPage" hidden=true>
+        <table cellspacing="150">
+          <tr>
+            <td width=400px height=750px>
+              <center class="activity_page">
+                <b>Saved Searches</b>
+                <div class="w3-bar-block w3-transparent">
+                  <div class="w3-bar-item w3-hover-black">William Shakespeare</div>
+                  <div class="w3-bar-item w3-hover-black">Green Eggs and Ham</div>
+                </div>
+              </center>
+            </td>
+            <td width=400px height=750px>
+              <center class="activity_page">
+                <b>Submitted Lists</b>
+                <div class="w3-bar-block w3-transparent">
+                  <div class="w3-bar-item w3-hover-black">New York Times Bestsellers List: 2017</div>
+                  <div class="w3-bar-item w3-hover-black">New York Times Bestsellers LIst: 2016</div>
+                  <div class="w3-bar-item w3-hover-black">Publishers Weekly Bestsellers List: 2017</div>
+                </div>
+              </center>
+            </td>
+          </tr>
+        </table>
       </center>
   </body>
 </html>

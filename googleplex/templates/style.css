@@ -1,5 +1,6 @@
 .search {
     display: inline-flex;
+    flex-direction: column;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -21,10 +22,6 @@
 
 .search_bar_top {
     display: inline-flex;
-    /*position: absolute;*/
-    /*top: 50%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);*/
     margin: auto;
 }
 
@@ -41,5 +38,21 @@
 
 .search_button:focus, .search_button:active, .search_button:hover {
     background-image: url("search_img_mouse_over.png");
+    background-size: 28.29px 28.29px;
+}
+
+.search_button_dark {
+    background-image: url("search_img_dark.png");
+    background-size: 28.29px 28.29px;
+    height: 28.29px;
+    width: 28.29px;
+    margin: 2px;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+}
+
+.search_button_dark:focus, .search_button_dark:active, .search_button_dark:hover {
+    background-image: url("search_img_mouse_over_dark.png");
     background-size: 28.29px 28.29px;
 }
