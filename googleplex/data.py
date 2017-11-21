@@ -1,5 +1,5 @@
 from datetime import date
-from models import Bestseller, BestsellerList, Review
+from .models import Bestseller, BestsellerList, Review
 
 def load_bestsellers():
     lists = []

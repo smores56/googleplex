@@ -1,8 +1,8 @@
 import os
 from datetime import date
 from googleplex import app
-from data import load_bestsellers
-from models import Bestseller, BestsellerList, Review
+from .data import load_bestsellers
+from .models import Bestseller, BestsellerList, Review
 from flask import send_from_directory, render_template, request
 
 @app.route('/')
