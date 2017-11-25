@@ -75,6 +75,30 @@
     /*padding: 10px;*/
 }
 
+.submission_box {
+    /*display: inline-flex;*/
+    font: "Roboto";
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    /*margin: auto;*/
+    background-color: #dadada;
+    /*overflow: hidden;*/
+    border-radius: 10px;
+    /*padding: 10px;*/
+    width: 500px;
+    height: 500px;
+}
+
+button {
+  display:block;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+
+}
+
 .activity_page {
   font: "Roboto";
   /*position: relative;
@@ -115,6 +139,20 @@ ul {
         <a href="profile.html" class="w3-bar-item w3-button w3-right w3-padding-16">Profile</a>
         <a href="submit.html" class="w3-bar-item w3-button w3-right w3-padding-16">Submit a List</a>
       </div>
+
+      <!-- Submission box-->
+        <center class="submission_box" id="submissionBox">
+          <h4>Submission Method</h4><br><br><br>
+
+              <button>File Upload</button><br>
+
+              <button>Image Upload</button><br>
+
+              <button>Manual Upload</button><br><br><br><br>
+
+              <button>Next</button>
+
+      </center>
 
   </body>
 </html>
