@@ -2,7 +2,44 @@
 
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="style.css">
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('#file').hide();
+      $('#image').hide();
+    });
 
+    function showhide(){
+      var x = document.getElementById("file");
+      if (x.style.display === "none") {
+          x.style.display = "block";
+      } else {
+          x.style.display = "none";
+      }
+
+
+      var y = document.getElementById("image");
+      if (y.style.display === "none") {
+          y.style.display = "block";
+      } else {
+          y.style.display = "none";
+      }
+
+
+      var z = document.getElementById("submission");
+      if (z.style.display === "none") {
+          z.style.display = "block";
+      } else {
+          z.style.display = "none";
+      }
+    }
+
+
+
+  </script>
+
+</head>
 <style>
 
 .container {
@@ -61,20 +98,6 @@
   user-select: none;
 }
 
-.profile_box {
-    /*display: inline-flex;*/
-    font: "Roboto";
-    position: absolute;
-    top: 30%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);
-    margin: auto;
-    background-color: #dadada;
-    overflow: hidden;
-    border-radius: 10px;
-    /*padding: 10px;*/
-}
-
 .submission_box {
     /*display: inline-flex;*/
     font: "Roboto";
@@ -84,7 +107,7 @@
     transform: translateX(-50%) translateY(-50%);
     /*margin: auto;*/
     background-color: #dadada;
-    /*overflow: hidden;*/
+    overflow: hidden;
     border-radius: 10px;
     /*padding: 10px;*/
     width: 500px;
@@ -92,25 +115,61 @@
 }
 
 button {
+  background-color: #f2f2f2;
+  color: black;
+  border: 1px solid black;
   display:block;
-  padding: 10px;
+  padding: 5px;
   text-align: center;
   text-decoration: none;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+  cursor: pointer;
+  border-radius: 5px;
 
 }
 
-.activity_page {
-  font: "Roboto";
-  /*position: relative;
-  top: 0%;*/
-  height: 100%;
-  /*left: 50%;
-  transform: translateX(-50%) translateY(-50%);*/
-  margin: auto;
-  background-color: #dadada;
-  overflow: hidden;
-  border-radius: 10px;
-  padding: 5px;
+
+button:hover {
+    background-color: black;
+    padding: 10px;
+    color: white;
+}
+
+button:active{
+  background-color: black;
+    padding: 10px;
+    color: white;
+}
+
+button.active{
+  background-color: black;
+    padding: 10px;
+    color: white;
+}
+
+a {
+    text-decoration: none;
+    display: inline-block;
+    padding: 8px 16px;
+}
+
+a:hover {
+    background-color: #ddd;
+    color: black;
+}
+.previous {
+    background-color: #f1f1f1;
+    color: black;
+}
+
+.next {
+    background-color: #f1f1f1;
+    color: backs;
+}
+
+.round {
+    border-radius: 50%;
 }
 
 ul {
@@ -121,10 +180,6 @@ ul {
 }
 
 </style>
-
-<script>
-
-</script>
 
 <html>
   <body height=100%>
@@ -141,18 +196,44 @@ ul {
       </div>
 
       <!-- Submission box-->
+      <div id="submission">
         <center class="submission_box" id="submissionBox">
-          <h4>Submission Method</h4><br><br><br>
+          <h4>Submission Method</h4><br><br><br><br>
 
-              <button>File Upload</button><br>
+              <button id="selectfile" onclick="showhide()">File Upload</button><br>
 
-              <button>Image Upload</button><br>
+              <button onclick="showhide()">Image Upload</button><br>
 
-              <button>Manual Upload</button><br><br><br><br>
-
-              <button>Next</button>
+              <button>Manual Upload</button>
 
       </center>
+      </div>
+
+      <!-- File Upload-->
+      <div id="file">
+        <center class="submission_box" id="submissionBox">
+          <h4>File Upload</h4><br><br>
+
+              <p>Select a file:</p><input type="text" readonly><br><br>
+              <button onclick="upload()">Upload</button><br><br><br>
+              <a href="#" class="previous round" id="prev">&#8249;</a>
+              <a href="#" class="next round">&#8250;</a>
+
+      </center>
+      </div>
+
+      <!-- Image Upload-->
+      <div id="image">
+        <center class="submission_box" id="submissionBox">
+          <h4>Image Upload</h4><br><br>
+              <p>Select an image:</p><input type="text" readonly><br><br>
+              <button>Upload</button><br><br><br>
+              <a href="#" onclick="showhide()" class="previous round" id="prev">&#8249;</a>
+              <a href="#"class="next round">&#8250;</a>
+
+      </center>
+      </div>
+
 
   </body>
 </html>
