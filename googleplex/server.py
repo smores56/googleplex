@@ -39,12 +39,10 @@ def preview():
 @app.route('/results')
 @app.route('/results.html')
 def results():
-    start = date(*[int(x) for x in (request.args.get('start') or '0001-01-01').split('-')])
-    end = date(*[int(x) for x in (request.args.get('end') or '9999-12-31').split('-')])
-    return render_template('results.html', lists=search(start, end))
+    search = request.args.get('search') or ''
+    return render_template('results.html', lists=search_db(search), search=search)
 
-def search(start_date, end_date):
-    return [l for l in DATABASE_DATA if isinstance(l.publication_date, date) and
-            (l.publication_date >= start_date and l.publication_date <= end_date)]
+def search_db(name):
+    return [l for l in DATABASE_DATA if name.lower() in l.name.lower()]
 
 DATABASE_DATA = load_bestsellers()
