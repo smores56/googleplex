@@ -1,97 +1,82 @@
 <!-- googleplex/templates/preview.html -->
 
-<html lang="en">
-<head>
-  <title>Preview List</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+{% extends "overlay.html" %}
+{% block title %}Preview List{% endblock %}
+{% block style %}
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
   <!-- TODO: move css file to separate dir -->
-  <link href = "{{url_for('static', filename='style.css') }}" rel="stylesheet">
+  <!-- <link rel="stylesheet" href="static/styles/main.css"> -->
   <!-- link to font-awesome for icons in the future -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-</head>
-<body>
-  <div class="w3-bar w3-black"> <!-- header bar -->
-    <a href="index.html" class="w3-bar-item w3-button w3-left w3-hover-none w3-hover-text-white w3-padding-16">Bestseller List Tracker</a>
-    <span class="w3-bar-item w3-left w3-hover-none w3-center">
-      <center class="search_bar_top" style="color:black;">
-        <input class="search_bar" type="text" size="40" name="search" placeholder="Search bestseller list">
-        <input type="button" class="search_button_dark" value="Search">
-      </center>
-    </span>
-    <a href="profile.html" class="w3-bar-item w3-button w3-right w3-padding-16">Profile</a>
-    <a href="submit.html" class="w3-bar-item w3-button w3-right w3-padding-16">Submit a List</a>
-  </div>
-  </br></br>
-  <div class="content-section">
-    <div class = "container">
-      <div class = "row">
-        <div class="col-lg-12">
-          <ul class="list-inline">
-              <table class="table table-bordered">
-                <thead>
-                  <tr>
-                    <th>
-                      <span class="col-lg-12" style="text-align:center; font-size:25px"> List Preview </span>
-                    </th>
-                  </tr>
-                  <tr>
-                    <th>
-                      <!-- Added space in front to align with other headers -->
-                      <span class="col-lg-4" style="align-items:center;">&nbsp;&nbsp;List Title : Weird, Odd List</span>
-                      <a class = "btn btn-default">
-                        <i class="fa fa-plus"></i>&nbsp;Tag
-                      </a>
-                    </th>
-                  </tr>
-                  <tr>
-                    <th>
-                      <span class="col-lg-4" style="align-items:center;">Book Title : Weird Days</span>
-                      <a class = "btn btn-default">
-                        <i class="fa fa-plus"></i>&nbsp;Tag
-                      </a>
-                    </th>
-                  </tr>
-                  <tr>
-                    <th>
-                      <span class="col-lg-4" style="align-items:center;">Book Title : Creepy Days</span>
-                      <a class = "btn btn-default">
-                        <i class="fa fa-plus"></i>&nbsp;Tag
-                      </a>
-                    </th>
-                  </tr>
-                  <tr>
-                    <th>
-                      <span class="col-lg-4" style="align-items:center;">Book Title : Slightly Off Days</span>
-                      <a class = "btn btn-default">
-                        <i class="fa fa-plus"></i>&nbsp;Tag
-                      </a>
-                    </th>
-                  </tr>
-                  <tr>
-                    <th>
-                      <span class="col-lg-4" style="align-items:center;">Book Title : Invisible Days</span>
-                      <a class = "btn btn-default">
-                        <i class="fa fa-plus"></i>&nbsp;Tag
-                      </a>
-                    </th>
-                  </tr>
-                  <tr>
-                    <th>
-                      <a class = "btn btn-success">
-                      <i class = "fa fa-upload"></i>&nbsp;Upload
-                      </a>
-                      <a class = "btn btn-danger">
-                      <i class = "fa fa-arrow-left"></i>&nbsp;Cancel
-                      </a>
-                    </th>
-                  </tr>
-                </thead>
-              </table>
-            </ul>
-            </div>
-          </div>
-        </div>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+{% endblock %}
+{% block content %}
+  <div class = "container">
+    <div class = "row">
+      <div class="col-lg-12">
+        <ul class="list-inline">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>
+                  <span class="col-lg-12" style="text-align:center; font-size:25px"> List Preview </span>
+                </th>
+              </tr>
+              <tr>
+                <th>
+                  <!-- Added space in front to align with other headers -->
+                  <span class="col-lg-4" style="align-items:center;">&nbsp;&nbsp;List Title : Weird, Odd List</span>
+                  <a class = "btn btn-default">
+                    <i class="fa fa-plus"></i>&nbsp;Tag
+                  </a>
+                </th>
+              </tr>
+              <tr>
+                <th>
+                  <span class="col-lg-4" style="align-items:center;">Book Title : Weird Days</span>
+                  <a class = "btn btn-default">
+                    <i class="fa fa-plus"></i>&nbsp;Tag
+                  </a>
+                </th>
+              </tr>
+              <tr>
+                <th>
+                  <span class="col-lg-4" style="align-items:center;">Book Title : Creepy Days</span>
+                  <a class = "btn btn-default">
+                    <i class="fa fa-plus"></i>&nbsp;Tag
+                  </a>
+                </th>
+              </tr>
+              <tr>
+                <th>
+                  <span class="col-lg-4" style="align-items:center;">Book Title : Slightly Off Days</span>
+                  <a class = "btn btn-default">
+                    <i class="fa fa-plus"></i>&nbsp;Tag
+                  </a>
+                </th>
+              </tr>
+              <tr>
+                <th>
+                  <span class="col-lg-4" style="align-items:center;">Book Title : Invisible Days</span>
+                  <a class = "btn btn-default">
+                    <i class="fa fa-plus"></i>&nbsp;Tag
+                  </a>
+                </th>
+              </tr>
+              <tr>
+                <th>
+                  <a class="btn btn-success" onclick="location.href='results'">
+                    <i class="fa fa-upload"></i>&nbsp;Upload
+                  </a>
+                  <a class="btn btn-danger" onclick="location.href='/'">
+                  <i class="fa fa-arrow-left"></i>&nbsp;Cancel
+                  </a>
+                </th>
+              </tr>
+            </thead>
+          </table>
+        </ul>
       </div>
-</body>
-</html>
+    </div>
+  </div>
+{% endblock %}

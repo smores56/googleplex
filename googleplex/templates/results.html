@@ -1,25 +1,25 @@
-<!DOCTYPE html>
-<html>
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/main.css') }}">
-  <head>
-    <title>Googleplex Demo</title>
-  </head>
-  <body>
-    <h1>Googleplex Demo</h1>
-    <table class="table table-striped">
-      <tbody>
-      {% for l in lists %}
-        <tr>
-          <td>
-            <h3>{{ l.name }} - {{ l.author }}: {{ l.publication_date }}</h3>
-            {% for bs in l.bestsellers %}
-            <p><b>&emsp;{{ loop.index }}</b>: "{{ bs.name }}" - {{ bs.author }}: {{ bs.publication_date }} ({{ bs.reviews | length }} reviews)</p>
-            {% endfor %}
-            <b>Tags: <b>{% for t in l.tags %}{% if loop.index != 1 %}, {% endif %}<a style="color:red;">{{ t }}</a>{% endfor %}
-          </td>
-        </tr>
-      {% endfor %}
-      </tbody>
-    </table>
-  </body>
-</html>
+<!-- googleplex/templates/results.html -->
+
+{% extends "overlay.html" %}
+{% block title %}Results{% endblock %}
+{% block style %}
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+{% endblock %}
+{% block content %}
+  <h1>{{ lists | length }} Search Result{% if lists | length != 1 %}s{% endif %} Found{% if search | length > 0 %} For "{{ search }}"{% endif %}:</h1>
+  <table class="table table-striped">
+    <tbody>
+    {% for l in lists %}
+      <tr>
+        <td>
+          <h3>{{ l.name }} - {{ l.author }}: {{ l.publication_date }}</h3>
+          {% for bs in l.bestsellers %}
+          <p><b>&emsp;{{ loop.index }}</b>: "{{ bs.name }}" - {{ bs.author }}: {{ bs.publication_date }} ({{ bs.reviews | length }} reviews)</p>
+          {% endfor %}
+          <b>Tags: <b>{% for t in l.tags %}{% if loop.index != 1 %}, {% endif %}<a style="color:red;">{{ t }}</a>{% endfor %}
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
