@@ -8,32 +8,52 @@
     $(document).ready(function() {
       $('#file').hide();
       $('#image').hide();
+
+      $("#selectfile").click(function(){
+        $("#sumission").hide();
+        $("#file").show();
+      });
+
+
+      $("#selectimage").click(function(){
+        $("#submission").hide();
+        $("#image").show();
+      });
+
+      $("#prevfile").click(function(){
+        $("#submission").show();
+        $("#file").hide();
+      });
+
+      $("#previmage").click(function(){
+        $("#submission").show();
+        $("#image").hide();
+      });
+
     });
 
-    function showhide(){
-      var x = document.getElementById("file");
-      if (x.style.display === "none") {
-          x.style.display = "block";
-      } else {
-          x.style.display = "none";
-      }
 
 
-      var y = document.getElementById("image");
-      if (y.style.display === "none") {
-          y.style.display = "block";
-      } else {
-          y.style.display = "none";
-      }
 
 
-      var z = document.getElementById("submission");
-      if (z.style.display === "none") {
-          z.style.display = "block";
-      } else {
-          z.style.display = "none";
-      }
-    }
+    // function showhide(id){
+
+
+    //   var x = document.getElementById(id);
+    //   if (x.style.display === "none") {
+    //       x.style.display = "block";
+    //   } else {
+    //       x.style.display = "none";
+    //   }
+
+
+    //   // var z = document.getElementById("submission");
+    //   // if (z.style.display === "none") {
+    //   //     z.style.display = "block";
+    //   // } else {
+    //   //     z.style.display = "none";
+    //   // }
+    // }
 
 
 
@@ -200,9 +220,9 @@ ul {
         <center class="submission_box" id="submissionBox">
           <h4>Submission Method</h4><br><br><br><br>
 
-              <button id="selectfile" onclick="showhide()">File Upload</button><br>
+              <button id="selectfile">File Upload</button><br>
 
-              <button onclick="showhide()">Image Upload</button><br>
+              <button id="selectimage">Image Upload</button><br>
 
               <button>Manual Upload</button>
 
@@ -215,8 +235,8 @@ ul {
           <h4>File Upload</h4><br><br>
 
               <p>Select a file:</p><input type="text" readonly><br><br>
-              <button onclick="upload()">Upload</button><br><br><br>
-              <a href="#" class="previous round" id="prev">&#8249;</a>
+              <button onclick="upload('submission')">Upload</button><br><br><br>
+              <a href="#" class="previous round" id="prevfile">&#8249;</a>
               <a href="#" class="next round">&#8250;</a>
 
       </center>
@@ -228,7 +248,7 @@ ul {
           <h4>Image Upload</h4><br><br>
               <p>Select an image:</p><input type="text" readonly><br><br>
               <button>Upload</button><br><br><br>
-              <a href="#" onclick="showhide()" class="previous round" id="prev">&#8249;</a>
+              <a href="#" class="previous round" id="previmage">&#8249;</a>
               <a href="#"class="next round">&#8250;</a>
 
       </center>
