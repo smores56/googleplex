@@ -104,14 +104,14 @@ ul {
             event.classList.remove('activity');
             document.getElementById("activityLabel").style.color = "white";
             document.getElementById("profileLabel").style.color = "black";
-            document.getElementById("profileTable").hidden = false;
-            document.getElementById("activityPage").hidden = true;
+            document.getElementById("profileTable").hidden = true;
+            document.getElementById("activityPage").hidden = false;
         } else {
             event.classList.add('activity');
             document.getElementById("activityLabel").style.color = "black";
             document.getElementById("profileLabel").style.color = "white";
-            document.getElementById("profileTable").hidden = true;
-            document.getElementById("activityPage").hidden = false;
+            document.getElementById("profileTable").hidden = false;
+            document.getElementById("activityPage").hidden = true;
         }
     }
 </script>
@@ -145,7 +145,7 @@ ul {
       </center>
 
         <!-- Information box-->
-        <center class="profile_box" id="profileTable">
+        <center class="profile_box" id="profileTable" hidden=true>
           <table cellpadding=10px>
             <tr>
               <td>
@@ -163,7 +163,7 @@ ul {
           </table>
       </center>
 
-      <center id="activityPage" hidden=true>
+      <center id="activityPage">
         <table cellspacing="150">
           <tr>
             <td width=400px height=750px>
