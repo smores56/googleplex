@@ -11,14 +11,14 @@
     function onContainerClick (event) {
         if(event.classList.contains('activity')) {
             event.classList.remove('activity');
-            document.getElementById("activityLabel").style.color = "white";
-            document.getElementById("profileLabel").style.color = "black";
+            document.getElementById("activityLabel").style.color = "black";
+            document.getElementById("profileLabel").style.color = "white";
             document.getElementById("profileTable").hidden = false;
             document.getElementById("activityPage").hidden = true;
         } else {
             event.classList.add('activity');
-            document.getElementById("activityLabel").style.color = "black";
-            document.getElementById("profileLabel").style.color = "white";
+            document.getElementById("activityLabel").style.color = "white";
+            document.getElementById("profileLabel").style.color = "black";
             document.getElementById("profileTable").hidden = true;
             document.getElementById("activityPage").hidden = false;
         }
@@ -29,8 +29,8 @@
   <!-- toggle switch -->
   <center>
     <div class="container" id="container" onclick="onContainerClick(this)">
-      <div class="label left unselectable" id="activityLabel" style="color: white;">Activity</div>
-      <div class="label right unselectable" id="profileLabel">Profile</div>
+      <div class="label left unselectable" id="profileLabel" style="color: white;">Profile</div>
+      <div class="label right unselectable" id="activityLabel">Activity</div>
       <div class="switch" id="switch"></div>
     </div>
     <br/>
