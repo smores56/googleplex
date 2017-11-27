@@ -1,15 +1,3 @@
-List 1\Author 1\2017-11-05\Graphic Novels
-The Walking Dead Volume 28\Robert Kirkman, Author, Charlie Adlard, Artist, Stefano Gaudiano, Artist, Cliff Rathburn, Artist, Dave Stewart, Artist\2017-10-01\Nothing to see here\Jim,5,Pretty great, I thought.\Nancy,3,meh.
-Overwatch: Anthology Volume 1\Blizzard Entertainment, Author, Matt Burns, Author, Roberts Brooks, Author, Andrew Robinson, Author, Micky Neilson, Author\2017-10-01\Nothing to see here\Jack,5,Pretty great, I thought.\Jill,3,meh.
-The Walking Dead: Here's Negan\Charlie Adlard, Artist, Cliff Rathburn, Artist, Dave Stewart, Artist, Robert Kirkman, Author\2017-10-01\Nothing to see here\Jim,5,Pretty great, I thought.\Karen,2,not good.
-Batman/The Flash: The Button Deluxe Edition\Joe InvisibleTom King, Author, Joshua Williamson, Author, Jason Fabok, Illustrator, Howard Porter, Illustrator,5,Pretty great, I thought.\Karen,2,not good.
-Tokyo Ghoul: Re, Vol. 1\Sui Ishida\2017-10-01\Nothing to see here\Jim,5,Pretty great, I thought.\Karen,2,not good.
-
-Top Mystery/Detective\Author 2\2017-11-05Detective,Mystery,Suspense
-Deep Freeze\John Sandford\2017-10-01\Nothing to see here\Jim,5,Pretty great, I thought.\Nancy,3,meh.
-Cross the Line\James Patterson\2017-11-01\Nothing to see here\Jack,5,Pretty great, I thought.\Jill,3,meh.
-Escape Clause\John Sandford\2017-11-01\Nothing to see here\Jim,5,Pretty great, I thought.\Karen,2,not good.
-The Girl Who Takes an Eye for an Eye: A Lisbeth Salander Novel, Continuing Stieg Larsson's Millennium Series\David Lagercrantz\2017-11-01\Nothing to see here\Jim,5,Pretty great, I thought.\Karen,2,not good.
 
 Top 10 Overall\Author 3\2017-11-27\Top,Overall
 The Getaway(Diary of a Wimpy Kid Book 12)\Jeff Kinney\2017-11-01\Nothing to see here\Jim,5,Pretty great, I thought.\Nancy,3,meh.
