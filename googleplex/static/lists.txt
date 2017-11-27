@@ -8,3 +8,15 @@ List 2\Author 2\2020-08-23\Feelings,Niceness
 Happy Days\Some Guy\2008-02-02\Nothing to see here\Jim,5,Pretty great, I thought.\Nancy,3,meh.
 Sad Days\Some Other Guy\2008-03-05\Nothing to see here\Jack,5,Pretty great, I thought.\Jill,3,meh.
 Mediocre Days\Joe Somebody\2009-03-15\Nothing to see here\Jim,5,Pretty great, I thought.\Karen,2,not good.
+
+Top 10 Overall\Author 3\2017-11-27\Top
+Weird Days\Some Lookie Guy\2008-01-02\Nothing to see here\Jim,5,Pretty great, I thought.\Nancy,3,meh.
+Creepy Days\Some Spooky Guy\2008-03-05\Nothing to see here\Jack,5,Pretty great, I thought.\Jill,3,meh.
+Slightly Off Days\Joe Spookbody\2009-12-15\Nothing to see here\Jim,5,Pretty great, I thought.\Karen,2,not good.
+Invisible Days\Joe Invisible\2006-01-01\Nothing to see here\Jim,5,Pretty great, I thought.\Karen,2,not good.
+
+Top 10 Overall\Author 3\2017-11-27\Top
+Weird Days\Some Lookie Guy\2008-01-02\Nothing to see here\Jim,5,Pretty great, I thought.\Nancy,3,meh.
+Creepy Days\Some Spooky Guy\2008-03-05\Nothing to see here\Jack,5,Pretty great, I thought.\Jill,3,meh.
+Slightly Off Days\Joe Spookbody\2009-12-15\Nothing to see here\Jim,5,Pretty great, I thought.\Karen,2,not good.
+Invisible Days\Joe Invisible\2006-01-01\Nothing to see here\Jim,5,Pretty great, I thought.\Karen,2,not good.
