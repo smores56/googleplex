@@ -1,12 +1,12 @@
 
-Top 10 Overall\Author 3\2017-11-27\Top,Overall
+Top 10 Overall\Publishers Weeky\2017-11-27\Top,Overall
 The Getaway(Diary of a Wimpy Kid Book 12)\Jeff Kinney\2017-11-01\Nothing to see here\Jim,5,Pretty great, I thought.\Nancy,3,meh.
 Oathbringer\Brandon Sanderson\2017-11-01\Nothing to see here\Jack,5,Pretty great, I thought.\Jill,3,meh.
 Hardcore Twenty-Four: A Stephanie Plum Novel\Janet Evanovich\2017-11-01\Nothing to see here\Jim,5,Pretty great, I thought.\Karen,2,not good.
 Wonder\RJ Palacio\2012-02-01\Nothing to see here\Jim,5,Pretty great, I thought.\Karen,2,not good.
 The Rooster Bar\John Grisham\2017-10-01\Nothing to see here\Jim,5,Pretty great, I thought.\Karen,2,not good.
 
-Top Cookbooks\Author 4\2017-11-27\Top,Cooking,Food
+Top Cookbooks\Publishers Weekly\2017-11-27\Top,Cooking,Food
 The Pioneer Woman Cooks: Come and Get It!: Simple, Scrumptious Recipes for Crazy Busy Lives\Red Drummond\2017-10-01\Nothing to see here\Jim,5,Pretty great, I thought.\Nancy,3,meh.
 Instant Pot Miracle: From Gourmet to Everyday, 175 Must-Have Recipes\The Editors at Houghton Mifflin Harcourt\2017-10-01\Nothing to see here\Jack,5,Pretty great, I thought.\Jill,3,meh.
 Smitten Kitchen Every Day: Triumphant and Unfussy New Favorites\Deb Perelman\2017-10-01\Nothing to see here\Jim,5,Pretty great, I thought.\Karen,2,not good.
