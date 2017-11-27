@@ -4,8 +4,32 @@
 {% block title %}Results{% endblock %}
 {% block style %}
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="static/styles/main.css">
 {% endblock %}
 {% block content %}
+  <div class="left">
+    <b>Sort By Genre:</b>
+    <li><input type="checkbox"></input><span type="label">Academic</span></li>
+    <li><input type="checkbox"></input><span type="label">Biography</span></li>
+    <li><input type="checkbox"></input><span type="label">Drama</span></li>
+    <li><input type="checkbox"></input><span type="label">Fantasy</span></li>
+    <li><input type="checkbox"></input><span type="label">Fiction</span></li>
+    <li><input type="checkbox"></input><span type="label">History</span></li>
+    <li><input type="checkbox"></input><span type="label">Horror</span></li>
+    <li><input type="checkbox"></input><span type="label">Mystery</span></li>
+    <li><input type="checkbox"></input><span type="label">Non-Fiction</span></li>
+    <li><input type="checkbox"></input><span type="label">Science Fiction</span></li>
+    <br>
+    <b>Sort By Date Published:</b>
+    <li><input type="checkbox"></input><span type="label">Pre 1900's</span></li>
+    <li><input type="checkbox"></input><span type="label">1900-1920</span></li>
+    <li><input type="checkbox"></input><span type="label">1920-1940</span></li>
+    <li><input type="checkbox"></input><span type="label">1940-1960</span></li>
+    <li><input type="checkbox"></input><span type="label">1960-1980</span></li>
+    <li><input type="checkbox"></input><span type="label">1980-2000</span></li>
+    <li><input type="checkbox"></input><span type="label">2000-2010</span></li>
+    <li><input type="checkbox"></input><span type="label">2010-Present</span></li>
+  </div>
   <h1>{{ lists | length }} Search Result{% if lists | length != 1 %}s{% endif %} Found{% if search | length > 0 %} For "{{ search }}"{% endif %}:</h1>
   <table class="table table-striped">
     <tbody>
