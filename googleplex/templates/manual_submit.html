@@ -1,0 +1,157 @@
+{% extends "overlay.html" %} {% block title %}Manual Submit{% endblock %} {% block style %}
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+{% endblock %}
+{% block header %}
+<div id="header" class="w3-bar w3-black">
+  <!-- header bar -->
+  <a href="profile.html" class="w3-bar-item w3-button w3-right w3-padding-16">Profile</a>
+  <a href="submit.html" class="w3-bar-item w3-button w3-right w3-padding-16">Submit a List</a>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    // put your Javascript here
+    $("div").slice(0, 2).show(); // select the first ten
+    $("#load").click(function(e) { // click event for load more
+      e.preventDefault();
+      $("div:hidden").slice(0, 1).show(); // select next 10 hidden divs and show them
+
+    });
+});
+
+</script>
+{% endblock %}
+<div>
+  <table style="width:100%">
+    <tr>
+      <span class="col-lg-4" style="text-align:left; font-size:24px">List Title: </span>
+      <input type="text" name="input1" value="Weird, Odd List" readonly="true">
+
+    </tr>
+    <tr>
+      <td>Book detail: </td>
+      <td>
+        <table style="width:80%">
+          <tr>
+            <td>
+              <span class="col-lg-3" style="text-align:left">Title: </span>
+              <input type="text" name="input1" value="Weird Days" readonly="true">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span class="col-lg-4" style="text-align:left">Author: </span>
+              <input type="text" name="input1" value=" " readonly="true">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span class="col-lg-4" style="text-align:left">Year Published: </span>
+              <input type="text" name="input1" value=" " readonly="true">
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<div>
+  <table style="width:100%">
+    <tr>
+      <td>Book detail: </td>
+      <td>
+        <table style="width:80%">
+          <tr>
+            <td>
+              <span class="col-lg-3" style="text-align:left">Title: </span>
+              <input type="text" name="input1" value="Creepy Days" readonly="true">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span class="col-lg-4" style="text-align:left">Author: </span>
+              <input type="text" name="input1" value=" " readonly="true">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span class="col-lg-4" style="text-align:left">Year Published: </span>
+              <input type="text" name="input1" value=" " readonly="true">
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<div>
+  <table style="width:100%">
+    <tr>
+      <td>Book detail: </td>
+      <td>
+        <table style="width:80%">
+          <tr>
+            <td>
+              <span class="col-lg-3" style="text-align:left">Title: </span>
+              <input type="text" name="input1" value="Slightly Off Days" readonly="true">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span class="col-lg-4" style="text-align:left">Author: </span>
+              <input type="text" name="input1" value=" " readonly="true">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span class="col-lg-4" style="text-align:left">Year Published: </span>
+              <input type="text" name="input1" value=" " readonly="true">
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<div>
+  <table style="width:100%">
+    <tr>
+      <td>Book detail: </td>
+      <td>
+        <table style="width:80%">
+          <tr>
+            <td>
+              <span class="col-lg-3" style="text-align:left">Title: </span>
+              <input type="text" name="input1" value="Invisible Days" readonly="true">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span class="col-lg-4" style="text-align:left">Author: </span>
+              <input type="text" name="input1" value=" " readonly="true">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span class="col-lg-4" style="text-align:left">Year Published: </span>
+              <input type="text" name="input1" value=" " readonly="true">
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<button id="load">Add new book +</button>
+<style>
+div {
+  display: none;
+}
+</style>
