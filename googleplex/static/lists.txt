@@ -11,3 +11,9 @@ The Pioneer Woman Cooks: Come and Get It!: Simple, Scrumptious Recipes for Crazy
 Instant Pot Miracle: From Gourmet to Everyday, 175 Must-Have Recipes\The Editors at Houghton Mifflin Harcourt\2017-10-01\Nothing to see here\Jack,5,Pretty great, I thought.\Jill,3,meh.
 Smitten Kitchen Every Day: Triumphant and Unfussy New Favorites\Deb Perelman\2017-10-01\Nothing to see here\Jim,5,Pretty great, I thought.\Karen,2,not good.
 The Instant Pot(r) Electric Pressure Cooker Cookbook: Easy Recipes for Fast & Healthy Meals\Laurel Randolph\2017-04-01\Nothing to see here\Jim,5,Pretty great, I thought.\Karen,2,not good.
+
+Top Mystery,Detective\Publishers Weekly\2017-11-05\Detective,Mystery,Suspense
+Deep Freeze\John Sandford\2017-10-01\Nothing to see here\Jim,5,Pretty great, I thought.\Nancy,3,meh.
+Cross the Line\James Patterson\2017-11-01\Nothing to see here\Jack,5,Pretty great, I thought.\Jill,3,meh.
+Escape Clause\John Sandford\2017-11-01\Nothing to see here\Jim,5,Pretty great, I thought.\Karen,2,not good.
+The Girl Who Takes an Eye for an Eye: A Lisbeth Salander Novel, Continuing Stieg Larsson's Millennium Series\David Lagercrantz\2017-11-01\Nothing to see here\Jim,5,Pretty great, I thought.\Karen,2,not good.
