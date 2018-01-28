@@ -1,12 +1,5 @@
 CREATE EXTENSION hstore;
 
-CREATE TABLE files (
-    id      serial PRIMARY KEY,
-    list_id integer NOT NULL REFERENCES lists ON DELETE CASCADE,
-    name    text NOT NULL,
-    path    text NOT NULL
-);
-
 CREATE TABLE users (
     id          serial PRIMARY KEY,
     email       text NOT NULL UNIQUE,
@@ -29,7 +22,7 @@ CREATE TABLE authors (
     -- ADD MORE FIELDS IN THE FUTURE?
 );
 
-CREATE TABLE lists (
+CREATE TABLE bestseller_lists (
     id              serial PRIMARY KEY,
     contributor_id  integer REFERENCES users ON DELETE SET NULL,
     title           text NOT NULL,
@@ -37,25 +30,32 @@ CREATE TABLE lists (
     description     text,
     num_bestsellers integer NOT NULL DEFAULT '1',
     authored_date   date,
-    submission_date date NOT NULL,
+    submission_date date NOT NULL
 );
 
 CREATE TABLE bestsellers (
-    id          serial PRIMARY KEY,
-    list_id     integer NOT NULL REFERENCES lists ON DELETE CASCADE,
-    title       text NOT NULL,
-    author      text,
-    description text,
-    links       hstore -- a key / value datatype for storing link names and paths
+    id                 serial PRIMARY KEY,
+    bestseller_list_id integer NOT NULL REFERENCES bestseller_lists ON DELETE CASCADE,
+    title              text NOT NULL,
+    author             text,
+    description        text,
+    links              hstore -- a key / value datatype for storing link names and paths
 );
 
 CREATE TABLE reviews (
-    id            serial PRIMARY KEY,
-    list_id       integer NOT NULL REFERENCES lists ON DELETE CASCADE,
-    user_id       integer REFERENCES users ON DELETE SET NULL,
-    rating        integer NOT NULL CHECK(rating >= 1 AND rating <= 5),
-    authored_time timestamp NOT NULL,
-    text          text NOT NULL
+    id                 serial PRIMARY KEY,
+    bestseller_list_id integer NOT NULL REFERENCES bestseller_lists ON DELETE CASCADE,
+    user_id            integer REFERENCES users ON DELETE SET NULL,
+    rating             integer NOT NULL CHECK(rating >= 1 AND rating <= 5),
+    authored_time      timestamp NOT NULL,
+    text               text NOT NULL
+);
+
+CREATE TABLE files (
+    id                 serial PRIMARY KEY,
+    bestseller_list_id integer NOT NULL REFERENCES bestseller_lists ON DELETE CASCADE,
+    name               text NOT NULL,
+    path               text NOT NULL
 );
 
 CREATE TABLE searches (
@@ -68,7 +68,7 @@ CREATE TABLE searches (
 CREATE TABLE sessions (
     id          serial PRIMARY KEY,
     user_id     integer NOT NULL REFERENCES users ON DELETE CASCADE,
-    random_int  integer NOT NULL,
+    uuid        text NOT NULL,
     expire_time timestamp NOT NULL
 );
 
@@ -79,4 +79,15 @@ CREATE TABLE messages (
     send_time    text NOT NULL,
     subject      text NOT NULL,
     text         text NOT NULL
+);
+
+CREATE TABLE tags (
+    id   serial PRIMARY KEY,
+    name text NOT NULL
+);
+
+create table tag_bestseller_list_junction (
+    tag_id             integer REFERENCES tags,
+    bestseller_list_id integer REFERENCES bestseller_lists,
+    constraint id PRIMARY KEY (tag_id, bestseller_list_id)
 );
