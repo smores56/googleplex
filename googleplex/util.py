@@ -2,7 +2,7 @@ from os import environ
 from os.path import join, dirname
 from dotenv import load_dotenv
 from functools import wraps
-from sanic.response import html
+from sanic import response
 from jinja2 import Environment, PackageLoader, select_autoescape
 import pyscrypt
 
@@ -14,8 +14,7 @@ def load_config():
     if load_config.CONFIG is None:
         fields = []
         load_config.CONFIG = {}
-        for field in ['DATABASE_URL', 'DB_USER', 'DB_NAME', 'DB_PASS', 'DB_HOST',
-                      'SESSION_COOKIE_SECRET_KEY']:
+        for field in ['DB_USER', 'DB_NAME', 'DB_PASS', 'DB_HOST', 'SESSION_COOKIE_SECRET_KEY']:
             value = environ.get(field, None)
             if value is None:
                 raise KeyError('The environment variable "%s" was not set. Please set it in \
@@ -33,11 +32,11 @@ load_config.CONFIG = None
 def render_template(name, **kwargs):
     if render_template.env is None:
         render_template.env = Environment(
-            loader=PackageLoader('__main__', 'templates'),
+            loader=PackageLoader('googleplex', 'templates'),
             autoescape=select_autoescape(['html'])
         )
 
-    return html(render_template.env.get_template(name).render(**kwargs))
+    return response.html(render_template.env.get_template(name).render(**kwargs))
 
 
 render_template.env = None
@@ -69,3 +68,7 @@ def scrypt(str_in, hash_str):
                          r=1,
                          p=1,
                          dkLen=32).encode('hex')
+
+
+async def load_file(filename):
+    return await response.file(join(dirname(__file__), filename))

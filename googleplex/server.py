@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import os
 from .models import *
 from .util import *
@@ -50,23 +48,22 @@ async def login(request):
 
 @app.route('/favicon.ico')
 async def favicon(request):
-    return send_from_directory(os.path.join(app.root_path, 'static/images/'), 'favicon.ico',
-                               mimetype='image/vnd.microsoft.icon')
+    return await load_file('/static/images/favicon.ico')
 
 
 @app.route('/images/<image>')
 async def images(request, image):
-    return send_from_directory(os.path.join(app.root_path, 'static/images/'), image)
+    return await load_file(os.path.join('./static/images/', image))
 
 
 @app.route('/scripts/<script>')
 async def scripts(request, script):
-    return send_from_directory(os.path.join(app.root_path, 'static/scripts/'), script)
+    return await load_file(os.path.join('./static/scripts/', script))
 
 
 @app.route('/styles/<sheet>')
 async def styles(request, sheet):
-    return send_from_directory(os.path.join(app.root_path, 'static/styles/'), sheet)
+    return await load_file(os.path.join('./static/styles/', sheet))
 
 
 @app.route('/profile')
@@ -102,7 +99,3 @@ async def results(request):
 
 def run():
     app.run(host='127.0.0.1', port='5678')
-
-
-if __name__ == '__main__':
-    run()
