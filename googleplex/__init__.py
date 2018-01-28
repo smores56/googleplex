@@ -1,4 +1,1 @@
-from flask import Flask
-
-app = Flask(__name__)
-from googleplex.server import *
+__all__ = ['models', 'server', 'util']

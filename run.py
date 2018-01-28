@@ -1,5 +1,5 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
-from googleplex import app
+from googleplex import server
 
-app.run()
+server.run()
