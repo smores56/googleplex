@@ -50,8 +50,13 @@ async def login(request):
 
 @app.route('/favicon.ico')
 async def favicon(request):
-    return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico',
+    return send_from_directory(os.path.join(app.root_path, 'static/images/'), 'favicon.ico',
                                mimetype='image/vnd.microsoft.icon')
+
+
+@app.route('/images/<image>')
+async def images(request, image):
+    return send_from_directory(os.path.join(app.root_path, 'static/images/'), image)
 
 
 @app.route('/scripts/<script>')
