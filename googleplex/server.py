@@ -94,10 +94,10 @@ async def preview(request, user):
 
 
 @app.route('/results')
-@authorized()
-async def results(request, user):
-    search = request.args.get('search') or ''
-    return render_template('results.html', lists=BestsellerList.search(search), search=search)
+async def results(request):
+    search = request.args.get('search', '')
+    lists, num_results = BestsellerList.search(search)
+    return render_template('results.html', lists=lists, num_results=num_results, search=search)
 
 
 def run():
