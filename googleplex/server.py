@@ -93,8 +93,8 @@ async def preview(request, user):
 @app.route('/results')
 async def results(request):
     search = request.args.get('search', '')
-    lists, num_results = BestsellerList.search(search)
-    return render_template('results.html', lists=lists, num_results=num_results, search=search)
+    results = BestsellerList.search(search)
+    return render_template('results.html', **results)
 
 
 def run():

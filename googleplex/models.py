@@ -82,12 +82,18 @@ class BestsellerList(BaseModel):
     def search(cls, search_str, max_results=10, page=1):
         start = (page - 1) * max_results
         end = start + max_results
-        lists = list(cls.select().where(title % search_str))
+        lists = list(BestsellerList.select().where(cls.title % search_str))
 
-        return (
-            itertools.islice(list_iter, start, end) or iter(()),
-            len(lists)
-        )
+        return {
+            'lists': list(itertools.islice(lists, start, end)),
+            'num_lists': len(lists),
+            'start': start,
+            'end': end
+        }
+
+    @classmethod
+    def from_form(cls, form):
+        pass
 
 
 class Bestseller(BaseModel):

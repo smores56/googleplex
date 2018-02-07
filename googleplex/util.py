@@ -5,6 +5,7 @@ from functools import wraps
 from sanic import response
 from jinja2 import Environment, PackageLoader, select_autoescape
 import pyscrypt
+from . import models
 
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
@@ -46,15 +47,15 @@ def authorized(premium=False, admin=False):
     def decorator(f):
         @wraps(f)
         async def decorated_function(request, *args, **kwargs):
-            user = User.load_if_logged_in(request)  # load user if they are logged in
+            user = models.User.load_if_logged_in(request)  # load user if they are logged in
 
             # the user exists and is authorized
             if user and (not premium or user.premium) and (not admin or user.admin):
-                response = await f(request, user, *args, **kwargs)
-                return response
+                resp = await f(request, user, *args, **kwargs)
+                return resp
 
             else:
-                return json({'status': 'not_authorized'}, 403)
+                return response.json({'status': 'not_authorized'}, 403)
 
         return decorated_function
 
@@ -71,4 +72,4 @@ def scrypt(str_in, hash_str):
 
 
 async def load_file(filename):
-    return await response.file(join(dirname(__file__), filename))
+    return await file(join(dirname(__file__), filename))
