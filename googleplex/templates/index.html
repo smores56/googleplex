@@ -8,8 +8,8 @@
 
 {% block header %}
   <div id="header" class="w3-bar w3-black"> <!-- header bar -->
-    <a href="profile.html" class="w3-bar-item w3-button w3-right w3-padding-16">Profile</a>
-    <a href="submit.html" class="w3-bar-item w3-button w3-right w3-padding-16">Submit a List</a>
+    <a href="profile" class="w3-bar-item w3-button w3-right w3-padding-16">Profile</a>
+    <a href="submit" class="w3-bar-item w3-button w3-right w3-padding-16">Submit a List</a>
   </div>
 {% endblock %}
 {% block content %}
@@ -18,7 +18,7 @@
     <div style="display: inline-flex;">
       <form action="/results" method="get">
         <input id="search" class="search_bar" type="text" size="40" name="search" placeholder="Search for lists">
-        <form action="/results.html">
+        <form action="/results">
           <input type="submit" class="search_button" value="Search">
         </form>
       </form>
