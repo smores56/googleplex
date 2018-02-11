@@ -66,10 +66,10 @@ class User(BaseModel):
 
 
 class BestsellerList(BaseModel):
-    author = ForeignKeyField(db_column='author_id', null=True, rel_model=Author, to_field='id')
+    author = ForeignKeyField(db_column='author_id', null=True, model=Author, to_field='id')
     authored_date = DateField(null=True)
     contributor = ForeignKeyField(db_column='contributor_id',
-                                  null=True, rel_model=User, to_field='id')
+                                  null=True, model=User, to_field='id')
     description = TextField(null=True)
     num_bestsellers = IntegerField()
     submission_date = DateField()
@@ -99,7 +99,7 @@ class BestsellerList(BaseModel):
 class Bestseller(BaseModel):
     author = TextField(null=True)
     bestseller_list = ForeignKeyField(db_column='bestseller_list_id',
-                                      rel_model=BestsellerList, to_field='id')
+                                      model=BestsellerList, to_field='id')
     description = TextField(null=True)
     links = HStoreField(null=True)
     title = TextField()
@@ -110,7 +110,7 @@ class Bestseller(BaseModel):
 
 class File(BaseModel):
     bestseller_list = ForeignKeyField(db_column='bestseller_list_id',
-                                      rel_model=BestsellerList, to_field='id')
+                                      model=BestsellerList, to_field='id')
     name = TextField()
     path = TextField()
 
@@ -119,9 +119,9 @@ class File(BaseModel):
 
 
 class Message(BaseModel):
-    recipient = ForeignKeyField(db_column='recipient_id', null=True, rel_model=User, to_field='id')
+    recipient = ForeignKeyField(db_column='recipient_id', null=True, model=User, to_field='id')
     send_time = TextField()
-    sender = ForeignKeyField(db_column='sender_id', null=True, rel_model=User,
+    sender = ForeignKeyField(db_column='sender_id', null=True, model=User,
                              related_name='users_sender_set', to_field='id')
     subject = TextField()
     text = TextField()
@@ -133,10 +133,10 @@ class Message(BaseModel):
 class Review(BaseModel):
     authored_time = DateTimeField()
     bestseller_list = ForeignKeyField(db_column='bestseller_list_id',
-                                      rel_model=BestsellerList, to_field='id')
+                                      model=BestsellerList, to_field='id')
     rating = IntegerField()
     text = TextField()
-    user = ForeignKeyField(db_column='user_id', null=True, rel_model=User, to_field='id')
+    user = ForeignKeyField(db_column='user_id', null=True, model=User, to_field='id')
 
     class Meta:
         db_table = 'reviews'
@@ -145,7 +145,7 @@ class Review(BaseModel):
 class Search(BaseModel):
     saved_on = DateTimeField()
     search_str = TextField()
-    user = ForeignKeyField(db_column='user_id', null=True, rel_model=User, to_field='id')
+    user = ForeignKeyField(db_column='user_id', null=True, model=User, to_field='id')
 
     class Meta:
         db_table = 'searches'
@@ -154,7 +154,7 @@ class Search(BaseModel):
 class Session(BaseModel):
     expire_time = DateTimeField()
     uuid = TextField()
-    user = ForeignKeyField(db_column='user_id', rel_model=User, to_field='id')
+    user = ForeignKeyField(db_column='user_id', model=User, to_field='id')
 
     class Meta:
         db_table = 'sessions'
@@ -187,8 +187,8 @@ class Tag(BaseModel):
 
 class TagBestsellerListJunction(BaseModel):
     bestseller_list = ForeignKeyField(db_column='bestseller_list_id',
-                                      rel_model=BestsellerList, to_field='id')
-    tag = ForeignKeyField(db_column='tag_id', rel_model=Tag, to_field='id')
+                                      model=BestsellerList, to_field='id')
+    tag = ForeignKeyField(db_column='tag_id', model=Tag, to_field='id')
 
     class Meta:
         db_table = 'tag_bestseller_list_junction'
