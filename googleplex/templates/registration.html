@@ -1,0 +1,89 @@
+<!-- googleplex/templates/registration.html -->
+
+{% extends "overlay.html" %}
+{% block title %}Log In{% endblock %}
+{% block style %}
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <!-- <link rel="stylesheet" href="static/styles/registration.css"> -->
+<style>
+  .registration_box {
+    display: inline;
+    margin-top: 60px;
+    font: "Roboto";
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    margin: auto;
+    background-color: #dadada;
+    overflow: hidden;
+    border-radius: 10px;
+    padding: 10px;
+    width: 500px;
+    height: 750px;
+    }
+
+    form {
+    width: 80%;
+    margin: 0 auto;
+    }
+
+    label, input {
+        /* in order to define widths */
+        display: inline-block;
+    }
+
+    label {
+         width: 30%;
+        /* positions the label text beside the input */
+        text-align: right;
+    }
+
+    label + input {
+        width: 30%;
+        /* large margin-right to force the next element to the new-line
+        and margin-left to create a gutter between the label and input */
+        margin: 0 30% 0 4%;
+    }
+
+
+</style>
+{% endblock %}
+
+{% block content %}
+  <!-- Submission box-->
+  <div id="login">
+    <center  class="registration_box">
+    <div class="container">
+      <h2> Register an account </h2>
+      <form action="/registration" method = "POST">
+
+          <label text-align: right>Email:</label>
+          <input type="text"  name="" value=""><br><br>
+
+          <label text-align: right>First Name:</label>
+          <input type="text"  name="" value=""><br><br>
+
+          <label text-align: right>Last Name:</label>
+          <input type="text" name="" value=""><br><br>
+
+          <label text-align: right>Institution:</label>
+          <input type="text" name="" value=""><br><br>
+
+          <label text-align: right>Position:</label>
+          <input type="text" name="" value=""><br><br>
+
+          <label text-align: right>Password:</label>
+          <input type="password" name=""><br><br>
+
+          <input type="submit" value="Register">
+
+      </form>
+
+      <br><br>
+      <a href="#" onclick="location.href='login'">Already have an account? Click here to log in.</a>
+   </div>
+    </center>
+
+  </div>
+{% endblock %}

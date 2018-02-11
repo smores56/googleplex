@@ -14,6 +14,8 @@ app.config['SESSION_COOKIE_SECRET_KEY'] = CONFIG['SESSION_COOKIE_SECRET_KEY']
 sanic_cookiesession.setup(app)
 
 
+
+
 @app.route('/')
 @app.route('/index')
 async def index(request):
@@ -65,6 +67,9 @@ async def scripts(request, script):
 async def styles(request, sheet):
     return await load_file(os.path.join('./static/styles/', sheet))
 
+@app.route('/registration')
+async def registration(request):
+    return render_template('registration.html')
 
 @app.route('/profile')
 @authorized()

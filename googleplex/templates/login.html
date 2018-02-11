@@ -23,6 +23,30 @@
     height: 500px;
 }
 
+ form {
+    width: 80%;
+    margin: 0 auto;
+    }
+
+    label, input {
+        /* in order to define widths */
+        display: inline-block;
+    }
+
+    label {
+         width: 30%;
+        /* positions the label text beside the input */
+        text-align: right;
+    }
+
+    label + input {
+        width: 30%;
+        /* large margin-right to force the next element to the new-line
+        and margin-left to create a gutter between the label and input */
+        margin: 0 30% 0 4%;
+    }
+
+
 </style>
 {% endblock %}
 
@@ -31,12 +55,12 @@
   <div id="login">
     <center class="login_box" id="submissionBox">
       <h2> Log In </h2>
-      <form action="">
+      <form action="/login" method="POST">
           Email:
-          <input type="text" align="right" name="user/email" value="">
+          <input type="text" align="right" name="email">
       <br><br><br>
           Password:
-          <input type="password" align="right" name="pass">
+          <input type="password" align="right" name="pass_hash">
       <br><br>
           <input type="submit" align="right" value="Log In">
       <br><br>
@@ -45,7 +69,7 @@
 
       <br>
       <a href="#">Forgot your username or password?</a><br>
-      <a href="registration">Don't have an account? Sign up here.</a>
+      <a href="#" onclick="location.href='registration'">Don't have an account? Sign up here.</a>
     </center>
 
 
