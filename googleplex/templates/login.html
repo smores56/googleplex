@@ -1,0 +1,53 @@
+<!-- googleplex/templates/login.html -->
+
+{% extends "overlay.html" %}
+{% block title %}Log In{% endblock %}
+{% block style %}
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <!-- <link rel="stylesheet" href="static/styles/profile.css"> -->
+<style>
+  .login_box {
+    display: inline;
+    margin-top: 60px;
+    font: "Roboto";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    margin: auto;
+    background-color: #dadada;
+    overflow: hidden;
+    border-radius: 10px;
+    padding: 10px;
+    width: 500px;
+    height: 500px;
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+  <!-- Submission box-->
+  <div id="login">
+    <center class="login_box" id="submissionBox">
+      <h2> Log In </h2>
+      <form action="/action_page.php">
+          Email:
+          <input type="text" align="right" name="user/email" value="">
+      <br><br><br>
+          Password:
+          <input type="password" align="right" name="pass">
+      <br><br>
+          <input type="submit" align="right" value="Log In">
+      <br><br>
+          <input type="checkbox" align="right" name="remember" value="remember"> Remember me
+      </form>
+
+      <br>
+      <a href="#">Forgot your username or password?</a><br>
+      <a href="registration">Don't have an account? Sign up here.</a>
+    </center>
+
+
+  </div>
+{% endblock %}
