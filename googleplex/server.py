@@ -92,8 +92,18 @@ async def preview(request, user):
 
 @app.route('/results')
 async def results(request):
-    search = request.args.get('search', '')
-    results = BestsellerList.search(search)
+    search = request.args['search'][0]
+    searchType = request.args['type'][0]
+
+    if searchType == "list":
+        results = BestsellerList.search(search)
+    elif searchType == "author":
+        results = Author.search(search)
+    elif searchType == "book":
+        results = Bestseller.search(search)
+
+    print("Search Term: ", search)
+    print("Results: ", results)
     return render_template('results.html', **results)
 
 
