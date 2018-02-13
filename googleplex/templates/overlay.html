@@ -3,13 +3,14 @@
 <html lang="en">
   <head>
     <title>{% block title %}{% endblock %} - Bestseller List Tracker</title>
-{% block style %}{% endblock %}
-{% block scripts %}{% endblock %}
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    {% block style %}{% endblock %}
+    {% block scripts %}{% endblock %}
   </head>
   <body>
 {% block header %}
     <div id="header" class="w3-bar w3-black"> <!-- header bar -->
-      <a href="index" class="w3-bar-item w3-button w3-left w3-hover-none w3-hover-text-white w3-padding-16">Bestseller List Tracker</a>
+      <a href="/" class="w3-bar-item w3-button w3-left w3-hover-none w3-hover-text-white w3-padding-16">Bestseller List Tracker</a>
       <span class="w3-bar-item w3-left w3-hover-none w3-center">
         <center class="search">
           <div style="display: inline-flex;">
@@ -20,9 +21,12 @@
           </div>
         </center>
       </span>
-          <a href="login" class="w3-bar-item w3-button w3-right w3-padding-16">Log In</a>
-      <a href="profile" class="w3-bar-item w3-button w3-right w3-padding-16">Profile</a>
       <a href="submit" class="w3-bar-item w3-button w3-right w3-padding-16">Submit a List</a>
+      {% if user %}
+      <a href="profile" class="w3-bar-item w3-button w3-right w3-padding-16">Profile</a>
+      {% else %}
+      <a href="login" class="w3-bar-item w3-button w3-right w3-padding-16">Log In</a>
+      {% endif %}
     </div>
 {% endblock %}
     <div id="content">{% block content %}{% endblock %}</div>

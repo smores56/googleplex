@@ -1,16 +1,16 @@
 {% extends "overlay.html" %}
 {% block title %}Home{% endblock %}
 {% block style %}
-  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
   <link rel="stylesheet" href="/styles/index.css">
 {% endblock %}
-
-
 {% block header %}
   <div id="header" class="w3-bar w3-black"> <!-- header bar -->
-        <a href="login" class="w3-bar-item w3-button w3-right w3-padding-16">Log In</a>
-    <a href="profile" class="w3-bar-item w3-button w3-right w3-padding-16">Profile</a>
     <a href="submit" class="w3-bar-item w3-button w3-right w3-padding-16">Submit a List</a>
+    {% if user %}
+    <a href="profile" class="w3-bar-item w3-button w3-right w3-padding-16">Profile</a>
+    {% else %}
+    <a href="login" class="w3-bar-item w3-button w3-right w3-padding-16">Log In</a>
+    {% endif %}
   </div>
 {% endblock %}
 {% block content %}
