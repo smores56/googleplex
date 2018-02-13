@@ -1,10 +1,14 @@
+import codecs
+from functools import wraps
 from os import environ
 from os.path import join, dirname
+import re
+
 from dotenv import load_dotenv
-from functools import wraps
-from sanic import response
 from jinja2 import Environment, PackageLoader, select_autoescape
 import pyscrypt
+from sanic import response
+
 from . import models
 
 dotenv_path = join(dirname(__file__), '.env')
@@ -47,16 +51,15 @@ def authorized(premium=False, admin=False):
     def decorator(f):
         @wraps(f)
         async def decorated_function(request, *args, **kwargs):
-            # user = models.User.load_if_logged_in(request)  # load user if they are logged in
-            user = models.User.get()  # temporary workaround
+            user = models.User.load_if_logged_in(request)  # load user if they are logged in
 
             # the user exists and is authorized
-            # if user and (not premium or user.premium) and (not admin or user.admin):
-            resp = await f(request, user, *args, **kwargs)
-            return resp
+            if user and (not premium or user.premium) and (not admin or user.admin):
+                resp = await f(request, user, *args, **kwargs)
+                return resp
 
-            # else:
-            #     return response.json({'status': 'not_authorized'}, 403)
+            else:
+                return response.json({'status': 'not_authorized'}, 403)
 
         return decorated_function
 
@@ -64,13 +67,21 @@ def authorized(premium=False, admin=False):
 
 
 def scrypt(str_in, hash_str):
-    return pyscrypt.hash(password=str_in,
-                         salt=hash_str,
-                         N=1024,
-                         r=1,
-                         p=1,
-                         dkLen=32).encode('hex')
+    hash_bytes = pyscrypt.hash(password=str_in.encode(),
+                               salt=hash_str.encode(),
+                               N=1024,
+                               r=1,
+                               p=1,
+                               dkLen=32)
+    return codecs.encode(hash_bytes, 'hex')
 
 
 async def load_file(filename):
     return await response.file(join(dirname(__file__), filename))
+
+
+email_pattern = re.compile('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
+
+
+def validate_email(email):
+    return email_pattern.match(email)
