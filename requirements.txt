@@ -2,7 +2,5 @@ python-dotenv
 jinja2
 peewee
 peewee-async
-peewee_migrate
 pyscrypt
 sanic
-Sanic-CookieSession
