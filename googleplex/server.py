@@ -105,8 +105,17 @@ async def preview(request, user):
 @app.route('/results')
 async def results(request):
     user = User.load_if_logged_in(request)
-    search = request.args.get('search', '')
-    results = BestsellerList.search(search)
+    search = request.args['search'][0]
+    searchType = request.args['type'][0]
+
+    if searchType == "list":
+        results = BestsellerList.search(search)
+    elif searchType == "author":
+        results = Author.search(search)
+    elif searchType == "book":
+        results = Bestseller.search(search)
+
+
     return render_template('results.html', user=user, **results)
 
 

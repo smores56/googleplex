@@ -39,6 +39,19 @@ class Author(BaseModel):
     class Meta:
         db_table = 'authors'
 
+    @classmethod
+    def search(cls, search_str, max_results=10, page=1):
+        start = (page - 1) * max_results
+        end = start + max_results
+        lists = list(Author.select().where(Author.name.contains(search_str)))
+
+        return {
+            'lists': list(itertools.islice(lists, start, end)),
+            'num_lists': len(lists),
+            'start': start,
+            'end': end
+        }
+
 
 class User(BaseModel):
     admin = BooleanField()
@@ -83,7 +96,7 @@ class BestsellerList(BaseModel):
     def search(cls, search_str, max_results=10, page=1):
         start = (page - 1) * max_results
         end = start + max_results
-        lists = list(BestsellerList.select().where(cls.title % search_str))
+        lists = list(BestsellerList.select().where(BestsellerList.title.contains(search_str)))
 
         return {
             'lists': list(itertools.islice(lists, start, end)),
@@ -107,6 +120,19 @@ class Bestseller(BaseModel):
 
     class Meta:
         db_table = 'bestsellers'
+
+    @classmethod
+    def search(cls, search_str, max_results=10, page=1):
+        start = (page - 1) * max_results
+        end = start + max_results
+        lists = list(Bestseller.select().where(Bestseller.title.contains(search_str)))
+
+        return {
+            'lists': list(itertools.islice(lists, start, end)),
+            'num_lists': len(lists),
+            'start': start,
+            'end': end
+        }
 
 
 class File(BaseModel):
