@@ -1,10 +1,14 @@
-from datetime import timedelta, datetime
-from peewee import *
-from playhouse.postgres_ext import *
-from .util import load_config
-from uuid import uuid4
 import itertools
 import random
+from threading import Thread
+from time import sleep
+from uuid import uuid4
+
+from peewee import *
+from datetime import timedelta, datetime
+from playhouse.postgres_ext import *
+
+from .util import load_config
 
 CONFIG = load_config()
 
@@ -49,15 +53,12 @@ class User(BaseModel):
 
     @classmethod
     def load_if_logged_in(cls, request):
-        session = request['session']
-        if 'login_cookie' in session:
-            try:
-                session = Session.from_cookie(session['login_cookie'])
+        login_cookie = request.cookies.get('login_cookie')
+        if login_cookie:
+            session = Session.from_cookie(login_cookie)
+            if session:
                 session.refresh()
                 return session.user
-
-            except DoesNotExist:
-                pass
 
         return None
 
@@ -159,23 +160,49 @@ class Session(BaseModel):
     class Meta:
         db_table = 'sessions'
 
-    def __init__(self, user_id):
-        expire_time = datetime.now() + timedelta(hours=3)
-        return Session.create(expire_time=expire_time, uuid=str(uuid4()), user=user_id)
+    @classmethod
+    def for_user(cls, user_id, long_term=False):
+        expire_t = datetime.now() + timedelta(hours=(72 if long_term else 1))
+        return cls.create(expire_time=expire_t, uuid=str(uuid4()), user_id=user_id)
 
     def __str__(self):
         return '%s %s' % (self.user.id, self.uuid)
 
     @classmethod
+    def setup_culler(cls):
+        def culler():
+            while True:
+                cls.remove_expired()
+                sleep(300)
+
+        Thread(target=culler).start()
+
+    @classmethod
     def remove_expired(cls):
-        Session.delete().where(expire_time < datetime.now()).execute()
+        Session.delete().where(cls.expire_time < datetime.now()).execute()
 
     def refresh(self):
-        Session.update(expire_time=datetime.now() + timedelta(hours=3)).where(id=self.id).execute()
+        now = datetime.now()
+        an_hour_from_now = now + timedelta(hours=1)
+        if self.expire_time < an_hour_from_now:
+            self.update(expire_time=an_hour_from_now).execute()
 
     def from_cookie(cookie):
-        user_id, uuid = cookie.split(' ')[:1]
-        return Session.get(user=user_id, uuid=uuid)
+        user_id, uuid = cookie.split(' ')[:2]
+        try:
+            session = Session.get(user=user_id, uuid=uuid)
+            if session:
+                if session.expire_time < datetime.now():
+                    session.delete_instance()
+
+                else:
+                    session.refresh()
+                    return session
+
+        except DoesNotExist:
+            pass
+
+        return None
 
 
 class Tag(BaseModel):
