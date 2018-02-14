@@ -6,7 +6,7 @@ CREATE TABLE users (
     pass_hash   text NOT NULL,
     first_name  text NOT NULL,
     last_name   text NOT NULL,
-    position    text NOT NULL,
+    position    text,
     institution text,
     premium     boolean NOT NULL DEFAULT 'f',
     admin       boolean NOT NULL DEFAULT 'f',
