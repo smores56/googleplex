@@ -7,32 +7,7 @@
 {% endblock %}
 {% block scripts %}
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script>
-    $(document).ready(function() {
-      $('#file').hide();
-      $('#image').hide();
-
-      $("#selectfile").click(function() {
-        $("#sumission").hide();
-        $("#file").show();
-      });
-
-      $("#selectimage").click(function() {
-        $("#submission").hide();
-        $("#image").show();
-      });
-
-      $("#prevfile").click(function() {
-        $("#submission").show();
-        $("#file").hide();
-      });
-
-      $("#previmage").click(function() {
-        $("#submission").show();
-        $("#image").hide();
-      });
-    });
-  </script>
+  <script src="/scripts/submit.js"></script>
 {% endblock %}
 {% block content %}
   <!-- Submission box-->
