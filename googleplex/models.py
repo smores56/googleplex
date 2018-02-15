@@ -46,8 +46,8 @@ class Author(BaseModel):
         lists = list(Author.select().where(Author.name.contains(search_str)))
 
         return {
-            'lists': list(itertools.islice(lists, start, end)),
-            'num_lists': len(lists),
+            'results': list(itertools.islice(lists, start, end)),
+            'num_results': len(lists),
             'start': start,
             'end': end
         }
@@ -124,8 +124,8 @@ class BestsellerList(BaseModel):
         lists = list(BestsellerList.select().where(BestsellerList.title.contains(search_str)))
 
         return {
-            'lists': list(itertools.islice(lists, start, end)),
-            'num_lists': len(lists),
+            'results': list(itertools.islice(lists, start, end)),
+            'num_results': len(lists),
             'start': start,
             'end': end
         }
@@ -153,8 +153,8 @@ class Bestseller(BaseModel):
         lists = list(Bestseller.select().where(Bestseller.title.contains(search_str)))
 
         return {
-            'lists': list(itertools.islice(lists, start, end)),
-            'num_lists': len(lists),
+            'results': list(itertools.islice(lists, start, end)),
+            'num_results': len(lists),
             'start': start,
             'end': end
         }
