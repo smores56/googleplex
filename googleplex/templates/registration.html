@@ -3,87 +3,64 @@
 {% extends "overlay.html" %}
 {% block title %}Log In{% endblock %}
 {% block style %}
-  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-  <!-- <link rel="stylesheet" href="static/styles/registration.css"> -->
-<style>
-  .registration_box {
-    display: inline;
-    margin-top: 60px;
-    font: "Roboto";
-    position: absolute;
-    top: 60%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);
-    margin: auto;
-    background-color: #dadada;
-    overflow: hidden;
-    border-radius: 10px;
-    padding: 10px;
-    width: 500px;
-    height: 750px;
-    }
-
-    form {
-    width: 80%;
-    margin: 0 auto;
-    }
-
-    label, input {
-        /* in order to define widths */
-        display: inline-block;
-    }
-
-    label {
-         width: 30%;
-        /* positions the label text beside the input */
-        text-align: right;
-    }
-
-    label + input {
-        width: 30%;
-        /* large margin-right to force the next element to the new-line
-        and margin-left to create a gutter between the label and input */
-        margin: 0 30% 0 4%;
-    }
-
-
-</style>
+  <link rel="stylesheet" href="/styles/registration.css">
 {% endblock %}
-
+{% block scripts %}
+  <script src="/scripts/scrypt-async.min.js"></script>
+  <script src="/scripts/registration.js"></script>
+{% endblock %}
 {% block content %}
   <!-- Submission box-->
   <div id="login">
-    <center  class="registration_box">
-    <div class="container">
-      <h2> Register an account </h2>
-      <form action="/registration" method = "POST">
+    <center class="registration_box">
+      <div class="container">
+        <h2> Register an account </h2>
+        <form id="registration-form" action="/registration" onsubmit="return submit_registration()" method="post">
 
-          <label text-align: right>Email:</label>
-          <input type="text"  name="" value=""><br><br>
+            <label text-align: right><a style="color:red;">*</a>Email:</label>
+            <input type="email" id="email" name="email">
+            <a style="color:red;display:none;" id="email-error"></a>
+            <br><br>
 
-          <label text-align: right>First Name:</label>
-          <input type="text"  name="" value=""><br><br>
+            <label text-align: right><a style="color:red;">*</a>First Name:</label>
+            <input type="text" id="first_name" name="first_name">
+            <a style="color:red;display:none;" id="first_name-error"></a>
+            <br><br>
 
-          <label text-align: right>Last Name:</label>
-          <input type="text" name="" value=""><br><br>
+            <label text-align: right><a style="color:red;">*</a>Last Name:</label>
+            <input type="text" id="last_name" name="last_name">
+            <a style="color:red;display:none;" id="last_name-error"></a>
+            <br><br>
 
-          <label text-align: right>Institution:</label>
-          <input type="text" name="" value=""><br><br>
+            <label text-align: right>Institution:</label>
+            <input type="text" id="institution" name="institution">
+            <a style="color:red;display:none;" id="institution-error"></a>
+            <br><br>
 
-          <label text-align: right>Position:</label>
-          <input type="text" name="" value=""><br><br>
+            <label text-align: right>Position:</label>
+            <input type="text" id="position" name="position">
+            <a style="color:red;display:none;" id="position-error"></a>
+            <br><br>
 
-          <label text-align: right>Password:</label>
-          <input type="password" name=""><br><br>
+            <label text-align: right><a style="color:red;">*</a>Password:</label>
+            <input type="password" id="password1">
+            <a style="color:red;display:none;" id="password1-error"></a>
+            <br><br>
 
-          <input type="submit" value="Register">
+            <label text-align: right><a style="color:red;">*</a>Re-enter Password:</label>
+            <input type="password" id="password2">
+            <a style="color:red;display:none;" id="password2-error"></a>
+            <br><br>
 
-      </form>
+            <input type="password" id="pass_hash" name="pass_hash" hidden>
 
-      <br><br>
-      <a href="#" onclick="location.href='login'">Already have an account? Click here to log in.</a>
-   </div>
+            <input type="submit" value="Register">
+        </form>
+        <br>
+        {% if flash %}<a style="color:red;">{{ flash }}</a>{% endif %}
+        <br>
+        <a href="/login">Already have an account? Click here to log in.</a>
+      </div>
     </center>
-
   </div>
 {% endblock %}

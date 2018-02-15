@@ -1,0 +1,36 @@
+.registration_box {
+    display: inline;
+    margin-top: 20px;
+    font: "Roboto";
+    background-color: #dadada;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    overflow: hidden;
+    border-radius: 10px;
+    padding: 10px;
+    width: 700px;
+    height: 600px;
+}
+
+form {
+    margin: 0 auto;
+}
+
+label, input {
+    /* in order to define widths */
+    display: inline-block;
+}
+
+label {
+     width: 30%;
+    /* positions the label text beside the input */
+    text-align: right;
+}
+
+label + input {
+    width: 40%;
+    /* large margin-right to force the next element to the new-line
+    and margin-left to create a gutter between the label and input */
+    margin: 0 20% 0 4%;
+}
