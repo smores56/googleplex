@@ -9,38 +9,48 @@
 {% block content %}
   <div class="left">
     <b>Sort By Genre:</b>
-    <li><input type="checkbox"></input><span type="label">Academic</span></li>
-    <li><input type="checkbox"></input><span type="label">Biography</span></li>
-    <li><input type="checkbox"></input><span type="label">Drama</span></li>
-    <li><input type="checkbox"></input><span type="label">Fantasy</span></li>
-    <li><input type="checkbox"></input><span type="label">Fiction</span></li>
-    <li><input type="checkbox"></input><span type="label">History</span></li>
-    <li><input type="checkbox"></input><span type="label">Horror</span></li>
-    <li><input type="checkbox"></input><span type="label">Mystery</span></li>
-    <li><input type="checkbox"></input><span type="label">Non-Fiction</span></li>
-    <li><input type="checkbox"></input><span type="label">Science Fiction</span></li>
+    <li><input type="checkbox"><span type="label">Academic</span></li>
+    <li><input type="checkbox"><span type="label">Biography</span></li>
+    <li><input type="checkbox"><span type="label">Drama</span></li>
+    <li><input type="checkbox"><span type="label">Fantasy</span></li>
+    <li><input type="checkbox"><span type="label">Fiction</span></li>
+    <li><input type="checkbox"><span type="label">History</span></li>
+    <li><input type="checkbox"><span type="label">Horror</span></li>
+    <li><input type="checkbox"><span type="label">Mystery</span></li>
+    <li><input type="checkbox"><span type="label">Non-Fiction</span></li>
+    <li><input type="checkbox"><span type="label">Science Fiction</span></li>
     <br>
     <b>Sort By Date Published:</b>
-    <li><input type="checkbox"></input><span type="label">Pre 1900's</span></li>
-    <li><input type="checkbox"></input><span type="label">1900-1920</span></li>
-    <li><input type="checkbox"></input><span type="label">1920-1940</span></li>
-    <li><input type="checkbox"></input><span type="label">1940-1960</span></li>
-    <li><input type="checkbox"></input><span type="label">1960-1980</span></li>
-    <li><input type="checkbox"></input><span type="label">1980-2000</span></li>
-    <li><input type="checkbox"></input><span type="label">2000-2010</span></li>
-    <li><input type="checkbox"></input><span type="label">2010-Present</span></li>
+    <li><input type="checkbox"><span type="label">Pre 1900's</span></li>
+    <li><input type="checkbox"><span type="label">1900-1920</span></li>
+    <li><input type="checkbox"><span type="label">1920-1940</span></li>
+    <li><input type="checkbox"><span type="label">1940-1960</span></li>
+    <li><input type="checkbox"><span type="label">1960-1980</span></li>
+    <li><input type="checkbox"><span type="label">1980-2000</span></li>
+    <li><input type="checkbox"><span type="label">2000-2010</span></li>
+    <li><input type="checkbox"><span type="label">2010-Present</span></li>
   </div>
-  <h1>{{ lists | length }} Search Result{% if lists | length != 1 %}s{% endif %} Found{% if search | length > 0 %} For "{{ search }}"{% endif %}:</h1>
+  <h1>{{ num_results }} Search Result{% if num_results != 1 %}s{% endif %} Found{% if search | length > 0 %} For "{{ search }}"{% endif %}:</h1>
   <table class="table table-striped">
     <tbody>
-    {% for l in lists %}
+    {%- for r in results -%}
       <tr>
         <td>
-          <h3>{{ l.name }} - {{ l.author }}: {{ l.publication_date }}</h3>
-          {% for bs in l.bestsellers %}
-          <p><b>&emsp;{{ loop.index }}</b>: "{{ bs.name }}" - {{ bs.author }}: {{ bs.publication_date }} ({{ bs.reviews | length }} reviews)</p>
+        {% if r.__class__.__name__ == 'BestsellerList' %}
+          <h3>{{ r.title }} - {% if r.author %}{{r.author.name}}{% else %}No author{% endif %}: {{ r.publication_date | default('No publication date') }}</h3>
+          {% for bs in r.bestsellers %}
+          <p><b>&emsp;{{ loop.index }}</b>: "{{ bs.title }}" - {{ bs.author }}</p>
           {% endfor %}
-          <b>Tags: <b>{% for t in l.tags %}{% if loop.index != 1 %}, {% endif %}<a style="color:red;">{{ t }}</a>{% endfor %}
+          <b>Tags: </b>{%- for t in r.tags -%}{% if loop.index != 1 %}, {% endif %}<a style="color:red;">{{ t }}</a>{% endfor %}
+
+        {% elif r.__class__.__name__ == 'Bestseller' %}
+          <h3>{{ r.title }} - {% if r.author %}{{ r.author.name }}{% else %}No author{% endif %}</h3>
+
+        {% else %}
+          <h3>{{ r.name }} - {% if r.birth_date %}Born {{ r.birth_date }}{% else %}Birth date unknown{% endif %},
+          {% if r.death_date %}Born {{ r.death_date }}{% else %}Death date unknown{% endif %}</h3>
+
+        {% endif %}
         </td>
       </tr>
     {% endfor %}
