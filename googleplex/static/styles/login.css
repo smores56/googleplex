@@ -1,177 +1,36 @@
-.container {
-  font-family: 'Roboto', sans-serif;
-  position: absolute;
-  top: 10%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%);
-  width: 150px;
-  height: 30px;
-  border: thin solid #000;
-  cursor: pointer;
-}
-
-.switch {
-  position: absolute;
-  width: 50%;
-  height: 100%;
-  background-color: #000;
-  transition: all 0.15s ease;
-  left: 0;
-  z-index: 1;
-}
-
-.container.activity {
-
-  border: thin solid #000;
-}
-
-.container.activity .switch {
-  left: 50%;
-  background-color: #000;
-}
-
-
-.label {
-  position: absolute;
-  width: 50%;
-  height: 100%;
-  text-align: center;
-  padding-top: 5px;
-  z-index: 2;
-}
-
-.label.right {
-  left: 50%;
-  z-index: 2;
-}
-
-.unselectable {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-  .login_box {
+#submissionBox {
     display: inline;
-    margin-top: 60px;
+    margin-top: 20px;
     font: "Roboto";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);
-    margin: auto;
     background-color: #dadada;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
     overflow: hidden;
     border-radius: 10px;
     padding: 10px;
-    width: 500px;
-    height: 500px;
+    width: 700px;
+    height: 600px;
 }
 
-button {
-  background-color: #f2f2f2;
-  color: black;
-  border: 1px solid black;
-  display:block;
-  padding: 5px;
-  text-align: center;
-  text-decoration: none;
-  -webkit-transition-duration: 0.4s; /* Safari */
-  transition-duration: 0.4s;
-  cursor: pointer;
-  border-radius: 5px;
-
-}
-
-
-button:hover {
-    background-color: black;
-    padding: 10px;
-    color: white;
-}
-
-button:active{
-  background-color: black;
-    padding: 10px;
-    color: white;
-}
-
-button.active{
-  background-color: black;
-    padding: 10px;
-    color: white;
-}
-
-a {
-    text-decoration: none;
-    display: inline-block;
-    padding: 8px 16px;
-}
-
-a:hover {
-    background-color: #ddd;
-    color: black;
-}
-.previous {
-    background-color: #f1f1f1;
-    color: black;
-}
-
-.next {
-    background-color: #f1f1f1;
-    color: backs;
-}
-
-.round {
-    border-radius: 50%;
-}
-
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 10px;
-  display: block;
-}
-
-.login_box {
-  display: inline;
-  margin-top: 60px;
-  font: "Roboto";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%);
-  margin: auto;
-  background-color: #dadada;
-  overflow: hidden;
-  border-radius: 10px;
-  padding: 10px;
-  width: 500px;
-  height: 500px;
-}
-
-#login-form {
-  width: 80%;
-  margin: 0 auto;
+form {
+    margin: 0 auto;
 }
 
 label, input {
-  /* in order to define widths */
-  display: inline-block;
+    /* in order to define widths */
+    display: inline-block;
 }
 
 label {
-   width: 30%;
-  /* positions the label text beside the input */
-  text-align: right;
+     width: 30%;
+    /* positions the label text beside the input */
+    text-align: right;
 }
 
 label + input {
-  width: 30%;
-  /* large margin-right to force the next element to the new-line
-  and margin-left to create a gutter between the label and input */
-  margin: 0 30% 0 4%;
+    width: 40%;
+    /* large margin-right to force the next element to the new-line
+    and margin-left to create a gutter between the label and input */
+    margin: 0 20% 0 4%;
 }
