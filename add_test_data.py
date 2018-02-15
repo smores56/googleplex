@@ -6,18 +6,15 @@ for model in [models.User, models.Bestseller, models.BestsellerList, models.Auth
     model.delete().execute()
 
 
-fields = [models.Author.name]
 author_data = [
     {"name": "J. K. Rowling"},
     {"name": "Paulo Coelho"}
 ]
 
-models.Author.insert_many(author_data, fields=fields)
+for a in author_data:
+    models.Author.create(**a)
 
 
-b_list = models.BestsellerList
-fields = [b_list.author, b_list.authored_date, b_list.contributor, b_list.description,
-          b_list.num_bestsellers, b_list.submission_date, b_list.title]
 list_data = [
     {
         "author": None,
@@ -29,7 +26,7 @@ list_data = [
         "title": "Test List"
     },
     {
-        "author": None,
+        "author": models.Author.get(models.Author.name == 'Paulo Coelho'),
         "authored_date": None,
         "contributor": None,
         "description": None,
@@ -39,16 +36,19 @@ list_data = [
     }
 ]
 
-models.BestsellerList.insert_many(list_data, fields=fields)
+for l in list_data:
+    models.BestsellerList.create(**l)
 
 
-fields = [models.Bestseller.title, models.Bestseller.bestseller_list]
 book_data = [
-    {"title": "Please Ignore", "bestseller_list": 3},
-    {"title": "Test Book", "bestseller_list": 2}
+    {"title": "Please Ignore", "bestseller_list": models.BestsellerList.get(
+        models.BestsellerList.title == 'Test List')},
+    {"title": "Test Book", "bestseller_list": models.BestsellerList.get(
+        models.BestsellerList.title == 'Asdf List')}
 ]
 
-models.Bestseller.insert_many(book_data, fields=fields)
+for b in book_data:
+    models.Bestseller.create(**b)
 
 
 user_data = {
