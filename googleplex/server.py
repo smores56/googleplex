@@ -1,3 +1,4 @@
+from datetime import timedelta, datetime
 import os
 from peewee import DoesNotExist
 from sanic import Sanic
@@ -26,8 +27,11 @@ async def login(request):
 
     else:
         login_cookie = request.cookies.get('login_cookie')
-        if Session.from_cookie(login_cookie):
-            return redirect('/')
+        if login_cookie:
+            response = redirect('/')
+            if Session.from_cookie(login_cookie):
+                del response.cookies['login_cookie']
+            return response
 
         email = request.form.get('email')
         pass_hash = request.form.get('pass_hash')
@@ -40,6 +44,8 @@ async def login(request):
                 session = Session.for_user(user.id, long_term=remember_me)
                 response = redirect('/')
                 response.cookies['login_cookie'] = str(session)
+                response.cookies['login_cookie']['max-age'] = (
+                    session.expire_time - datetime.now()).total_seconds()
                 return response
 
             except DoesNotExist:
@@ -72,10 +78,23 @@ async def styles(request, sheet):
     return await load_file(os.path.join('./static/styles/', sheet))
 
 
-@app.route('/registration')
+@app.route('/registration', methods=['GET', 'POST'])
 async def registration(request):
-    user = User.load_if_logged_in(request)
-    return redirect('/') if user else render_template('registration.html', user=user)
+    if request.method == 'GET':
+        user = User.load_if_logged_in(request)
+        flash = request.cookies.get('flash', None)
+        return redirect('/') if user else render_template('registration.html',
+                                                          user=user, flash=flash)
+
+    else:
+        user, error = User.register(request.form)
+        if error:
+            response = redirect('/registration')
+            response.cookies['flash'] = error
+            return response
+
+        else:
+            return redirect('/login')
 
 
 @app.route('/profile')
@@ -105,8 +124,8 @@ async def preview(request, user):
 @app.route('/results')
 async def results(request):
     user = User.load_if_logged_in(request)
-    search = request.args['search'][0]
-    searchType = request.args['type'][0]
+    search = request.args.get('search', '')
+    searchType = request.args.get('type', 'list')
 
     if searchType == "list":
         results = BestsellerList.search(search)
@@ -115,14 +134,41 @@ async def results(request):
     elif searchType == "book":
         results = Bestseller.search(search)
 
-
     return render_template('results.html', user=user, **results)
+
+@app.route('/manualpreview', methods=['GET','POST'])
+async def manualPreview(request):
+    data = request.json
+    listTitle = data.get('list_title')
+    bookCount = data.get('book_count')
+    for i in range(1, 1 + bookCount):
+        book = data.get('book' + str(i))
+        author = book.get('author')
+        year = book.get('yearPublished')
+        title = book.get('bookTitle')
+    return render_template('preview.html')
+
+@app.route('/logout')
+async def logout(request):
+    if 'login_cookie' in request.cookies:
+        response = redirect('/')
+        del request.cookies['login_cookie']
+        del response.cookies['login_cookie']
+        return response
 
 
 @app.middleware('response')
 async def remove_flash(request, response):
     if 'flash' in request.cookies:
         del response.cookies['flash']
+
+
+@app.middleware('response')
+async def set_expire_time_on_login_cookie(request, response):
+    login_cookie = request.cookies.get('login_cookie', None)
+    if login_cookie:
+        response.cookies['login_cookie'] = login_cookie
+        response.cookies['login_cookie']['max-age'] = 3600
 
 
 def run():

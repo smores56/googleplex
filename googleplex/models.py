@@ -8,7 +8,7 @@ from peewee import *
 from datetime import timedelta, datetime
 from playhouse.postgres_ext import *
 
-from .util import load_config
+from .util import *
 
 CONFIG = load_config()
 
@@ -46,8 +46,8 @@ class Author(BaseModel):
         lists = list(Author.select().where(Author.name.contains(search_str)))
 
         return {
-            'lists': list(itertools.islice(lists, start, end)),
-            'num_lists': len(lists),
+            'results': list(itertools.islice(lists, start, end)),
+            'num_results': len(lists),
             'start': start,
             'end': end
         }
@@ -61,7 +61,7 @@ class User(BaseModel):
     is_banned = BooleanField()
     last_name = TextField()
     pass_hash = TextField()
-    position = TextField()
+    position = TextField(null=True)
     premium = BooleanField()
 
     @classmethod
@@ -74,6 +74,31 @@ class User(BaseModel):
                 return session.user
 
         return None
+
+    @classmethod
+    def register(cls, form, premium=False, admin=False):
+        vals = {}
+        for field, field_name in [('email', 'Email'), ('first_name', 'First name'),
+                                  ('last_name', 'Last name'), ('pass_hash', 'Password')]:
+            val = form.get(field, None)
+            if val is None:
+                return (None, field_name + ' not specified.')
+            else:
+                vals[field] = val
+
+        for opt_field in ['institution', 'position']:
+            vals[opt_field] = form.get(opt_field, None)
+
+        vals.update({'premium': premium, 'admin': admin})
+        re_hash = scrypt(vals['pass_hash'], (vals['email'] + 'xyz')[:8])
+        vals['pass_hash'] = re_hash
+
+        try:
+            user = User.create(**vals)
+            return (user, None)
+
+        except DoesNotExist as e:
+            return (None, 'An unknown error occurred: %s' % e)
 
     class Meta:
         db_table = 'users'
@@ -99,8 +124,8 @@ class BestsellerList(BaseModel):
         lists = list(BestsellerList.select().where(BestsellerList.title.contains(search_str)))
 
         return {
-            'lists': list(itertools.islice(lists, start, end)),
-            'num_lists': len(lists),
+            'results': list(itertools.islice(lists, start, end)),
+            'num_results': len(lists),
             'start': start,
             'end': end
         }
@@ -128,8 +153,8 @@ class Bestseller(BaseModel):
         lists = list(Bestseller.select().where(Bestseller.title.contains(search_str)))
 
         return {
-            'lists': list(itertools.islice(lists, start, end)),
-            'num_lists': len(lists),
+            'results': list(itertools.islice(lists, start, end)),
+            'num_results': len(lists),
             'start': start,
             'end': end
         }
@@ -214,19 +239,20 @@ class Session(BaseModel):
             self.update(expire_time=an_hour_from_now).execute()
 
     def from_cookie(cookie):
-        user_id, uuid = cookie.split(' ')[:2]
-        try:
-            session = Session.get(user=user_id, uuid=uuid)
-            if session:
-                if session.expire_time < datetime.now():
-                    session.delete_instance()
+        if isinstance(cookie, str):
+            user_id, uuid = cookie.split(' ')[:2]
+            try:
+                session = Session.get(user=user_id, uuid=uuid)
+                if session:
+                    if session.expire_time < datetime.now():
+                        session.delete_instance()
 
-                else:
-                    session.refresh()
-                    return session
+                    else:
+                        session.refresh()
+                        return session
 
-        except DoesNotExist:
-            pass
+            except DoesNotExist:
+                pass
 
         return None
 

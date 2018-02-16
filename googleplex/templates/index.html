@@ -8,6 +8,7 @@
     <a href="submit" class="w3-bar-item w3-button w3-right w3-padding-16">Submit a List</a>
     {% if user %}
     <a href="profile" class="w3-bar-item w3-button w3-right w3-padding-16">Profile</a>
+    <a href="logout" class="w3-bar-item w3-button w3-right w3-padding-16">Log Out</a>
     {% else %}
     <a href="login" class="w3-bar-item w3-button w3-right w3-padding-16">Log In</a>
     {% endif %}
@@ -19,14 +20,12 @@
     <div style="display: inline-flex;">
       <form action="/results" method="get">
         <input id="search" class="search_bar" type="text" size="40" name="search" placeholder="Search for lists">
-        <form action="/results">
-          <select name="type">
-            <option value="list">Lists</option>
-            <option value="book">Books</option>
-            <option value="author">Authors</option>
-          </select>
-          <input type="submit" class="search_button" value="Search">
-        </form>
+        <select name="type">
+          <option value="list">Lists</option>
+          <option value="book">Books</option>
+          <option value="author">Authors</option>
+        </select>
+        <input type="submit" class="search_button" value="Search">
       </form>
     </div>
   </center>

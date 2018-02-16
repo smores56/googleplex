@@ -31,4 +31,33 @@ $(document).ready(function() {
             '</td>' +
         '</tr>');
       });
-    });
+
+      $('#manual-submit').submit(function(ev) {
+        ev.preventDefault();
+
+        var length = $("#books tr").length;
+        var numBooks = length / 3;
+        var data = {};
+        for (i = 1; i < numBooks + 1; i++) {
+          data["book".concat(i)] = {
+            bookTitle: $("#bookTitle" + i).val(),
+            author: $("#author" + i).val(),
+            yearPublished: $("#yearPublished" + i).val()
+          };
+        }
+        data['list_title'] = $("#listTitle").val()
+        data['book_count'] = numBooks;
+        $.ajax({
+          url: '/manualpreview',
+          data: JSON.stringify(data),
+          type: "POST",
+          success: function(response) {
+            window.location.href = '/preview';
+          },
+          error: function(xhr) {
+            console.trace()
+          }
+        });
+      });
+
+});

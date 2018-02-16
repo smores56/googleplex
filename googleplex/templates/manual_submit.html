@@ -8,7 +8,7 @@
 {% block scripts %}
   <script src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
   <script src="/scripts/manual_submit.js"></script>
-    
+
 {% endblock %}
 {% block content %}
   <div>
@@ -20,7 +20,7 @@
       <tr>
         <td>Book detail: </td>
         <td>
-          <table style="width:80%">
+          <table id="books" style="width:80%">
             <tr>
               <td>
                 <span class="col-lg-3" style="text-align:left">Title: </span>
@@ -44,7 +44,8 @@
       </tr>
     </table>
   </div>
-
-  <button id="load">Add new book +</button>
-  <button id="preview" onclick="location.href='preview'">Preview List</button>
+<form id="manual-submit" action="/manualpreview" method="post">
+  <button id="load"type="button">Add new book +</button>
+  <button id="preview" type="submit">Preview List</button>
+</form>
 {% endblock %}
