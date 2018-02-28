@@ -53,8 +53,8 @@ class Author(BaseModel):
         }
 
     @classmethod
-    def search_author(cls, author_name):
-        return list(Author.select().where(Author.name == author_name))[0]
+    def search_author(cls, author_name, author_id):
+        return list(Author.select().where((Author.name == author_name) and (Author.id == author_id)))[0]
 
     def getInfo(self):
         info = {'author_name': self.name}
@@ -152,7 +152,7 @@ class BestsellerList(BaseModel):
 
 
 class Bestseller(BaseModel):
-    author = TextField(null=True)
+    author = ForeignKeyField(db_column='author_id', null=True, model=Author, to_field='id')
     bestseller_list = ForeignKeyField(db_column='bestseller_list_id',
                                       model=BestsellerList, to_field='id')
     description = TextField(null=True)
@@ -176,12 +176,20 @@ class Bestseller(BaseModel):
         }
 
     @classmethod
-    def searchAuthor(cls, author_name):
-        lists = list(Bestseller.selct().where(Bestseller.author == author_name))
+    def search_book(cls, book_title, book_id):
+        return list(Bestseller.select().where((Bestseller.title == book_title) and (Bestseller.id == book_id)))[0]
 
+    def getInfo(self):
         return {
-            'books': lists
+            'author': self.author,
+            'title': self.title,
+            'description': self.description
         }
+
+    @classmethod
+    def get_books_by_author(cls, author):
+        return list(Bestseller.select().where(Bestseller.author == author))
+
 
 
 class File(BaseModel):

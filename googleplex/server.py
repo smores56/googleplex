@@ -159,7 +159,23 @@ async def logout(request):
 
 @app.route('/book')
 async def book(request):
-    return render_template('book.html')
+    title = request.args.get('title', '')
+    book_id = int(request.args.get('id', ''))
+    book = Bestseller.search_book(title, book_id)
+
+    info = book.getInfo()
+    print(info)
+    book_info = {'title': info['title']}
+    if info['author']:
+        book_info['author'] = info['author'].name
+        book_info['author_id'] = info['author'].id
+
+    if info['description']:
+        book_info['description'] = info['description']
+
+    print(book_info)
+
+    return render_template('book.html', **book_info)
 
 @app.route('/list')
 async def list(request):
@@ -169,13 +185,12 @@ async def list(request):
 async def book(request):
 
     name = request.args.get('name', '')
-
-    author = Author.search_author(name)
+    author_id = int(request.args.get('id', ''))
+    author = Author.search_author(name, author_id)
     info = author.getInfo()
-    print(info)
     author_info = {'author_name': info['author_name']}
 
-    if 'birth_date' in info.keys():
+    if 'birth_date' in info.keys(): #TODO what happens if null?
         birth_date = info['birth_date']
         arr = ['Birth Date: ' + birth_date.strftime(DATE_FORMAT_STRING)]
         if 'death_date' in info.keys():
@@ -185,8 +200,6 @@ async def book(request):
             age_end = datetime.date(datetime.now())
 
         calc_bday = date(age_end.year, birth_date.month, birth_date.day)
-        print(age_end.year)
-        print(birth_date.year)
         age = age_end.year - birth_date.year
         if calc_bday > age_end:
             age -= 1
@@ -195,10 +208,7 @@ async def book(request):
 
         author_info['age_string'] = ', '.join(arr)
 
-    author_info['books'] = []
-
-    print("Final Author Info")
-    print(author_info)
+    author_info['books'] = Bestseller.get_books_by_author(author)
 
     return render_template('author.html', **author_info)
 

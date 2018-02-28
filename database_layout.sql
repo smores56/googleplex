@@ -34,6 +34,7 @@ CREATE TABLE bestseller_lists (
 );
 
 CREATE TABLE bestsellers (
+    author_id          integer REFERENCES authors ON DELETE SET NULL,
     id                 serial PRIMARY KEY,
     bestseller_list_id integer NOT NULL REFERENCES bestseller_lists ON DELETE CASCADE,
     title              text NOT NULL,

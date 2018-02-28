@@ -25,7 +25,7 @@ list_data = [
         "author": None,
         "authored_date": None,
         "contributor": None,
-        "description": None,
+        "description": "Lorem ipsum latin stuff",
         "num_bestsellers": 10,
         "submission_date": datetime.now(),
         "title": "Test List"
@@ -46,9 +46,13 @@ for l in list_data:
 
 
 book_data = [
-    {"title": "Please Ignore", "bestseller_list": models.BestsellerList.get(
-        models.BestsellerList.title == 'Test List')},
-    {"title": "Test Book", "bestseller_list": models.BestsellerList.get(
+    {"title": "Please Ignore",
+     "bestseller_list": models.BestsellerList.get(
+        models.BestsellerList.title == 'Test List'),
+     "author": models.Author.get(models.Author.name == 'Paulo Coelho'),
+     "description": "Lorem ipsum latin stuff"},
+    {"title": "Test Book",
+     "bestseller_list": models.BestsellerList.get(
         models.BestsellerList.title == 'Asdf List')}
 ]
 
