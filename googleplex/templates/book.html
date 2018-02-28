@@ -1,0 +1,36 @@
+<!-- googleplex/templates/book.html -->
+
+{% extends "overlay.html" %}
+{% block title %}Book{% endblock %}
+{% block style %}
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="/styles/main.css">
+{% endblock %}
+{% block content %}
+  <h1>{{ num_results }} Search Result{% if num_results != 1 %}s{% endif %} Found{% if search | length > 0 %} For "{{ search }}"{% endif %}:</h1>
+  <table class="table table-striped">
+    <tbody>
+    {%- for r in results -%}
+      <tr>
+        <td>
+        {% if r.__class__.__name__ == 'BestsellerList' %}
+          <h3>{{ r.title }} - {% if r.author %}{{r.author.name}}{% else %}No author{% endif %}: {{ r.publication_date | default('No publication date') }}</h3>
+          {% for bs in r.bestsellers %}
+          <p><b>&emsp;{{ loop.index }}</b>: "{{ bs.title }}" - {{ bs.author }}</p>
+          {% endfor %}
+          <b>Tags: </b>{%- for t in r.tags -%}{% if loop.index != 1 %}, {% endif %}<a style="color:red;">{{ t }}</a>{% endfor %}
+
+        {% elif r.__class__.__name__ == 'Bestseller' %}
+          <h3>{{ r.title }} - {% if r.author %}{{ r.author.name }}{% else %}No author{% endif %}</h3>
+
+        {% else %}
+          <h3>{{ r.name }} - {% if r.birth_date %}Born {{ r.birth_date }}{% else %}Birth date unknown{% endif %},
+          {% if r.death_date %}Born {{ r.death_date }}{% else %}Death date unknown{% endif %}</h3>
+
+        {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

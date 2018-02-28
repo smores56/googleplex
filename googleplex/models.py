@@ -52,6 +52,22 @@ class Author(BaseModel):
             'end': end
         }
 
+    @classmethod
+    def search_author(cls, author_name):
+        return list(Author.select().where(Author.name == author_name))[0]
+
+    def getInfo(self):
+        info = {'author_name': self.name}
+        if self.birth_date:
+            info['birth_date'] = self.birth_date
+
+        if self.death_date:
+            info['death_date'] = self.death_date
+
+        if self.ethnicity:
+            info['ethnicity'] = self.ethnicity
+
+        return info
 
 class User(BaseModel):
     admin = BooleanField()
@@ -157,6 +173,14 @@ class Bestseller(BaseModel):
             'num_results': len(lists),
             'start': start,
             'end': end
+        }
+
+    @classmethod
+    def searchAuthor(cls, author_name):
+        lists = list(Bestseller.selct().where(Bestseller.author == author_name))
+
+        return {
+            'books': lists
         }
 
 

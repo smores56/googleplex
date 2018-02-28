@@ -1,4 +1,4 @@
-from datetime import timedelta, datetime
+from datetime import timedelta, datetime, date
 import os
 from peewee import DoesNotExist
 from sanic import Sanic
@@ -10,6 +10,7 @@ from .util import *
 CONFIG = load_config()
 app = Sanic(__name__)
 
+DATE_FORMAT_STRING = '%B %-d, %Y'
 
 @app.route('/')
 @app.route('/index')
@@ -156,6 +157,50 @@ async def logout(request):
         del response.cookies['login_cookie']
         return response
 
+@app.route('/book')
+async def book(request):
+    return render_template('book.html')
+
+@app.route('/list')
+async def list(request):
+    return render_template('list.html')
+
+@app.route('/author')
+async def book(request):
+
+    name = request.args.get('name', '')
+
+    author = Author.search_author(name)
+    info = author.getInfo()
+    print(info)
+    author_info = {'author_name': info['author_name']}
+
+    if 'birth_date' in info.keys():
+        birth_date = info['birth_date']
+        arr = ['Birth Date: ' + birth_date.strftime(DATE_FORMAT_STRING)]
+        if 'death_date' in info.keys():
+            age_end = info['death_date']
+            arr.append("Deceased: " + info['death_date'].strftime(DATE_FORMAT_STRING))
+        else:
+            age_end = datetime.date(datetime.now())
+
+        calc_bday = date(age_end.year, birth_date.month, birth_date.day)
+        print(age_end.year)
+        print(birth_date.year)
+        age = age_end.year - birth_date.year
+        if calc_bday > age_end:
+            age -= 1
+
+        arr.append("Age: " + str(age))
+
+        author_info['age_string'] = ', '.join(arr)
+
+    author_info['books'] = []
+
+    print("Final Author Info")
+    print(author_info)
+
+    return render_template('author.html', **author_info)
 
 @app.middleware('response')
 async def remove_flash(request, response):

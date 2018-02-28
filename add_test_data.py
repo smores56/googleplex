@@ -5,10 +5,15 @@ from googleplex import models
 for model in [models.User, models.Bestseller, models.BestsellerList, models.Author]:
     model.delete().execute()
 
+rowling_birth = datetime.strptime('07311965', '%m%d%Y')
+coelho_birth = datetime.strptime('08241947', '%m%d%Y')
+shakespeare_birth = datetime.strptime('01011564', '%m%d%Y')
+shakespeare_death = datetime.strptime('04231616', '%m%d%Y')
 
 author_data = [
-    {"name": "J. K. Rowling"},
-    {"name": "Paulo Coelho"}
+    {"name": "J. K. Rowling", 'birth_date': rowling_birth},
+    {"name": "Paulo Coelho", 'birth_date': coelho_birth},
+    {"name": "William Shakespeare", 'birth_date': shakespeare_birth, 'death_date': shakespeare_death}
 ]
 
 for a in author_data:
