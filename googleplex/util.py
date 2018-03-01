@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 from jinja2 import Environment, PackageLoader, select_autoescape
 import pyscrypt
 from sanic import response
+from sanic.exceptions import Forbidden
 
 from . import models
 
@@ -40,11 +41,13 @@ def render_template(name, **kwargs):
             loader=PackageLoader('googleplex', 'templates'),
             autoescape=select_autoescape(['html'])
         )
+        render_template.env.filters['datetime_fmt'] = datetime_fmt
 
     return response.html(render_template.env.get_template(name).render(**kwargs))
 
 
 render_template.env = None
+
 
 def authorized(premium=False, admin=False):
     def decorator(f):
@@ -58,7 +61,7 @@ def authorized(premium=False, admin=False):
                 return resp
 
             else:
-                return response.json({'status': 'not_authorized'}, 403)
+                raise Forbidden("You must be logged in to visit the requested page.")
 
         return decorated_function
 
@@ -84,3 +87,7 @@ email_pattern = re.compile('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
 
 def validate_email(email):
     return email_pattern.match(email)
+
+
+def datetime_fmt(date, fmt_str='%B %-d, %Y'):
+    return date.strftime(fmt_str)
