@@ -161,41 +161,50 @@ async def logout(request):
 async def book(request):
     title = request.args.get('title', '')
     book_id = int(request.args.get('id', ''))
-    book = Bestseller.search_book(title, book_id)
+    book = Bestseller.get_book(title, book_id)
 
-    info = book.getInfo()
-    print(info)
-    book_info = {'title': info['title']}
-    if info['author']:
-        book_info['author'] = info['author'].name
-        book_info['author_id'] = info['author'].id
-
-    if info['description']:
-        book_info['description'] = info['description']
-
-    print(book_info)
+    book_info = {k:v for k,v in book.getInfo().items() if v}
+    book_info['author_id'] = book_info['author'].id
+    book_info['author'] = book_info['author'].name
 
     return render_template('book.html', **book_info)
 
 @app.route('/list')
 async def list(request):
-    return render_template('list.html')
+    title = request.args.get('title', '')
+    list_id = request.args.get('id', '')
+
+    bestsellerList = BestsellerList.get_list(title, list_id)
+
+    list_info = {k:v for k, v in bestsellerList.getInfo().items() if v}
+
+    list_info['books'] = Bestseller.get_books_on_list(list_id)
+    list_info['submission_date'] = list_info['submission_date'].strftime(DATE_FORMAT_STRING)
+    list_info['contributor'] = list_info['contributor'].first_name + " " + list_info['contributor'].last_name
+
+    if 'authored_date' in list_info.keys():
+        list_info['authored_date'] = list_info['authored_date'].strftime(DATE_FORMAT_STRING)
+
+
+    print(list_info)
+
+    return render_template('list.html', **list_info)
 
 @app.route('/author')
 async def book(request):
 
     name = request.args.get('name', '')
     author_id = int(request.args.get('id', ''))
-    author = Author.search_author(name, author_id)
-    info = author.getInfo()
-    author_info = {'author_name': info['author_name']}
+    author = Author.get_author(name, author_id)
 
-    if 'birth_date' in info.keys(): #TODO what happens if null?
-        birth_date = info['birth_date']
+    author_info = {k:v for k, v in author.getInfo().items() if v}
+
+    if 'birth_date' in author_info.keys():
+        birth_date = author_info['birth_date']
         arr = ['Birth Date: ' + birth_date.strftime(DATE_FORMAT_STRING)]
-        if 'death_date' in info.keys():
-            age_end = info['death_date']
-            arr.append("Deceased: " + info['death_date'].strftime(DATE_FORMAT_STRING))
+        if 'death_date' in author_info.keys():
+            age_end = author_info['death_date']
+            arr.append("Deceased: " + author_info['death_date'].strftime(DATE_FORMAT_STRING))
         else:
             age_end = datetime.date(datetime.now())
 

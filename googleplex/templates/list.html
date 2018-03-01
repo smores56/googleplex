@@ -1,0 +1,30 @@
+<!-- googleplex/templates/list.html -->
+
+{% extends "overlay.html" %}
+{% block title %}{{title}}{% endblock %}
+{% block style %}
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="/styles/author.css">
+  <link rel="stylesheet" href="/styles/main.css">
+{% endblock %}
+{% block content %}
+  <div class='individual_flex'>
+      <h1>{{title}}</h1>
+      <p>Contributed on {{submission_date}} by {{contributor}}</p>
+      {% if author %} <a href='/author?name={{author}}&id={{author_id}}'><p>{{author}}</p></a> {% endif %}
+      {% if author or author_date %}Originally authored {% if authored_date %}on {{author_date}} {% endif %}{% if author %}by {{author}}{% endif %}{% endif %}
+      {% if description %}<p>{{description}}</p> {% endif %}
+      <h3>Books on this List</h3>
+      <tbody>
+      {%- for book in books -%}
+        <tr>
+          <td>
+              <a href="/book?title={{book.title}}&id={{book.id}}"><p>{{book.title}}</p></a>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+
+  </div>
+  <!-- About the author section? -->
+{% endblock %}
