@@ -38,12 +38,12 @@
         <td>
         {% if r.__class__.__name__ == 'BestsellerList' %}
           <a href="/list?title={{r.title}}&id={{r.id}}">
-              <h3>{{ r.title }} - {% if r.author %}{{r.author.name}}{% else %}No author{% endif %}: {{ r.publication_date | default('No publication date') }}</h3>
+              <h3>{{ r.title }} - {% if r.author %}{{ r.author.name }}{% else %}No author{% endif %}: {{ r.publication_date | default('No publication date') }}</h3>
           </a>
           {% for bs in r.bestsellers %}
-          <p><b>&emsp;{{ loop.index }}</b>: "{{ bs.title }}" - {{ bs.author }}</p>
+          <p><b>&emsp;{{ loop.index }}</b>: "{{ bs.title }}" - {% if bs.author %}{{ bs.author.name }}{% else %}No author{% endif %}</p>
           {% endfor %}
-          <b>Tags: </b>{%- for t in r.tags -%}{% if loop.index != 1 %}, {% endif %}<a style="color:red;">{{ t }}</a>{% endfor %}
+          <b>Tags: </b>{%- for t in r.tags -%}{% if loop.index != 1 %}, {% endif %}<a style="color:red;">{{ t.name }}</a>{% endfor %}
 
         {% elif r.__class__.__name__ == 'Bestseller' %}
           <a href="/book?title={{r.title}}&id={{r.id}}">
