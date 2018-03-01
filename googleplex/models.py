@@ -152,7 +152,7 @@ class BestsellerList(BaseModel):
 
 
 class Bestseller(BaseModel):
-    author = TextField(model=Author, null=True)
+    author = ForeignKeyField(model=Author, null=True)
     description = TextField(null=True)
     title = TextField()
 
