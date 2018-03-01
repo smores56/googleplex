@@ -1,3 +1,4 @@
+from datetime import timedelta, datetime
 import itertools
 import random
 from threading import Thread
@@ -5,8 +6,6 @@ from time import sleep
 from uuid import uuid4
 
 from peewee import *
-from datetime import timedelta, datetime
-from playhouse.postgres_ext import *
 
 from .util import *
 
@@ -20,10 +19,6 @@ database = PostgresqlDatabase(
     })
 
 
-class UnknownField(object):
-    def __init__(self, *_, **__): pass
-
-
 class BaseModel(Model):
 
     class Meta:
@@ -35,9 +30,6 @@ class Author(BaseModel):
     death_date = DateField(null=True)
     ethnicity = TextField(null=True)
     name = TextField()
-
-    class Meta:
-        db_table = 'authors'
 
     @classmethod
     def search(cls, search_str, max_results=10, page=1):
@@ -100,22 +92,15 @@ class User(BaseModel):
         except DoesNotExist as e:
             return (None, 'An unknown error occurred: %s' % e)
 
-    class Meta:
-        db_table = 'users'
-
 
 class BestsellerList(BaseModel):
-    author = ForeignKeyField(db_column='author_id', null=True, model=Author, to_field='id')
+    author = ForeignKeyField(null=True, model=Author)
     authored_date = DateField(null=True)
-    contributor = ForeignKeyField(db_column='contributor_id',
-                                  null=True, model=User, to_field='id')
+    contributor = ForeignKeyField(null=True, model=User)
     description = TextField(null=True)
     num_bestsellers = IntegerField()
     submission_date = DateField()
     title = TextField()
-
-    class Meta:
-        db_table = 'bestseller_lists'
 
     @classmethod
     def search(cls, search_str, max_results=10, page=1):
@@ -137,14 +122,8 @@ class BestsellerList(BaseModel):
 
 class Bestseller(BaseModel):
     author = TextField(null=True)
-    bestseller_list = ForeignKeyField(db_column='bestseller_list_id',
-                                      model=BestsellerList, to_field='id')
     description = TextField(null=True)
-    links = HStoreField(null=True)
     title = TextField()
-
-    class Meta:
-        db_table = 'bestsellers'
 
     @classmethod
     def search(cls, search_str, max_results=10, page=1):
@@ -160,56 +139,37 @@ class Bestseller(BaseModel):
         }
 
 
+class BestsellerListOrdering(BaseModel):
+    bestseller_list = ForeignKeyField(model=BestsellerList)
+    bestseller = ForeignKeyField(model=Bestseller)
+    index = IntegerField()
+
+
 class File(BaseModel):
-    bestseller_list = ForeignKeyField(db_column='bestseller_list_id',
-                                      model=BestsellerList, to_field='id')
+    bestseller_list = ForeignKeyField(model=BestsellerList)
     name = TextField()
     path = TextField()
 
-    class Meta:
-        db_table = 'files'
-
 
 class Message(BaseModel):
-    recipient = ForeignKeyField(db_column='recipient_id', null=True, model=User, to_field='id')
+    recipient = ForeignKeyField(null=True, model=User)
     send_time = TextField()
-    sender = ForeignKeyField(db_column='sender_id', null=True, model=User,
-                             related_name='users_sender_set', to_field='id')
+    sender = ForeignKeyField(null=True, model=User)
     subject = TextField()
     text = TextField()
-
-    class Meta:
-        db_table = 'messages'
-
-
-class Review(BaseModel):
-    authored_time = DateTimeField()
-    bestseller_list = ForeignKeyField(db_column='bestseller_list_id',
-                                      model=BestsellerList, to_field='id')
-    rating = IntegerField()
-    text = TextField()
-    user = ForeignKeyField(db_column='user_id', null=True, model=User, to_field='id')
-
-    class Meta:
-        db_table = 'reviews'
 
 
 class Search(BaseModel):
     saved_on = DateTimeField()
+    comment = TextField()
     search_str = TextField()
-    user = ForeignKeyField(db_column='user_id', null=True, model=User, to_field='id')
-
-    class Meta:
-        db_table = 'searches'
+    user = ForeignKeyField(null=True, model=User)
 
 
 class Session(BaseModel):
     expire_time = DateTimeField()
     uuid = TextField()
-    user = ForeignKeyField(db_column='user_id', model=User, to_field='id')
-
-    class Meta:
-        db_table = 'sessions'
+    user = ForeignKeyField(model=User)
 
     @classmethod
     def for_user(cls, user_id, long_term=False):
@@ -260,18 +220,16 @@ class Session(BaseModel):
 class Tag(BaseModel):
     name = TextField()
 
-    class Meta:
-        db_table = 'tags'
-
 
 class TagBestsellerListJunction(BaseModel):
-    bestseller_list = ForeignKeyField(db_column='bestseller_list_id',
-                                      model=BestsellerList, to_field='id')
-    tag = ForeignKeyField(db_column='tag_id', model=Tag, to_field='id')
+    bestseller_list = ForeignKeyField(model=BestsellerList)
+    tag = ForeignKeyField(model=Tag)
 
     class Meta:
-        db_table = 'tag_bestseller_list_junction'
-        indexes = (
-            (('tag', 'bestseller_list'), True),
-        )
         primary_key = CompositeKey('bestseller_list', 'tag')
+
+
+MODELS = [Author, User, Bestseller, BestsellerList, BestsellerListOrdering,
+          File, Message, Search, Session, Tag, TagBestsellerListJunction]
+
+database.create_tables(MODELS, safe=True)
