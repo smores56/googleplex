@@ -37,18 +37,24 @@
       <tr>
         <td>
         {% if r.__class__.__name__ == 'BestsellerList' %}
-          <h3>{{ r.title }} - {% if r.author %}{{r.author.name}}{% else %}No author{% endif %}: {{ r.publication_date | default('No publication date') }}</h3>
+          <a href="/list?title={{r.title}}&id={{r.id}}">
+              <h3>{{ r.title }} - {% if r.author %}{{r.author.name}}{% else %}No author{% endif %}: {{ r.publication_date | default('No publication date') }}</h3>
+          </a>
           {% for bs in r.bestsellers %}
           <p><b>&emsp;{{ loop.index }}</b>: "{{ bs.title }}" - {{ bs.author }}</p>
           {% endfor %}
           <b>Tags: </b>{%- for t in r.tags -%}{% if loop.index != 1 %}, {% endif %}<a style="color:red;">{{ t }}</a>{% endfor %}
 
         {% elif r.__class__.__name__ == 'Bestseller' %}
-          <h3>{{ r.title }} - {% if r.author %}{{ r.author.name }}{% else %}No author{% endif %}</h3>
+          <a href="/book?title={{r.title}}&id={{r.id}}">
+              <h3>{{ r.title }} - {% if r.author %}{{ r.author.name }}{% else %}No author{% endif %}</h3>
+          </a>
 
         {% else %}
-          <h3>{{ r.name }} - {% if r.birth_date %}Born {{ r.birth_date }}{% else %}Birth date unknown{% endif %},
-          {% if r.death_date %}Born {{ r.death_date }}{% else %}Death date unknown{% endif %}</h3>
+          <a href="/author?name={{r.name}}&id={{r.id}}">
+              <h3>{{ r.name }} - {% if r.birth_date %}Born {{ r.birth_date }}{% else %}Birth date unknown{% endif %},
+              {% if r.death_date %}Born {{ r.death_date }}{% else %}Death date unknown{% endif %}</h3>
+          </a>
 
         {% endif %}
         </td>

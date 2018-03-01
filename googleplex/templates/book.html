@@ -1,0 +1,17 @@
+<!-- googleplex/templates/book.html -->
+
+{% extends "overlay.html" %}
+{% block title %}{{title}}{% endblock %}
+{% block style %}
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="/styles/author.css">
+  <link rel="stylesheet" href="/styles/main.css">
+{% endblock %}
+{% block content %}
+  <div class='individual_flex'>
+      <h1>{{title}}</h1>
+      {% if author %} <a href='/author?name={{author}}&id={{author_id}}'><p>{{author}}</p></a> {% endif %}
+      {% if description %}<p>{{description}}</p> {% endif %}
+  </div>
+  <!-- About the author section? -->
+{% endblock %}

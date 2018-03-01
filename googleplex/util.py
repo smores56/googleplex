@@ -46,7 +46,6 @@ def render_template(name, **kwargs):
 
 render_template.env = None
 
-
 def authorized(premium=False, admin=False):
     def decorator(f):
         @wraps(f)

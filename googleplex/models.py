@@ -44,6 +44,23 @@ class Author(BaseModel):
             'end': end
         }
 
+    @classmethod
+    def get_author(cls, author_name, author_id):
+        return list(Author.select().where((Author.name == author_name) and (Author.id == author_id)))[0]
+
+    def getInfo(self):
+        info = {'author_name': self.name}
+        if self.birth_date:
+            info['birth_date'] = self.birth_date
+
+        if self.death_date:
+            info['death_date'] = self.death_date
+
+        if self.ethnicity:
+            info['ethnicity'] = self.ethnicity
+
+        return info
+
 
 class User(BaseModel):
     admin = BooleanField()
@@ -116,12 +133,26 @@ class BestsellerList(BaseModel):
         }
 
     @classmethod
+    def get_list(cls, list_title, list_id):
+        return list(BestsellerList.select().where((BestsellerList.title == list_title) and (BestsellerList.id == list_id)))[0]
+
+    def getInfo(self):
+        return {
+            'title': self.title,
+            'submission_date': self.submission_date,
+            'contributor': self.contributor,
+            'authored_date': self.authored_date,
+            'num_bestsellers': self.num_bestsellers,
+            'description': self.description
+        }
+
+    @classmethod
     def from_form(cls, form):
         pass
 
 
 class Bestseller(BaseModel):
-    author = TextField(null=True)
+    author = TextField(model=Author, null=True)
     description = TextField(null=True)
     title = TextField()
 
@@ -137,6 +168,25 @@ class Bestseller(BaseModel):
             'start': start,
             'end': end
         }
+
+    @classmethod
+    def get_book(cls, book_title, book_id):
+        return list(Bestseller.select().where((Bestseller.title == book_title) and (Bestseller.id == book_id)))[0]
+
+    def getInfo(self):
+        return {
+            'author': self.author,
+            'title': self.title,
+            'description': self.description
+        }
+
+    @classmethod
+    def get_books_by_author(cls, author):
+        return list(Bestseller.select().where(Bestseller.author == author))
+
+    @classmethod
+    def get_books_on_list(cls, list_id):
+        return list(Bestseller.select().where(Bestseller.bestseller_list_id == list_id))
 
 
 class BestsellerListOrdering(BaseModel):
