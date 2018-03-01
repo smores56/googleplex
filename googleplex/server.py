@@ -3,6 +3,7 @@ import os
 from peewee import DoesNotExist
 from sanic import Sanic
 from sanic.response import *
+from sanic.exceptions import Forbidden, NotFound, ServerError
 
 from .models import *
 from .util import *
@@ -10,7 +11,6 @@ from .util import *
 CONFIG = load_config()
 app = Sanic(__name__)
 
-DATE_FORMAT_STRING = '%B %-d, %Y'
 
 @app.route('/')
 @app.route('/index')
@@ -137,8 +137,9 @@ async def results(request):
 
     return render_template('results.html', user=user, **results)
 
-@app.route('/manualpreview', methods=['GET','POST'])
-async def manualPreview(request):
+
+@app.route('/manualpreview', methods=['GET', 'POST'])
+async def manual_preview(request):
     data = request.json
     listTitle = data.get('list_title')
     bookCount = data.get('book_count')
@@ -149,6 +150,7 @@ async def manualPreview(request):
         title = book.get('bookTitle')
     return render_template('preview.html')
 
+
 @app.route('/logout')
 async def logout(request):
     if 'login_cookie' in request.cookies:
@@ -157,73 +159,60 @@ async def logout(request):
         del response.cookies['login_cookie']
         return response
 
+
 @app.route('/book')
 async def book(request):
     title = request.args.get('title', '')
-    book_id = int(request.args.get('id', ''))
-    book = Bestseller.get_book(title, book_id)
+    book_id = int(request.args.get('id', -1))
+    bestseller = Bestseller.get_book(title, book_id)
+    if not bestseller:
+        raise NotFound('The specified bestseller could not be found in our system.')
 
-    book_info = {k:v for k,v in book.getInfo().items() if v}
-    if 'author' in book_info.keys():
-        book_info['author_id'] = book_info['author'].id
-        book_info['author'] = book_info['author'].name
+    else:
+        return render_template('book.html', bestseller=bestseller)
 
-    return render_template('book.html', **book_info)
 
 @app.route('/list')
-async def list(request):
+async def bestseller_list(request):
     title = request.args.get('title', '')
-    list_id = request.args.get('id', '')
+    list_id = int(request.args.get('id', -1))
+    bestseller_list = BestsellerList.get_list(title, list_id)
+    if not bestseller_list:
+        raise NotFound('The specified bestseller list could not be found in our system.')
 
-    bestsellerList = BestsellerList.get_list(title, list_id)
+    else:
+        return render_template('list.html', list=bestseller_list)
 
-    list_info = {k:v for k, v in bestsellerList.getInfo().items() if v}
-
-    list_info['books'] = Bestseller.get_books_on_list(list_id)
-    list_info['submission_date'] = list_info['submission_date'].strftime(DATE_FORMAT_STRING)
-    list_info['contributor'] = list_info['contributor'].first_name + " " + list_info['contributor'].last_name
-
-    if 'authored_date' in list_info.keys():
-        list_info['authored_date'] = list_info['authored_date'].strftime(DATE_FORMAT_STRING)
-
-
-    print(list_info)
-
-    return render_template('list.html', **list_info)
 
 @app.route('/author')
 async def book(request):
-
     name = request.args.get('name', '')
-    author_id = int(request.args.get('id', ''))
-    author = Author.get_author(name, author_id)
+    author = Author.get_author(name)
+    if not author:
+        raise NotFound('The specified author could not be found in our system.')
 
-    author_info = {k:v for k, v in author.getInfo().items() if v}
+    else:
+        return render_template('author.html', author=author)
 
-    if 'birth_date' in author_info.keys():
-        birth_date = author_info['birth_date']
-        arr = ['Birth Date: ' + birth_date.strftime(DATE_FORMAT_STRING)]
-        if 'death_date' in author_info.keys():
-            age_end = author_info['death_date']
-            arr.append("Deceased: " + author_info['death_date'].strftime(DATE_FORMAT_STRING))
-        else:
-            age_end = datetime.date(datetime.now())
 
-        calc_bday = date(age_end.year, birth_date.month, birth_date.day)
-        age = age_end.year - birth_date.year
-        if calc_bday > age_end:
-            age -= 1
+@app.exception(NotFound)
+async def page_not_found(request, exception):
+    return render_template('page_not_found.html', error=str(exception))
 
-        arr.append("Age: " + str(age))
 
-        author_info['age_string'] = ', '.join(arr)
+@app.exception(Forbidden)
+async def access_forbidden(request, exception):
+    return render_template('access_forbidden.html', error=str(exception))
 
-    author_info['books'] = Bestseller.get_books_by_author(author)
 
-    return render_template('author.html', **author_info)
+@app.exception(ServerError)
+async def internal_error(request, exception):
+    return render_template('internal_error.html', error=str(exception))
+
 
 @app.middleware('response')
 async def remove_flash(request, response):
+    # TODO: if new flash is set, it will get deleted!
     if 'flash' in request.cookies:
         del response.cookies['flash']
 
