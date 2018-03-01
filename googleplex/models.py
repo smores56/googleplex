@@ -1,4 +1,4 @@
-from datetime import timedelta, datetime
+from datetime import timedelta, datetime, date, time
 import itertools
 import random
 from threading import Thread
@@ -31,6 +31,26 @@ class Author(BaseModel):
     ethnicity = TextField(null=True)
     name = TextField()
 
+    @property
+    def books(self):
+        return list(Bestseller.select().where(Bestseller.author == self))
+
+    @property
+    def age(self):
+        if not hasattr(self, '_age'):
+            if self.birth_date:
+                end_date = self.death_date or date.today()
+                end_bday = date(end_date.year, self.birth_date.month, self.birth_date.day)
+
+                self._age = end_date.year - self.birth_date.year
+                if end_bday > end_date:
+                    self._age -= 1
+
+            else:
+                self._age = None
+
+        return self._age
+
     @classmethod
     def search(cls, search_str, max_results=10, page=1):
         start = (page - 1) * max_results
@@ -45,21 +65,8 @@ class Author(BaseModel):
         }
 
     @classmethod
-    def get_author(cls, author_name, author_id):
-        return list(Author.select().where((Author.name == author_name) and (Author.id == author_id)))[0]
-
-    def getInfo(self):
-        info = {'author_name': self.name}
-        if self.birth_date:
-            info['birth_date'] = self.birth_date
-
-        if self.death_date:
-            info['death_date'] = self.death_date
-
-        if self.ethnicity:
-            info['ethnicity'] = self.ethnicity
-
-        return info
+    def get_author(cls, author_name):
+        return Author.get_or_none(Author.name == author_name)
 
 
 class User(BaseModel):
@@ -72,6 +79,10 @@ class User(BaseModel):
     pass_hash = TextField()
     position = TextField(null=True)
     premium = BooleanField()
+
+    @property
+    def full_name(self):
+        return "%s %s" % (self.first_name, self.last_name)
 
     @classmethod
     def load_if_logged_in(cls, request):
@@ -119,6 +130,16 @@ class BestsellerList(BaseModel):
     submission_date = DateField()
     title = TextField()
 
+    @property
+    def bestsellers(self):
+        return [ordering.bestseller for ordering in BestsellerListOrdering.select().where(
+            BestsellerListOrdering.bestseller_list == self).order_by(BestsellerListOrdering.index)]
+
+    @property
+    def tags(self):
+        return [j.tag for j in TagBestsellerListJunction.select()
+                .where(TagBestsellerListJunction.bestseller_list == self)]
+
     @classmethod
     def search(cls, search_str, max_results=10, page=1):
         start = (page - 1) * max_results
@@ -134,21 +155,12 @@ class BestsellerList(BaseModel):
 
     @classmethod
     def get_list(cls, list_title, list_id):
-        return list(BestsellerList.select().where((BestsellerList.title == list_title) and (BestsellerList.id == list_id)))[0]
-
-    def getInfo(self):
-        return {
-            'title': self.title,
-            'submission_date': self.submission_date,
-            'contributor': self.contributor,
-            'authored_date': self.authored_date,
-            'num_bestsellers': self.num_bestsellers,
-            'description': self.description
-        }
+        return BestsellerList.get_or_none((BestsellerList.title == list_title) and
+                                          (BestsellerList.id == list_id))
 
     @classmethod
     def from_form(cls, form):
-        pass
+        raise NotImplemented
 
 
 class Bestseller(BaseModel):
@@ -171,22 +183,12 @@ class Bestseller(BaseModel):
 
     @classmethod
     def get_book(cls, book_title, book_id):
-        return list(Bestseller.select().where((Bestseller.title == book_title) and (Bestseller.id == book_id)))[0]
+        return Bestseller.get_or_none((Bestseller.title == book_title) and
+                                      (Bestseller.id == book_id))
 
-    def getInfo(self):
-        return {
-            'author': self.author,
-            'title': self.title,
-            'description': self.description
-        }
-
-    @classmethod
-    def get_books_by_author(cls, author):
-        return list(Bestseller.select().where(Bestseller.author == author))
-
-    @classmethod
-    def get_books_on_list(cls, list_id):
-        return list(Bestseller.select().where(Bestseller.bestseller_list_id == list_id))
+    def get_lists_with_this_bestseller(self):
+        return [ordering.bestseller_list for ordering in
+                BestsellerListOrdering.select().where(BestsellerListOrdering.bestseller == self)]
 
 
 class BestsellerListOrdering(BaseModel):
@@ -213,7 +215,7 @@ class Search(BaseModel):
     saved_on = DateTimeField()
     comment = TextField()
     search_str = TextField()
-    user = ForeignKeyField(null=True, model=User)
+    user = ForeignKeyField(model=User)
 
 
 class Session(BaseModel):
