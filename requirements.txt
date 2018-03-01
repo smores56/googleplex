@@ -1,6 +1,8 @@
+aiosmtplib
 python-dotenv
 jinja2
 peewee
 peewee-async
 pyscrypt
 sanic
+XlsxWriter
