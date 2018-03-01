@@ -164,8 +164,9 @@ async def book(request):
     book = Bestseller.get_book(title, book_id)
 
     book_info = {k:v for k,v in book.getInfo().items() if v}
-    book_info['author_id'] = book_info['author'].id
-    book_info['author'] = book_info['author'].name
+    if 'author' in book_info.keys():
+        book_info['author_id'] = book_info['author'].id
+        book_info['author'] = book_info['author'].name
 
     return render_template('book.html', **book_info)
 
