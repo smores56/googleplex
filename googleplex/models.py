@@ -238,7 +238,7 @@ class Session(BaseModel):
                 cls.remove_expired()
                 sleep(300)
 
-        Thread(target=culler).start()
+        Thread(target=culler, daemon=True).start()
 
     @classmethod
     def remove_expired(cls):
@@ -276,9 +276,6 @@ class Tag(BaseModel):
 class TagBestsellerListJunction(BaseModel):
     bestseller_list = ForeignKeyField(model=BestsellerList)
     tag = ForeignKeyField(model=Tag)
-
-    class Meta:
-        primary_key = CompositeKey('bestseller_list', 'tag')
 
 
 MODELS = [Author, User, Bestseller, BestsellerList, BestsellerListOrdering,
