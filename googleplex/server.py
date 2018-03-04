@@ -98,7 +98,7 @@ async def registration(request):
             return redirect('/login')
 
 
-@app.route('/password_reset')
+@app.route('/password_reset', methods=['GET', 'POST'])
 async def password_reset(request):
     email = str(request.form.get('email'))
     print(email)
