@@ -15,7 +15,7 @@
     <table id="list" style="width:100%">
       <tr>
         <span class="col-lg-4" style="text-align:left; font-size:24px">List Title: </span>
-        <input type="text" id="listTitle" placeholder="">
+        <input type="text" id="title" placeholder="">
       </tr>
       <tr>
         <td>Book detail: </td>
@@ -24,7 +24,7 @@
             <tr>
               <td>
                 <span class="col-lg-3" style="text-align:left">Title: </span>
-                <input type="text" id="bookTitle1">
+                <input type="text" id="title1">
               </td>
             </tr>
             <tr>
@@ -35,17 +35,18 @@
             </tr>
             <tr>
               <td>
-                <span class="col-lg-4" style="text-align:left">Year Published: </span>
-                <input type="text" id="yearPublished1">
+                <span class="col-lg-4" style="text-align:left">Date Published: </span>
+                <input type="date" id="authored_date1">
               </td>
             </tr>
           </table>
         </td>
       </tr>
     </table>
+    <form id="manual-submit" action="/preview?type=manual" method="post">
+      <button id="load"type="button">Add new book +</button>
+      <button id="remove" type="button">Remove last book -</button>
+      <button id="preview" type="submit">Preview List</button>
+    </form>
   </div>
-<form id="manual-submit" action="/manualpreview" method="post">
-  <button id="load"type="button">Add new book +</button>
-  <button id="preview" type="submit">Preview List</button>
-</form>
 {% endblock %}
