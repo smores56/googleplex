@@ -3,6 +3,8 @@ from functools import wraps
 from os import environ
 from os.path import join, dirname
 import re
+from threading import Thread
+from time import sleep
 
 from dotenv import load_dotenv
 from jinja2 import Environment, PackageLoader, select_autoescape
@@ -91,3 +93,13 @@ def validate_email(email):
 
 def datetime_fmt(date, fmt_str='%B %-d, %Y'):
     return date.strftime(fmt_str)
+
+
+def schedule_cleanings():
+    def run_cleaning():
+        while True:
+            models.Session.remove_expired()
+            models.File.remove_unaccounted()
+            models.Message.remove_floating()
+            sleep(600)
+    Thread(target=run_cleaning, daemon=True).start()
