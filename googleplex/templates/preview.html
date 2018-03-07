@@ -23,58 +23,46 @@
                 </th>
               </tr>
               <tr>
-                <th>
-                  <!-- Added space in front to align with other headers -->
-                  <span class="col-lg-4" style="align-items:center;">&nbsp;&nbsp;List Title : Weird, Odd List</span>
-                  <a class = "btn btn-default">
-                    <i class="fa fa-plus"></i>&nbsp;Tag
-                  </a>
-                </th>
+                <th>List Title: {{ list.title }}</th>
+              </tr>
+              {% if type == 'manual' %}
+                {% for ordering in orderings %}
+                <tr>
+                  <th>Book #{{ ordering.index }}</th>
+                  <th>Title: {{ ordering.bestseller.title }}</th>
+                  <th>Author: {{ ordering.bestseller.author.name }}</th>
+                  <th>Published Date: {{ ordering.bestseller.authored_date }}</th>
+                </tr>
+                {% endfor %}
+              {% elif type == 'file' %}
+                <tr>
+                  <th>Your file (named "{{ file_name }}"):</th>
+                </tr>
+                <tr>
+                  <th style="margin:auto;text-align:center;">
+                     <object width="70%" height="500" data="{{ file_path }}"></object>
+                  </th>
+                </tr>
+              {% else %} {# type == 'image' #}
+              <tr>
+                <th>Your image (titled "{{ image_name }}"):</th>
               </tr>
               <tr>
-                <th>
-                  <span class="col-lg-4" style="align-items:center;">Book Title : Weird Days</span>
-                  <a class = "btn btn-default">
-                    <i class="fa fa-plus"></i>&nbsp;Tag
-                  </a>
+                <th style="margin:auto;text-align:center;">
+                  <img width="70%" height="500" src="{{ image_path }}">
                 </th>
               </tr>
-              <tr>
-                <th>
-                  <span class="col-lg-4" style="align-items:center;">Book Title : Creepy Days</span>
-                  <a class = "btn btn-default">
-                    <i class="fa fa-plus"></i>&nbsp;Tag
-                  </a>
-                </th>
-              </tr>
-              <tr>
-                <th>
-                  <span class="col-lg-4" style="align-items:center;">Book Title : Slightly Off Days</span>
-                  <a class = "btn btn-default">
-                    <i class="fa fa-plus"></i>&nbsp;Tag
-                  </a>
-                </th>
-              </tr>
-              <tr>
-                <th>
-                  <span class="col-lg-4" style="align-items:center;">Book Title : Invisible Days</span>
-                  <a class = "btn btn-default">
-                    <i class="fa fa-plus"></i>&nbsp;Tag
-                  </a>
-                </th>
-              </tr>
-              <tr>
-                <th>
-                  <a class="btn btn-success" onclick="location.href='results'">
-                    <i class="fa fa-upload"></i>&nbsp;Upload
-                  </a>
-                  <a class="btn btn-danger" onclick="location.href='/'">
-                  <i class="fa fa-arrow-left"></i>&nbsp;Cancel
-                  </a>
-                </th>
-              </tr>
+              {% endif %}
             </thead>
           </table>
+          <form action="/preview" method="POST">
+            <a>Add tags to your list (A comma-separated list of words or phrases):</a>
+            <label for="tags">Tags:</label><input name="tags" type="text">
+            <input type="text" id="confirm" name="confirm" value="yes" hidden>
+            <input type="number" name="list_id" value="{{ list.id }}" hidden>
+            <input type="submit" value="Confirm">
+            <input type="submit" value="Cancel" onclick="document.getElementById('confirm').value = 'no';">
+          </form>
         </ul>
       </div>
     </div>
