@@ -3,3 +3,4 @@ googleplex/.env
 .ropeproject/
 .idea/
 __pycache__/
+googleplex/uploaded/
