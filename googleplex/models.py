@@ -1,9 +1,9 @@
 from datetime import timedelta, datetime, date, time
 import itertools
 import random
-from threading import Thread
-from time import sleep
+import os
 from uuid import uuid4
+from glob import glob
 
 from peewee import *
 
@@ -52,7 +52,7 @@ class Author(BaseModel):
         return self._age
 
     @classmethod
-    def search(cls, search_str, max_results=10, page=1):
+    def search(cls, search_str, max_results=25, page=1):
         start = (page - 1) * max_results
         end = start + max_results
         lists = list(Author.select().where(Author.name.contains(search_str)))
@@ -70,15 +70,16 @@ class Author(BaseModel):
 
 
 class User(BaseModel):
-    admin = BooleanField()
+    admin = BooleanField(default=False)
     email = TextField(unique=True)
     first_name = TextField()
     institution = TextField(null=True)
-    is_banned = BooleanField()
+    banned = BooleanField(default=False)
     last_name = TextField()
     pass_hash = TextField()
     position = TextField(null=True)
-    premium = BooleanField()
+    premium = BooleanField(default=False)
+    active = BooleanField(default=False)
 
     @property
     def full_name(self):
@@ -92,6 +93,9 @@ class User(BaseModel):
             if session:
                 session.refresh()
                 return session.user
+
+            else:
+                del request.cookies['login_cookie']
 
         return None
 
@@ -109,7 +113,7 @@ class User(BaseModel):
         for opt_field in ['institution', 'position']:
             vals[opt_field] = form.get(opt_field, None)
 
-        vals.update({'premium': premium, 'admin': admin})
+        vals.update({'premium': premium, 'admin': admin, 'banned': False})
         re_hash = scrypt(vals['pass_hash'], (vals['email'] + 'xyz')[:8])
         vals['pass_hash'] = re_hash
 
@@ -122,13 +126,14 @@ class User(BaseModel):
 
 
 class BestsellerList(BaseModel):
-    author = ForeignKeyField(null=True, model=Author)
+    author = ForeignKeyField(null=True, model=Author, on_delete='SET NULL')
     authored_date = DateField(null=True)
-    contributor = ForeignKeyField(null=True, model=User)
+    contributor = ForeignKeyField(null=True, model=User, on_delete='SET NULL')
     description = TextField(null=True)
     num_bestsellers = IntegerField()
     submission_date = DateField()
     title = TextField()
+    active = BooleanField(default=False)
 
     @property
     def bestsellers(self):
@@ -141,7 +146,7 @@ class BestsellerList(BaseModel):
                 .where(TagBestsellerListJunction.bestseller_list == self)]
 
     @classmethod
-    def search(cls, search_str, max_results=10, page=1):
+    def search(cls, search_str, max_results=25, page=1):
         start = (page - 1) * max_results
         end = start + max_results
         lists = list(BestsellerList.select().where(BestsellerList.title.contains(search_str)))
@@ -159,17 +164,54 @@ class BestsellerList(BaseModel):
                                           (BestsellerList.id == list_id))
 
     @classmethod
-    def from_form(cls, form):
-        raise NotImplemented
+    def from_form(cls, form, user=None):
+        vals = {'contributor': user, 'submission_date': date.today()}
+        vals['title'] = form.get('title')
+        vals['num_bestsellers'] = form.get('num_bestsellers')
+
+        if 'description' in form:
+            vals['description'] = form.get('description')
+        if 'authored_date' in form:
+            vals['authored_date'] = datetime.strptime(form['authored_date'][0], '%Y-%m-%d').date()
+        if 'author' in form:
+            vals['author'] = Author.get_or_create(name=form.get('author'))[0]
+
+        return BestsellerList.create(**vals)
+
+    @classmethod
+    def from_json(cls, json, user):
+        vals = {'contributor': user, 'submission_date': date.today(),
+                'active': False, 'title': json.get('title'),
+                'description': json.get('description') if 'description' in json else None}
+        if 'author' in json:
+            vals['author'] = Author.get_or_create(name=json.get('author'))[0]
+        else:
+            vals['author'] = None
+        if 'authored_date' in json:
+            vals['authored_date'] = datetime.strptime(json.get('authored_date'), '%Y-%m-%d').date()
+        else:
+            vals['authored_date'] = None
+
+        bestsellers = [Bestseller.from_json(bestseller) for bestseller in json.get('bestsellers')]
+        vals['num_bestsellers'] = len(bestsellers)
+
+        bestseller_list = BestsellerList.create(**vals)
+
+        for index, bestseller in enumerate(bestsellers):
+            BestsellerListOrdering.create(
+                index=index + 1, bestseller=bestseller, bestseller_list=bestseller_list)
+
+        return bestseller_list
 
 
 class Bestseller(BaseModel):
-    author = ForeignKeyField(model=Author, null=True)
+    author = ForeignKeyField(model=Author, null=True, on_delete='SET NULL')
+    authored_date = DateField(null=True)
     description = TextField(null=True)
     title = TextField()
 
     @classmethod
-    def search(cls, search_str, max_results=10, page=1):
+    def search(cls, search_str, max_results=25, page=1):
         start = (page - 1) * max_results
         end = start + max_results
         lists = list(Bestseller.select().where(Bestseller.title.contains(search_str)))
@@ -190,38 +232,83 @@ class Bestseller(BaseModel):
         return [ordering.bestseller_list for ordering in
                 BestsellerListOrdering.select().where(BestsellerListOrdering.bestseller == self)]
 
+    @classmethod
+    def from_json(cls, json):
+        json['author'] = Author.get_or_create(name=json.get('author'))[0]
+        return Bestseller.create(**json)
+
 
 class BestsellerListOrdering(BaseModel):
-    bestseller_list = ForeignKeyField(model=BestsellerList)
-    bestseller = ForeignKeyField(model=Bestseller)
+    bestseller_list = ForeignKeyField(model=BestsellerList, on_delete='CASCADE')
+    bestseller = ForeignKeyField(model=Bestseller, on_delete='CASCADE')
     index = IntegerField()
 
 
 class File(BaseModel):
-    bestseller_list = ForeignKeyField(model=BestsellerList)
+    bestseller_list = ForeignKeyField(model=BestsellerList, on_delete='CASCADE')
     name = TextField()
     path = TextField()
+    expire_time = DateTimeField(null=True, default=datetime.now() + timedelta(hours=1))
+
+    # MAX_IMAGE_SIZE = 256
+    # MAX_FILE_SIZE = 1024
+
+    @classmethod
+    def remove_unaccounted(cls):
+        db_paths = {f.path: f for f in File.select()}
+        local_paths = list(glob('/uploaded/*'))
+        for path in local_paths:
+            if not path in db_paths.keys():
+                os.remove(path)
+                local_paths.remove(path)
+
+        for path, f in db_paths:
+            if not path in local_paths:
+                f.delete_instance()
+
+    @classmethod
+    def remove_expired(cls):
+        for f in File.select().where(File.expire_time < datetime.now()):
+            f.delete_instance()
+
+    @classmethod
+    def upload(cls, file_obj, bestseller_list):
+        File.remove_expired()
+
+        if not os.path.isdir('./googleplex/uploaded'):
+            os.mkdir('./googleplex/uploaded')
+
+        path = './googleplex/uploaded/%d-%s' % (bestseller_list.id, file_obj.name)
+        with open(path, 'wb+') as f:
+            f.write(file_obj.body)
+
+        return File.create(path=path, name=file_obj.name, bestseller_list=bestseller_list)
 
 
 class Message(BaseModel):
-    recipient = ForeignKeyField(null=True, model=User)
+    recipient = ForeignKeyField(null=True, model=User, on_delete='SET NULL')
     send_time = TextField()
-    sender = ForeignKeyField(null=True, model=User)
+    sender = ForeignKeyField(null=True, model=User, on_delete='SET NULL')
     subject = TextField()
     text = TextField()
+
+    @classmethod
+    def remove_floating():
+        for msg in Message.select().where(Message.recipient == None and Message.sender == None):
+            msg.delete_instance()
 
 
 class Search(BaseModel):
     saved_on = DateTimeField()
     comment = TextField()
     search_str = TextField()
-    user = ForeignKeyField(model=User)
+    user = ForeignKeyField(model=User, on_delete='CASCADE')
 
 
 class Session(BaseModel):
     expire_time = DateTimeField()
     uuid = TextField()
-    user = ForeignKeyField(model=User)
+    user = ForeignKeyField(model=User, on_delete='CASCADE')
 
     @classmethod
     def for_user(cls, user_id, long_term=False):
@@ -230,15 +317,6 @@ class Session(BaseModel):
 
     def __str__(self):
         return '%s %s' % (self.user.id, self.uuid)
-
-    @classmethod
-    def setup_culler(cls):
-        def culler():
-            while True:
-                cls.remove_expired()
-                sleep(300)
-
-        Thread(target=culler, daemon=True).start()
 
     @classmethod
     def remove_expired(cls):
@@ -274,8 +352,8 @@ class Tag(BaseModel):
 
 
 class TagBestsellerListJunction(BaseModel):
-    bestseller_list = ForeignKeyField(model=BestsellerList)
-    tag = ForeignKeyField(model=Tag)
+    bestseller_list = ForeignKeyField(model=BestsellerList, on_delete='CASCADE')
+    tag = ForeignKeyField(model=Tag, on_delete='CASCADE')
 
 
 MODELS = [Author, User, Bestseller, BestsellerList, BestsellerListOrdering,
