@@ -21,19 +21,19 @@ async def index(request):
 
 @app.route('/login', methods=['POST', 'GET'])
 async def login(request):
+    login_cookie = request.cookies.get('login_cookie')
+    if login_cookie:
+        if Session.from_cookie(login_cookie):
+            return redirect('/')
+        else:
+            del request.cookies['login_cookie']
+
     if request.method == 'GET':
         flash = request.cookies.pop('flash', None)
         user = User.load_if_logged_in(request)
         return redirect('/') if user else render_template('login.html', flash=flash, user=user)
 
     else:
-        login_cookie = request.cookies.get('login_cookie')
-        if login_cookie:
-            response = redirect('/')
-            if Session.from_cookie(login_cookie):
-                del response.cookies['login_cookie']
-            return response
-
         email = request.form.get('email')
         pass_hash = request.form.get('pass_hash')
         remember_me = request.form.get('remember')
@@ -79,6 +79,12 @@ async def styles(request, sheet):
     return await load_file(os.path.join('./static/styles/', sheet))
 
 
+@app.route('/uploaded/<requested>')
+@authorized()
+async def uploaded(request, user, requested):
+    return await load_file(os.path.join('./uploaded/', requested))
+
+
 @app.route('/registration', methods=['GET', 'POST'])
 async def registration(request):
     if request.method == 'GET':
@@ -104,22 +110,86 @@ async def profile(request, user):
     return render_template('profile.html', user=user)
 
 
-@app.route('/submit')
+@app.route('/submit', methods=['GET', 'POST'])
 @authorized()
 async def submit(request, user):
-    return render_template('submit.html', user=user)
+    if request.method == 'GET':
+        return render_template('submit.html', user=user)
+
+    else:
+        list_type = request.args.get('type', 'manual')
+        vals = {'type': list_type}
+
+        if list_type == 'file':
+            bs_list = BestsellerList.from_form(request.form, user)
+            bs_file = File.upload(request.files.get('file'), bs_list)
+            vals['file_id'] = bs_file.id
+        elif list_type == 'image':
+            bs_list = BestsellerList.from_form(request.form, user)
+            bs_image = File.upload(request.files.get('image'), bs_list)
+            vals['image_id'] = bs_image.id
+
+        vals['list_id'] = bs_list.id
+
+        return redirect(app.url_for('preview', **vals))
 
 
-@app.route('/manual_submit')
+@app.route('/manual_submit', methods=['GET', 'POST'])
 @authorized()
 async def manual_submit(request, user):
-    return render_template('manual_submit.html', user=user)
+    if request.method == 'GET':
+        return render_template('manual_submit.html', user=user)
+
+    else:
+        return json({'list_id': BestsellerList.from_json(request.json, user).id})
 
 
-@app.route('/preview')
+@app.route('/preview', methods=['GET', 'POST'])
 @authorized()
 async def preview(request, user):
-    return render_template('preview.html', user=user)
+    list_type = request.args.get('type', 'manual')
+    vals = {'type': list_type}
+
+    if request.method == 'POST':
+        list_id = int(request.form.get('list_id', -1))
+        bs_list = BestsellerList.get_by_id(list_id)
+        tags = [Tag.get_or_create(name=tag.strip())[0]
+                for tag in request.form.get('tags').split(',')]
+        for tag in tags:
+            TagBestsellerListJunction.create(bestseller_list=bs_list, tag=tag)
+
+        if request.form.get('confirm', '') == 'yes':
+            bs_list.active = True
+            bs_list.save()
+            bs_file = File.get_or_none(File.bestseller_list == bs_list)
+            if bs_file:
+                bs_file.expire_time = None
+                bs_file.save()
+
+        else:
+            for bestseller in Bestseller.select().where(Bestseller.bestseller_list == bs_list):
+                bestseller.delete_instance()
+            bs_list.delete_instance()
+
+        return redirect('/')
+
+    else:
+        vals['list'] = BestsellerList.get_by_id(request.args.get('list_id'))
+
+        if list_type == 'manual':
+            vals['orderings'] = BestsellerListOrdering.select().where(
+                BestsellerListOrdering.bestseller_list == vals['list']).order_by(
+                BestsellerListOrdering.index)
+        elif list_type == 'file':
+            bs_file = File.get_by_id(request.args.get('file_id'))
+            vals['file_path'] = bs_file.path.split('/', 2)[2]
+            vals['file_name'] = bs_file.name
+        else:
+            bs_image = File.get_by_id(request.args.get('image_id'))
+            vals['image_path'] = bs_image.path.split('/', 2)[2]
+            vals['image_name'] = bs_image.name
+
+        return render_template('preview.html', user=user, **vals)
 
 
 @app.route('/results')
@@ -138,17 +208,42 @@ async def results(request):
     return render_template('results.html', user=user, **results)
 
 
-@app.route('/manualpreview', methods=['GET', 'POST'])
-async def manual_preview(request):
-    data = request.json
-    listTitle = data.get('list_title')
-    bookCount = data.get('book_count')
-    for i in range(1, 1 + bookCount):
-        book = data.get('book' + str(i))
-        author = book.get('author')
-        year = book.get('yearPublished')
-        title = book.get('bookTitle')
-    return render_template('preview.html')
+@app.route('/book')
+async def book(request):
+    user = User.load_if_logged_in(request)
+    title = request.args.get('title', '')
+    book_id = int(request.args.get('id', -1))
+    bestseller = Bestseller.get_book(title, book_id)
+    if not bestseller:
+        raise NotFound('The specified bestseller could not be found in our system.')
+
+    else:
+        return render_template('book.html', bestseller=bestseller, user=user)
+
+
+@app.route('/list')
+async def bestseller_list(request):
+    user = User.load_if_logged_in(request)
+    title = request.args.get('title', '')
+    list_id = int(request.args.get('id', -1))
+    bestseller_list = BestsellerList.get_list(title, list_id)
+    if not bestseller_list:
+        raise NotFound('The specified bestseller list could not be found in our system.')
+
+    else:
+        return render_template('list.html', list=bestseller_list, user=user)
+
+
+@app.route('/author')
+async def book(request):
+    user = User.load_if_logged_in(request)
+    name = request.args.get('name', '')
+    author = Author.get_author(name)
+    if not author:
+        raise NotFound('The specified author could not be found in our system.')
+
+    else:
+        return render_template('author.html', author=author, user=user)
 
 
 @app.route('/logout')
@@ -158,41 +253,6 @@ async def logout(request):
         del request.cookies['login_cookie']
         del response.cookies['login_cookie']
         return response
-
-
-@app.route('/book')
-async def book(request):
-    title = request.args.get('title', '')
-    book_id = int(request.args.get('id', -1))
-    bestseller = Bestseller.get_book(title, book_id)
-    if not bestseller:
-        raise NotFound('The specified bestseller could not be found in our system.')
-
-    else:
-        return render_template('book.html', bestseller=bestseller)
-
-
-@app.route('/list')
-async def bestseller_list(request):
-    title = request.args.get('title', '')
-    list_id = int(request.args.get('id', -1))
-    bestseller_list = BestsellerList.get_list(title, list_id)
-    if not bestseller_list:
-        raise NotFound('The specified bestseller list could not be found in our system.')
-
-    else:
-        return render_template('list.html', list=bestseller_list)
-
-
-@app.route('/author')
-async def book(request):
-    name = request.args.get('name', '')
-    author = Author.get_author(name)
-    if not author:
-        raise NotFound('The specified author could not be found in our system.')
-
-    else:
-        return render_template('author.html', author=author)
 
 
 @app.exception(NotFound)
@@ -227,4 +287,4 @@ async def set_expire_time_on_login_cookie(request, response):
 
 def run():
     app.run(host='127.0.0.1', port='5678')
-    Session.setup_culler()
+    schedule_cleanings()
