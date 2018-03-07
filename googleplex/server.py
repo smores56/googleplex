@@ -104,6 +104,24 @@ async def registration(request):
             return redirect('/login')
 
 
+@app.route('/password_reset', methods=['GET', 'POST'])
+async def password_reset(request):
+    email = str(request.form.get('email'))
+    print(email)
+    if validate_email(email): # email is of right form
+        try:
+            user = User.get(email=email) #Check for user
+            if user: # redirect to login
+                flash = "We've sent a password reset link to your email address."
+                #TODO: email message sent somewhere here
+                return render_template('login.html',flash=flash)
+        except DoesNotExist:
+            # Email not registered to a user, flash error message on reset page
+            flash = 'The given email does not match any user in our records.'
+            return render_template('password_reset.html',flash=flash)
+    else:
+        return render_template('password_reset.html')
+
 @app.route('/profile')
 @authorized()
 async def profile(request, user):
