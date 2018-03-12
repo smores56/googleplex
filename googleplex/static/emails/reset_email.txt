@@ -1,0 +1,13 @@
+Subject: Reset Your Password
+
+Hi <firstname>,
+
+You recently requested to reset your password. To reset your password click this link or copy and paste it into your browser: <link>unique url reset</link>.
+
+
+If you no longer wish to reset your password, please ignore this email.
+If you didn't request to reset your password, <link>please let us know</link>.
+
+
+Sincerely,
+The Bestseller Archive Team
