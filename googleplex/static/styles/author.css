@@ -4,3 +4,8 @@
   top: 10%;
   left: 10%;
 }
+
+.form_label {
+    display: block;
+    margin-bottom: 20px;
+}

@@ -10,15 +10,25 @@
 {% block content %}
   <div class='individual_flex'>
     <form method="post">
-        Name:
-        <input type="text" name="name" value="{{author.name}}"><br>
-        Birth Date (MM/DD/YYYY):
-        <input type="text" name="birth_date" value="{% if author.birth_date %}{{author.birth_date | submission_datetime_fmt}}{% else %}{% endif %}"><br>
-        Death Date (MM/DD/YYYY):
-        <input type="text" name="death_date" value="{% if author.death_date %}{{author.death_date | submission_datetime_fmt}}{% else %}{% endif %}"><br>
-        Ethnicity:
-        <input type="text" name="ethnicity" value="{% if author.ethnicity %}{{author.ethnicity}}{% else %}{% endif %}"><br>
-        <input type="submit" value="Update Entry">
+        <label class="form_label">
+            Name:
+            <input type="text" name="name" value="{{author.name}}"><br>
+        </label>
+        <label class="form_label">
+            Birth Date (MM/DD/YYYY):
+            <input type="text" name="birth_date" value="{% if author.birth_date %}{{author.birth_date | submission_datetime_fmt}}{% else %}{% endif %}"><br>
+        </label>
+        <label class="form_label">
+            Death Date (MM/DD/YYYY):
+            <input type="text" name="death_date" value="{% if author.death_date %}{{author.death_date | submission_datetime_fmt}}{% else %}{% endif %}"><br>
+        </label>
+        <label class="form_label">
+            Ethnicity:
+            <input type="text" name="ethnicity" value="{% if author.ethnicity %}{{author.ethnicity}}{% else %}{% endif %}"><br>
+        </label>
+        <label class="form_label">
+            <input type="submit" value="Update Entry">
+        </label>
     </form>
       <!-- <h1>{{ author.name }}</h1>
       <p>Birth date: {% if author.birth_date %}{{ author.birth_date | datetime_fmt }}{% else %}unknown{% endif %},

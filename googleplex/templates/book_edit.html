@@ -10,13 +10,21 @@
 {% block content %}
   <div class='individual_flex'>
       <form method="post">
-          Title:</br>
-          <input type="text" name="title" value="{{bestseller.title}}"></br>
-          Author:</br>
-          <input type="text" name="author" value="{{bestseller.author.name}}"></br>
-          Description:</br>
-          <input type="text" name="description" value="{{bestseller.description if bestseller.description else ''}}" placeholder=""></br>
-          <input type="submit" value="Update Entry">
+          <label class="form_label">
+              Title:
+              <input type="text" name="title" value="{{bestseller.title}}"/>
+          </label>
+          <label class="form_label">
+              Author:
+              <input type="text" name="author" value="{{bestseller.author.name}}"/>
+          </label>
+          <label class="form_label">
+              Description:
+              <input type="text" name="description" value="{{bestseller.description if bestseller.description else ''}}" placeholder=""/>
+          </label>
+          <label class="form_label">
+              <input type="submit" value="Update Entry"/>
+          </label>
       </form>
       <!-- <h1>{{ bestseller.title }}</h1>
       {% if bestseller.author %}
