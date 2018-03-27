@@ -1,4 +1,4 @@
-<!-- googleplex/templates/book.html -->
+<!-- googleplex/templates/book_edit.html -->
 
 {% extends "overlay.html" %}
 {% block title %}{{ bestseller.title }}{% endblock %}
@@ -9,7 +9,16 @@
 {% endblock %}
 {% block content %}
   <div class='individual_flex'>
-      <h1>{{ bestseller.title }}</h1>
+      <form method="post">
+          Title:</br>
+          <input type="text" name="title" value="{{bestseller.title}}"></br>
+          Author:</br>
+          <input type="text" name="author" value="{{bestseller.author.name}}"></br>
+          Description:</br>
+          <input type="text" name="description" value="{{bestseller.description if bestseller.description else ''}}" placeholder=""></br>
+          <input type="submit" value="Update Entry">
+      </form>
+      <!-- <h1>{{ bestseller.title }}</h1>
       {% if bestseller.author %}
       By <a href='/author?name={{ bestseller.author.name }}'>{{ bestseller.author.name }}</a>
       {% else %}
@@ -27,11 +36,7 @@
         </tr>
         <br>
       {% endfor %}
-      </tbody>
-      <a href="/book_edit?title={{ bestseller.title }}&id={{ bestseller.id }}">
-        Edit
-      </a>
-
+      </tbody> -->
   </div>
   <!-- About the author section? -->
 {% endblock %}

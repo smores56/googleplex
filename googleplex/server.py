@@ -221,6 +221,7 @@ async def results(request):
     elif searchType == "author":
         results = Author.search(search)
     elif searchType == "book":
+        print("here 1")
         results = Bestseller.search(search)
 
     return render_template('results.html', user=user, **results)
@@ -238,6 +239,33 @@ async def book(request):
     else:
         return render_template('book.html', bestseller=bestseller, user=user)
 
+@app.route('/book_edit', methods=["GET", "POST"])
+async def book_edit(request):
+    user = User.load_if_logged_in(request)
+    title = request.args.get('title', '')
+    book_id = request.args.get('id', -1)
+    bestseller = Bestseller.get_book(title, book_id)
+    if not bestseller:
+        raise NotFound("The specified bestseller could not be found in our system.")
+
+    else:
+        if request.method == "POST":
+            print(request.form)
+
+            description = request.form['description'][0] if "description" in request.form.keys() else bestseller.description
+            title = request.form['title'][0] if "title" in request.form.keys() else bestseller.title
+            author_name = request.form['author'][0] if 'author' in request.form.keys() else None
+            author = Author.get_author(author_name)
+            if author is None and author_name is not None:
+                author_data = {'name': author_name}
+                author = models.Author.create(**author_data)
+                
+            Bestseller.update(title=title, description=description, author=author).where(Bestseller.id == book_id).execute()
+
+            # bestseller.save()
+            return redirect("/book?title={}&id={}".format(title, book_id))
+        else:
+            return render_template('book_edit.html', bestseller=bestseller, user=user)
 
 @app.route('/list')
 async def bestseller_list(request):
