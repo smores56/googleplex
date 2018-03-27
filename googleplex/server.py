@@ -250,8 +250,6 @@ async def book_edit(request):
 
     else:
         if request.method == "POST":
-            print(request.form)
-
             description = request.form['description'][0] if "description" in request.form.keys() else bestseller.description
             title = request.form['title'][0] if "title" in request.form.keys() else bestseller.title
             author_name = request.form['author'][0] if 'author' in request.form.keys() else None
@@ -259,13 +257,43 @@ async def book_edit(request):
             if author is None and author_name is not None:
                 author_data = {'name': author_name}
                 author = models.Author.create(**author_data)
-                
+
             Bestseller.update(title=title, description=description, author=author).where(Bestseller.id == book_id).execute()
 
-            # bestseller.save()
             return redirect("/book?title={}&id={}".format(title, book_id))
         else:
             return render_template('book_edit.html', bestseller=bestseller, user=user)
+
+@app.route('/author_edit', methods=["GET", "POST"])
+async def author_edit(request):
+    user = User.load_if_logged_in(request)
+    name = request.args.get('name', '')
+    author = Author.get_author(name)
+    if not author:
+        raise NotFound('The specified author could not be found in our system.')
+
+    else:
+        if request.method == "POST":
+            print(request.form)
+            keys = request.form.keys()
+            name = request.form['name'][0] if 'name' in keys else author.name
+            try:
+                birth_date = datetime.strptime(request.form['birth_date'][0], '%m/%d/%Y')
+            except:
+                birth_date = author.birth_date
+
+            try:
+                death_date = datetime.strptime(request.form['death_date'][0], '%m/%d/%Y')
+            except:
+                death_date = author.death_date
+            ethnicity = request.form['ethnicity'][0] if 'ethnicity' in keys else author.ethnicity
+
+            Author.update(name = name, birth_date=birth_date, death_date=death_date, ethnicity=ethnicity).where(Author.name == name).execute()
+
+            return redirect("/author?name={}".format(name))
+        else:
+            return render_template('author_edit.html', author=author, user=user)
+
 
 @app.route('/list')
 async def bestseller_list(request):

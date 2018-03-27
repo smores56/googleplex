@@ -44,7 +44,7 @@ def render_template(name, **kwargs):
             autoescape=select_autoescape(['html'])
         )
         render_template.env.filters['datetime_fmt'] = datetime_fmt
-
+        render_template.env.filters['submission_datetime_fmt'] = submission_datetime_fmt
     return response.html(render_template.env.get_template(name).render(**kwargs))
 
 
@@ -94,6 +94,8 @@ def validate_email(email):
 def datetime_fmt(date, fmt_str='%B %-d, %Y'):
     return date.strftime(fmt_str)
 
+def submission_datetime_fmt(date):
+    return datetime_fmt(date, '%m/%d/%Y')
 
 def schedule_cleanings():
     def run_cleaning():
