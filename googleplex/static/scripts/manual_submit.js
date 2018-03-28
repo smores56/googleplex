@@ -66,9 +66,6 @@ $(document).ready(function() {
       $('#books tr:last').remove();
     }
     num_bestsellers--;
-    // $('#list').find('th:last-child').remove();
-    // $('#list th:last-child').remove();
-    // $('#list th:last-child').remove();
   });
 
 });
