@@ -3,6 +3,7 @@ $(document).ready(function() {
   // $("div").slice(0, 2).show(); // select the first ten
 
   var num_bestsellers = 1;
+
   $("#load").click(function() {
     num_bestsellers++;
     $('#list tr:last').after(`<br/><br/><tr>
@@ -58,4 +59,16 @@ $(document).ready(function() {
       }
     });
   });
+
+
+  $('#remove').on('click', function() {
+    for (i = 0; i < 3; i++) {
+      $('#books tr:last').remove();
+    }
+    num_bestsellers--;
+    // $('#list').find('th:last-child').remove();
+    // $('#list th:last-child').remove();
+    // $('#list th:last-child').remove();
+  });
+
 });
