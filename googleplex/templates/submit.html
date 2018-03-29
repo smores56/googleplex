@@ -26,14 +26,14 @@
       <h4>File Upload</h4><br><br>
       <form id="file-upload-form" action="/submit?type=file" method="post" enctype="multipart/form-data">
         <label for="title">Title:</label><input type="text" id="file-upload-title" name="title"
-          required oninvalid="this.setCustomValidity('Please enter a title.')"><br>
+          required oninvalid="this.setCustomValidity('Please enter a title.')" onvalid="this.setCustomValidity('')"><br>
         <label for="author">Author:</label><input type="text" name="author"><br>
         <label for="authored_date">Authored Date:</label><input type="date" name="authored_date"><br>
         <label for="description">Description:</label><input type="text" name="description"><br>
-        <label for="num_bestsellers">Number of Bestsellers:</label><input type="number" id="file-upload-num"
-          name="num_bestsellers" required oninvalid="this.setCustomValidity('Please enter the number of bestsellers.')"><br>
+        <label for="num_bestsellers">Number of Bestsellers:</label><input type="number" id="file-upload-num" name="num_bestsellers"
+          required oninvalid="this.setCustomValidity('Please enter the number of bestsellers.')" onvalid="this.setCustomValidity('')"><br>
         <label for="file">Select a File:</label><input type="file" id="file-upload-file" name="file"
-          required oninvalid="this.setCustomValidity('Please attach a file.')"><br>
+          required oninvalid="this.setCustomValidity('Please attach a file.')" onvalid="this.setCustomValidity('')"><br>
         <a href="#" class="previous round" id="prevfile">&#8249;</a>
         <input class="next round" type="submit" value="&#8250;"><br><br><br>
       </form>
@@ -46,14 +46,14 @@
       <h4>Image Upload</h4><br><br>
       <form id="image-upload-form" action="/submit?type=image" method="post" enctype="multipart/form-data">
         <label for="title">Title:</label><input type="text" name="title" required
-          oninvalid="this.setCustomValidity('Please enter a title.')"><br>
+          oninvalid="this.setCustomValidity('Please enter a title.')" onvalid="this.setCustomValidity('')"><br>
         <label for="author">Author:</label><input type="text" name="author"><br>
         <label for="authored_date">Authored Date:</label><input type="date" name="authored_date"><br>
         <label for="description">Description:</label><input type="text" name="description"><br>
         <label for="num_bestsellers">Number of Bestsellers:</label><input type="number" name="num_bestsellers" required
-          oninvalid="this.setCustomValidity('Please enter the number of bestsellers.')"><br>
+          oninvalid="this.setCustomValidity('Please enter the number of bestsellers.')" onvalid="this.setCustomValidity('')"><br>
         <label for="image">Select a File:</label><input type="file" id="image-upload-image" name="image" required
-          oninvalid="this.setCustomValidity('Please attach an image.')"><br>
+          oninvalid="this.setCustomValidity('Please attach an image.')" onvalid="this.setCustomValidity('')"><br>
         <a href="#" class="previous round" id="prevfile">&#8249;</a>
         <input class="next round" type="submit" value="&#8250;"><br><br><br>
       </form>
