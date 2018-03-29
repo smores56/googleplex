@@ -5,12 +5,17 @@ from os.path import join, dirname
 import re
 from threading import Thread
 from time import sleep
+from string import ascii_letters
+from random import choice
+import asyncio
+from email.mime.text import MIMEText
 
 from dotenv import load_dotenv
-from jinja2 import Environment, PackageLoader, select_autoescape
+from jinja2 import Environment, Template, PackageLoader, select_autoescape
 import pyscrypt
 from sanic import response
 from sanic.exceptions import Forbidden
+import aiosmtplib
 
 from . import models
 
@@ -22,7 +27,8 @@ def load_config():
     if load_config.CONFIG is None:
         fields = []
         load_config.CONFIG = {}
-        for field in ['DB_USER', 'DB_NAME', 'DB_PASS', 'DB_HOST', 'SESSION_COOKIE_SECRET_KEY']:
+        for field in ['DB_USER', 'DB_NAME', 'DB_PASS', 'DB_HOST',
+                      'SESSION_COOKIE_SECRET_KEY', 'EMAIL_USER', 'EMAIL_PASS']:
             value = environ.get(field, None)
             if value is None:
                 raise KeyError('The environment variable "%s" was not set. Please set it in \
@@ -94,8 +100,10 @@ def validate_email(email):
 def datetime_fmt(date, fmt_str='%B %-d, %Y'):
     return date.strftime(fmt_str)
 
+
 def submission_datetime_fmt(date):
     return datetime_fmt(date, '%m/%d/%Y')
+
 
 def schedule_cleanings():
     def run_cleaning():
@@ -105,3 +113,29 @@ def schedule_cleanings():
             models.Message.remove_floating()
             sleep(600)
     Thread(target=run_cleaning, daemon=True).start()
+
+
+def gen_string(length):
+    return "".join(choice(ascii_letters) for _ in range(length))
+
+
+def write_email(email, user, action_link=None):
+    with open('./googleplex/static/emails/' + email, 'r') as f:
+        return Template(f.read()).render(user=user, link=action_link)
+
+
+def send_email(recipient, subject, content):
+    config = load_config()
+
+    message = MIMEText(content, _subtype='html')
+    message['From'] = config['EMAIL_USER']
+    message['To'] = recipient
+    message['Subject'] = subject
+
+    loop = asyncio.get_event_loop()
+    smtp = aiosmtplib.SMTP(hostname='smtp.gmail.com', port=587, loop=loop)
+    asyncio.ensure_future(smtp.connect(), loop=loop).add_done_callback(
+        lambda _: asyncio.ensure_future(smtp.starttls(), loop=loop).add_done_callback(
+            lambda _: asyncio.ensure_future(smtp.login(config['EMAIL_USER'], config['EMAIL_PASS']),
+                                            loop=loop).add_done_callback(
+                lambda _: asyncio.ensure_future(smtp.send_message(message), loop=loop))))
