@@ -1,0 +1,37 @@
+<!-- googleplex/templates/list_edit.html -->
+
+{% extends "overlay.html" %}
+{% block title %}{{title}}{% endblock %}
+{% block style %}
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="/styles/author.css">
+  <link rel="stylesheet" href="/styles/main.css">
+{% endblock %}
+{% block scripts %}
+  <script src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+  <script src="/scripts/list_edit.js"></script>
+
+{% endblock %}
+{% block content %}
+  <div class='individual_flex'>
+      <form id="list_form" method='post'>
+          <label class="form_label">
+              Title:
+              <input type="text" name="title" value="{{list.title}}"><br>
+          </label>
+          {%- for book in list.bestsellers -%}
+            <label class="form_label">
+                Book {{loop.index}}:
+                <input type="text" name="book{{loop.index}}" value="{{book.title}}">
+                <button id="button{{loop.index}}" type="button" onclick="deleteClick();">Delete</button><br>
+            </label>
+          {% endfor %}
+      </form>
+      <label class="form_label">
+          <button id="load" type="button">Add new book +</button><br>
+      </label>
+      <label>
+          <button id="submit" type="button">Update Entry</button>
+      </label>
+  </div>
+{% endblock %}

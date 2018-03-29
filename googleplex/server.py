@@ -312,6 +312,28 @@ async def bestseller_list(request):
     else:
         return render_template('list.html', list=bestseller_list, user=user)
 
+@app.route('/list_edit', methods=["GET", "POST"])
+async def bestseller_list(request):
+    user = User.load_if_logged_in(request)
+    title = request.args.get('title', '')
+    list_id = int(request.args.get('id', -1))
+    bestseller_list = BestsellerList.get_list(title, list_id)
+    if not bestseller_list:
+        raise NotFound('The specified bestseller list could not be found in our system.')
+
+    else:
+        if request.method == "POST":
+            form = request.form
+            title = request.form['title'][0]
+            for i in range(len(form) - 1):
+                book_title = form['book' + str(i + 1)][0]
+                print(book_title)
+
+            return redirect("/list?title={}&id={}".format(title, list_id))
+        else:
+            return render_template('list_edit.html', list=bestseller_list, user=user)
+
+
 
 @app.route('/author')
 async def book(request):
