@@ -4,6 +4,7 @@ import random
 import os
 from uuid import uuid4
 from glob import glob
+import imghdr
 
 from peewee import *
 
@@ -283,6 +284,10 @@ class File(BaseModel):
             f.write(file_obj.body)
 
         return File.create(path=path, name=file_obj.name, bestseller_list=bestseller_list)
+
+    @property
+    def is_image(self):
+        return imghdr.what(self.path) is not None
 
 
 class Message(BaseModel):
