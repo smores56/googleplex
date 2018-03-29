@@ -1,0 +1,30 @@
+.individual_flex {
+  font-family: 'Roboto', sans-serif;
+  position: absolute;
+  top: 10%;
+  left: 10%;
+}
+table {
+    position: absolute;
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 70%;
+    margin-bottom: 100px;
+
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+#tablestuff {
+
+    margin-top: 180px;
+    margin-left: 140px;
+}

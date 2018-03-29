@@ -6,15 +6,88 @@
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
   <link rel="stylesheet" href="/styles/author.css">
   <link rel="stylesheet" href="/styles/main.css">
+  <link rel="stylesheet" href="/styles/list.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/TableExport/3.2.5/css/tableexport.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.12.6/xlsx.core.min.js"></script>
+  <script src="xlsx.core.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="https://cdn.rawgit.com/eligrey/FileSaver.js/e9d941381475b5df8b7d7691013401e171014e89/FileSaver.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/TableExport/3.3.5/js/tableexport.min.js"></script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+ function ExportTable(){
+     $('table').tableExport({
+       headings: true,
+       footers: false,
+       formats: ["xlsx"],    // (String[]), filetypes for the export
+       fileName: "id",                    // (id, String), filename for the downloaded file
+       bootstrap: true,                   // (Boolean), style buttons using bootstrap
+       position: "top" ,                // (top, bottom), position of the caption element relative to table
+       ignoreRows: null,                  // (Number, Number[]), row indices to exclude from the exported file
+       ignoreCols: null,                 // (Number, Number[]), column indices to exclude from the exported file
+       ignoreCSS: ".tableexport-ignore"   // (selector, selector[]), selector(s) to exclude from the exported file
+     });
+
+
+   }
+   ExportTable();
+});
+</script>
+
 {% endblock %}
 {% block content %}
   <div class='individual_flex'>
+
       <h1>{{ list.title }}</h1>
       <p>Contributed on {{ list.submission_date | datetime_fmt }} by {{ list.contributor.full_name | default('[deleted]') }}</p>
       {% if list.author %}<p>Author: <a href='/author?name={{ list.author.name }}'>{{ list.author.name }}</a></p>{% endif %}
       {% if list.author or list.author_date %}Originally authored {% if list.author_date %}on {{ list.author_date }}
       {% endif %}{% if list.author %}by {{ list.author.name }}{% endif %}{% endif %}
       {% if list.description %}<p>{{ list.description }}</p> {% endif %}
+<<<<<<< HEAD
+=======
+
+  </div>
+
+  <div id="tablestuff">
+
+    <table id= {{ list.title }}  >
+      <thead valign="top">
+        <th>#</th>
+        <th>Book Title</th>
+        <th>Book Author</th>
+
+      </thead>
+      <tbody>
+      {%- for book in list.bestsellers -%}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td>
+              <a href="/book?title={{ book.title }}&id={{ book.id }}">{{ book.title }}</a>
+          </td>
+          <td>
+              <a href="/book?title={{ book.author.name }}&id={{ book.id }}">{{ book.author.name}}</a>
+          </td>
+
+          <br>
+        </tr>
+      {% endfor %}
+      </tbody>
+      </table>
+      <br><br>
+
+
+
+      <a href="/list_edit?title={{ list.title }}&id={{ list.id }}">
+        Edit
+      </a>
+
+      <a href="/list_edit?title={{ list.title }}&id={{ list.id }}">
+        Edit
+      </a>
+>>>>>>> 8d8152ab891bca656e3135da5d0507a9727031c1
 
       {% if file %}
         {% if file.is_image %}
@@ -40,6 +113,9 @@
 
       {% endif %}
   </div>
+<<<<<<< HEAD
 
   <!-- About the author section? -->
+=======
+>>>>>>> 8d8152ab891bca656e3135da5d0507a9727031c1
 {% endblock %}

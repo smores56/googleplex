@@ -19,32 +19,16 @@
               <input type="text" name="author" value="{{bestseller.author.name}}"/>
           </label>
           <label class="form_label">
+              Date Published:
+              <input type="date" name="published" value="{{published_date}}"/>
+          </label>
+          <label class="form_label">
               Description:
-              <input type="text" name="description" value="{{bestseller.description if bestseller.description else ''}}" placeholder=""/>
+              <input type="textarea" name="description" rows="5" value="{{bestseller.description if bestseller.description else ''}}" placeholder=""/>
           </label>
           <label class="form_label">
               <input type="submit" value="Update Entry"/>
           </label>
       </form>
-      <!-- <h1>{{ bestseller.title }}</h1>
-      {% if bestseller.author %}
-      By <a href='/author?name={{ bestseller.author.name }}'>{{ bestseller.author.name }}</a>
-      {% else %}
-      <a>Unknown author</a>
-      {% endif %}
-      {% if bestseller.description %}<p>{{ bestseller.description }}</p> {% endif %}
-      <h3>Lists containing this Bestseller</h3>
-      <tbody>
-      {%- for list in bestseller.get_lists_with_this_bestseller() -%}
-        <tr>
-          <td>{{ loop.index }}:</td>
-          <td>
-              <a href="/list?title={{ list.title }}&id={{ list.id }}">{{ list.title }}</a>
-          </td>
-        </tr>
-        <br>
-      {% endfor %}
-      </tbody> -->
   </div>
-  <!-- About the author section? -->
 {% endblock %}

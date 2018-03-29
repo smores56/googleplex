@@ -305,13 +305,22 @@ async def book_edit(request):
             ) else bestseller.description
             title = request.form['title'][0] if "title" in request.form.keys() else bestseller.title
             author_name = request.form['author'][0] if 'author' in request.form.keys() else None
+            try:
+                published_date = datetime.strptime(request.form['published'][0], '%Y-%m-%d')
+            except:
+                published_date = bestseller.authored_date
+
             author = Author.get_author(author_name)
             if author is None and author_name is not None:
                 author_data = {'name': author_name}
                 author = models.Author.create(**author_data)
 
+<<<<<<< HEAD
             Bestseller.update(title=title, description=description, author=author).where(
                 Bestseller.id == book_id).execute()
+=======
+            Bestseller.update(title=title, description=description, author=author, authored_date=published_date).where(Bestseller.id == book_id).execute()
+>>>>>>> 8d8152ab891bca656e3135da5d0507a9727031c1
 
             return redirect("/book?title={}&id={}".format(title, book_id))
         else:
@@ -332,12 +341,12 @@ async def author_edit(request):
             keys = request.form.keys()
             name = request.form['name'][0] if 'name' in keys else author.name
             try:
-                birth_date = datetime.strptime(request.form['birth_date'][0], '%m/%d/%Y')
+                birth_date = datetime.strptime(request.form['birth_date'][0], '%Y-%m-%d')
             except:
                 birth_date = author.birth_date
 
             try:
-                death_date = datetime.strptime(request.form['death_date'][0], '%m/%d/%Y')
+                death_date = datetime.strptime(request.form['death_date'][0], '%Y-%m-%d')
             except:
                 death_date = author.death_date
             ethnicity = request.form['ethnicity'][0] if 'ethnicity' in keys else author.ethnicity
@@ -362,6 +371,28 @@ async def bestseller_list(request):
     else:
         bs_file = File.get_or_none(bestseller_list=bestseller_list)
         return render_template('list.html', list=bestseller_list, user=user, file=bs_file)
+
+@app.route('/list_edit', methods=["GET", "POST"])
+async def bestseller_list(request):
+    user = User.load_if_logged_in(request)
+    title = request.args.get('title', '')
+    list_id = int(request.args.get('id', -1))
+    bestseller_list = BestsellerList.get_list(title, list_id)
+    if not bestseller_list:
+        raise NotFound('The specified bestseller list could not be found in our system.')
+
+    else:
+        if request.method == "POST":
+            form = request.form
+            title = request.form['title'][0]
+            for i in range(len(form) - 1):
+                book_title = form['book' + str(i + 1)][0]
+                print(book_title)
+
+            return redirect("/list?title={}&id={}".format(title, list_id))
+        else:
+            return render_template('list_edit.html', list=bestseller_list, user=user)
+
 
 
 @app.route('/author')
