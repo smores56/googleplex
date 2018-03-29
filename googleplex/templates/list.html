@@ -1,7 +1,7 @@
 <!-- googleplex/templates/list.html -->
 
 {% extends "overlay.html" %}
-{% block title %}{{title}}{% endblock %}
+{% block title %}{{ list.title }}{% endblock %}
 {% block style %}
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
   <link rel="stylesheet" href="/styles/author.css">
@@ -46,14 +46,11 @@ $(document).ready(function(){
       {% if list.author or list.author_date %}Originally authored {% if list.author_date %}on {{ list.author_date }}
       {% endif %}{% if list.author %}by {{ list.author.name }}{% endif %}{% endif %}
       {% if list.description %}<p>{{ list.description }}</p> {% endif %}
-<<<<<<< HEAD
-=======
 
   </div>
 
   <div id="tablestuff">
-
-    <table id= {{ list.title }}  >
+    <table id="{{ list.title }}">
       <thead valign="top">
         <th>#</th>
         <th>Book Title</th>
@@ -70,7 +67,6 @@ $(document).ready(function(){
           <td>
               <a href="/book?title={{ book.author.name }}&id={{ book.id }}">{{ book.author.name}}</a>
           </td>
-
           <br>
         </tr>
       {% endfor %}
@@ -78,16 +74,7 @@ $(document).ready(function(){
       </table>
       <br><br>
 
-
-
-      <a href="/list_edit?title={{ list.title }}&id={{ list.id }}">
-        Edit
-      </a>
-
-      <a href="/list_edit?title={{ list.title }}&id={{ list.id }}">
-        Edit
-      </a>
->>>>>>> 8d8152ab891bca656e3135da5d0507a9727031c1
+      <p><a href="/list_edit?title={{ list.title }}&id={{ list.id }}">Edit</a></p>
 
       {% if file %}
         {% if file.is_image %}
@@ -98,7 +85,7 @@ $(document).ready(function(){
           <object width="70%" height="500" data="/uploaded/{{ file.bestseller_list.id }}-{{ file.name }}"></object>
         {% endif %}
       {% else %}
-        <h3>Books on this List</h3>
+        <!-- <h3>Books on this List</h3>
         <tbody>
         {%- for book in list.bestsellers -%}
           <tr>
@@ -109,13 +96,7 @@ $(document).ready(function(){
             <br>
           </tr>
         {% endfor %}
-        </tbody>
-
+        </tbody> -->
       {% endif %}
   </div>
-<<<<<<< HEAD
-
-  <!-- About the author section? -->
-=======
->>>>>>> 8d8152ab891bca656e3135da5d0507a9727031c1
 {% endblock %}
