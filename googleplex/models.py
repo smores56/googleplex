@@ -257,15 +257,20 @@ class File(BaseModel):
     @classmethod
     def remove_unaccounted(cls):
         db_paths = {f.path: f for f in File.select()}
-        local_paths = list(glob('/uploaded/*'))
+        local_paths = list(glob('./googleplex/uploaded/*'))
+        to_delete = []
+
         for path in local_paths:
             if not path in db_paths.keys():
-                os.remove(path)
+                to_delete.append(path)
                 local_paths.remove(path)
 
-        for path, f in db_paths:
+        for path, f in db_paths.items():
             if not path in local_paths:
                 f.delete_instance()
+
+        for path in to_delete:
+            os.remove(path)
 
     @classmethod
     def remove_expired(cls):
@@ -298,7 +303,7 @@ class Message(BaseModel):
     text = TextField()
 
     @classmethod
-    def remove_floating():
+    def remove_floating(cls):
         for msg in Message.select().where(Message.recipient == None and Message.sender == None):
             msg.delete_instance()
 

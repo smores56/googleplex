@@ -443,5 +443,5 @@ async def set_expire_time_on_login_cookie(request, response):
 
 
 def run():
-    app.run(host='127.0.0.1', port='5678')
     schedule_cleanings()
+    app.run(host='127.0.0.1', port='5678')
