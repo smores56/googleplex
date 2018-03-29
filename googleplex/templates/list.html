@@ -12,22 +12,34 @@
       <h1>{{ list.title }}</h1>
       <p>Contributed on {{ list.submission_date | datetime_fmt }} by {{ list.contributor.full_name | default('[deleted]') }}</p>
       {% if list.author %}<p>Author: <a href='/author?name={{ list.author.name }}'>{{ list.author.name }}</a></p>{% endif %}
-      {% if list.author or list.author_date %}Originally authored {% if authored_date %}on {{ list.author_date }}
-      {% endif %}{% if list.author %}by {{ list.author.date }}{% endif %}{% endif %}
+      {% if list.author or list.author_date %}Originally authored {% if list.author_date %}on {{ list.author_date }}
+      {% endif %}{% if list.author %}by {{ list.author.name }}{% endif %}{% endif %}
       {% if list.description %}<p>{{ list.description }}</p> {% endif %}
-      <h3>Books on this List</h3>
-      <tbody>
-      {%- for book in list.bestsellers -%}
-        <tr>
-          <td>{{ loop.index }}:</td>
-          <td>
-              <a href="/book?title={{ book.title }}&id={{ book.id }}">{{ book.title }}</a>
-          </td>
-          <br>
-        </tr>
-      {% endfor %}
-      </tbody>
 
+      {% if file %}
+        {% if file.is_image %}
+          <h3>The Image of this Bestseller List</h3>
+          <img width="70%" height="500" src="/uploaded/{{ file.bestseller_list.id }}-{{ file.name }}">
+        {% else %}
+          <h3>The File for this Bestseller List</h3>
+          <object width="70%" height="500" data="/uploaded/{{ file.bestseller_list.id }}-{{ file.name }}"></object>
+        {% endif %}
+      {% else %}
+        <h3>Books on this List</h3>
+        <tbody>
+        {%- for book in list.bestsellers -%}
+          <tr>
+            <td>{{ loop.index }}:</td>
+            <td>
+                <a href="/book?title={{ book.title }}&id={{ book.id }}">{{ book.title }}</a>
+            </td>
+            <br>
+          </tr>
+        {% endfor %}
+        </tbody>
+
+      {% endif %}
   </div>
+
   <!-- About the author section? -->
 {% endblock %}
