@@ -15,12 +15,12 @@
             <input type="text" name="name" value="{{author.name}}"><br>
         </label>
         <label class="form_label">
-            Birth Date (MM/DD/YYYY):
-            <input type="text" name="birth_date" value="{% if author.birth_date %}{{author.birth_date | submission_datetime_fmt}}{% else %}{% endif %}"><br>
+            Birth Date:
+            <input type="date" name="birth_date" value="{% if author.birth_date %}{{author.birth_date | submission_datetime_fmt}}{% else %}{% endif %}"><br>
         </label>
         <label class="form_label">
-            Death Date (MM/DD/YYYY):
-            <input type="text" name="death_date" value="{% if author.death_date %}{{author.death_date | submission_datetime_fmt}}{% else %}{% endif %}"><br>
+            Death Date:
+            <input type="date" name="death_date" value="{% if author.death_date %}{{author.death_date | submission_datetime_fmt}}{% else %}{% endif %}"><br>
         </label>
         <label class="form_label">
             Ethnicity:

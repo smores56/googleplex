@@ -278,12 +278,12 @@ async def author_edit(request):
             keys = request.form.keys()
             name = request.form['name'][0] if 'name' in keys else author.name
             try:
-                birth_date = datetime.strptime(request.form['birth_date'][0], '%m/%d/%Y')
+                birth_date = datetime.strptime(request.form['birth_date'][0], '%Y-%m-%d')
             except:
                 birth_date = author.birth_date
 
             try:
-                death_date = datetime.strptime(request.form['death_date'][0], '%m/%d/%Y')
+                death_date = datetime.strptime(request.form['death_date'][0], '%Y-%m-%d')
             except:
                 death_date = author.death_date
             ethnicity = request.form['ethnicity'][0] if 'ethnicity' in keys else author.ethnicity

@@ -95,7 +95,7 @@ def datetime_fmt(date, fmt_str='%B %-d, %Y'):
     return date.strftime(fmt_str)
 
 def submission_datetime_fmt(date):
-    return datetime_fmt(date, '%m/%d/%Y')
+    return datetime_fmt(date, '%Y-%m-%d')
 
 def schedule_cleanings():
     def run_cleaning():
