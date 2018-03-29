@@ -19,6 +19,10 @@
               <input type="text" name="author" value="{{bestseller.author.name}}"/>
           </label>
           <label class="form_label">
+              Date Published:
+              <input type="date" name="published" value="{{published_date}}"/>
+          </label>
+          <label class="form_label">
               Description:
               <input type="text" name="description" value="{{bestseller.description if bestseller.description else ''}}" placeholder=""/>
           </label>

@@ -15,6 +15,10 @@
       {% else %}
       <a>Unknown author</a>
       {% endif %}
+      <br>
+      {% if bestseller.authored_date %}
+      Published {{bestseller.authored_date | datetime_fmt}}
+      {% endif %}
       {% if bestseller.description %}<p>{{ bestseller.description }}</p> {% endif %}
       <h3>Lists containing this Bestseller</h3>
       <tbody>

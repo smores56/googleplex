@@ -253,12 +253,17 @@ async def book_edit(request):
             description = request.form['description'][0] if "description" in request.form.keys() else bestseller.description
             title = request.form['title'][0] if "title" in request.form.keys() else bestseller.title
             author_name = request.form['author'][0] if 'author' in request.form.keys() else None
+            try:
+                published_date = datetime.strptime(request.form['published'][0], '%Y-%m-%d')
+            except:
+                published_date = bestseller.authored_date
+
             author = Author.get_author(author_name)
             if author is None and author_name is not None:
                 author_data = {'name': author_name}
                 author = models.Author.create(**author_data)
 
-            Bestseller.update(title=title, description=description, author=author).where(Bestseller.id == book_id).execute()
+            Bestseller.update(title=title, description=description, author=author, authored_date=published_date).where(Bestseller.id == book_id).execute()
 
             return redirect("/book?title={}&id={}".format(title, book_id))
         else:
