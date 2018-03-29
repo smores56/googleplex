@@ -101,26 +101,76 @@ async def registration(request):
             return response
 
         else:
-            return redirect('/login')
+            message = ActiveLink.setup_link(user, 'activate account')
+            response = redirect('/login')
+            response.cookies['flash'] = message
+            return response
 
 
 @app.route('/password_reset', methods=['GET', 'POST'])
 async def password_reset(request):
-    email = str(request.form.get('email'))
-    print(email)
-    if validate_email(email): # email is of right form
-        try:
-            user = User.get(email=email) #Check for user
-            if user: # redirect to login
-                flash = "We've sent a password reset link to your email address."
-                #TODO: email message sent somewhere here
-                return render_template('login.html',flash=flash)
-        except DoesNotExist:
-            # Email not registered to a user, flash error message on reset page
-            flash = 'The given email does not match any user in our records.'
-            return render_template('password_reset.html',flash=flash)
+    if request.method == 'GET':
+        active_link_str = request.args.get('link', '')
+        active_link = ActiveLink.get_or_none(link=active_link_str)
+
+        if (active_link and active_link.expire_time < datetime.now()) or \
+                (active_link_str and not active_link):
+            response = redirect('/login')
+            response.cookies['flash'] = 'The link you clicked expired. ' \
+                                        'Please request another one.'
+            return response
+
+        else:
+            return render_template('password_reset.html', flash=request.cookies.get('flash'),
+                                   link=active_link)
+
     else:
-        return render_template('password_reset.html')
+        active_link_str = request.form.get('link', '')
+        active_link = ActiveLink.get_or_none(link=active_link_str)
+        if active_link:
+            if active_link.expire_time >= datetime.now():
+                new_pass_hash = request.form.get('new_pass_hash')
+                new_pass_rehash = scrypt(new_pass_hash, (active_link.user.email + 'xyz')[:8])
+                User.update(pass_hash=new_pass_rehash).where(
+                    User.id == active_link.user.id).execute()
+
+                active_link.activate()
+                response = redirect('/login')
+                response.cookies['flash'] = 'Your password has been reset!'
+                return response
+
+            else:
+                response = redirect('/login')
+                response.cookies['flash'] = 'Your reset link expired. Please request another one.'
+                return response
+
+        else:
+            email = request.form.get('email', '')
+            user = User.get_or_none(email=email)
+
+            if user:
+                response = redirect('/login')
+                response.cookies['flash'] = ActiveLink.setup_link(user, 'reset password')
+
+            else:
+                response = redirect('/password_reset')
+                response.cookies['flash'] = 'The specified email could not be found.'
+
+            return response
+
+
+@app.route('/activate_account')
+async def activate_account(request):
+    link = ActiveLink.get_or_none(link=request.args.get('link', ''))
+    if link:
+        link.activate()
+        response = redirect('/login')
+        response.cookies['flash'] = 'Your account has been activated!'
+        return response
+
+    else:
+        raise Forbidden('The activation link was not valid.')
+
 
 @app.route('/profile')
 @authorized()
@@ -239,6 +289,7 @@ async def book(request):
     else:
         return render_template('book.html', bestseller=bestseller, user=user)
 
+
 @app.route('/book_edit', methods=["GET", "POST"])
 async def book_edit(request):
     user = User.load_if_logged_in(request)
@@ -250,7 +301,8 @@ async def book_edit(request):
 
     else:
         if request.method == "POST":
-            description = request.form['description'][0] if "description" in request.form.keys() else bestseller.description
+            description = request.form['description'][0] if "description" in request.form.keys(
+            ) else bestseller.description
             title = request.form['title'][0] if "title" in request.form.keys() else bestseller.title
             author_name = request.form['author'][0] if 'author' in request.form.keys() else None
             author = Author.get_author(author_name)
@@ -258,11 +310,13 @@ async def book_edit(request):
                 author_data = {'name': author_name}
                 author = models.Author.create(**author_data)
 
-            Bestseller.update(title=title, description=description, author=author).where(Bestseller.id == book_id).execute()
+            Bestseller.update(title=title, description=description, author=author).where(
+                Bestseller.id == book_id).execute()
 
             return redirect("/book?title={}&id={}".format(title, book_id))
         else:
             return render_template('book_edit.html', bestseller=bestseller, user=user)
+
 
 @app.route('/author_edit', methods=["GET", "POST"])
 async def author_edit(request):
@@ -288,7 +342,8 @@ async def author_edit(request):
                 death_date = author.death_date
             ethnicity = request.form['ethnicity'][0] if 'ethnicity' in keys else author.ethnicity
 
-            Author.update(name = name, birth_date=birth_date, death_date=death_date, ethnicity=ethnicity).where(Author.name == name).execute()
+            Author.update(name=name, birth_date=birth_date, death_date=death_date,
+                          ethnicity=ethnicity).where(Author.name == name).execute()
 
             return redirect("/author?name={}".format(name))
         else:
@@ -305,7 +360,8 @@ async def bestseller_list(request):
         raise NotFound('The specified bestseller list could not be found in our system.')
 
     else:
-        return render_template('list.html', list=bestseller_list, user=user)
+        bs_file = File.get_or_none(bestseller_list=bestseller_list)
+        return render_template('list.html', list=bestseller_list, user=user, file=bs_file)
 
 
 @app.route('/author')
@@ -346,8 +402,7 @@ async def internal_error(request, exception):
 
 @app.middleware('response')
 async def remove_flash(request, response):
-    # TODO: if new flash is set, it will get deleted!
-    if 'flash' in request.cookies:
+    if 'flash' not in response.cookies:
         del response.cookies['flash']
 
 
