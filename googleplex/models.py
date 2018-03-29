@@ -356,7 +356,50 @@ class TagBestsellerListJunction(BaseModel):
     tag = ForeignKeyField(model=Tag, on_delete='CASCADE')
 
 
+class ActiveLink(BaseModel):
+    link = TextField()
+    action = TextField()
+    user = ForeignKeyField(model=User, on_delete='CASCADE')
+    expire_time = DateTimeField()
+
+    VALID_ACTIONS = ['reset password', 'activate account']
+
+    @classmethod
+    def setup_link(cls, user, action):
+        if action not in ActiveLink.VALID_ACTIONS:
+            raise ValueError("The action '%s' is not valid" % action)
+
+        else:
+            link = gen_string(25)
+            expire_time = datetime.now() + timedelta(days=1)
+            active_link = ActiveLink.create(user=user, action=action,
+                                            link=link, expire_time=expire_time)
+
+            if action == 'reset password':
+                email = write_email('reset_password.html', user, active_link)
+                send_email(user.email, 'Reset Your Password', email)
+                message = 'You have been sent an email with a link to reset your password!'
+
+            elif action == 'activate account':
+                email = write_email('activate_account.html', user, active_link)
+                send_email(user.email, 'Activate Your Account', email)
+                message = 'You have been sent an email to activate your account!'
+
+            return message
+
+    def activate(self):
+        if self.expire_time >= datetime.now():
+            if self.action == 'reset password':
+                pass
+
+            elif self.action == 'activate account':
+                self.user.active = True
+                self.user.save()
+
+        self.delete_instance()
+
+
 MODELS = [Author, User, Bestseller, BestsellerList, BestsellerListOrdering,
-          File, Message, Search, Session, Tag, TagBestsellerListJunction]
+          File, Message, Search, Session, Tag, TagBestsellerListJunction, ActiveLink]
 
 database.create_tables(MODELS, safe=True)
