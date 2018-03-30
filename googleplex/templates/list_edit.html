@@ -14,20 +14,26 @@
 {% endblock %}
 {% block content %}
   <div class='individual_flex'>
+      <label>
+          Note: to swap books, click on one of the books, and it will be highlighted in green. Then, click on the other book. <br/>
+      </label>
       <form id="list_form" method='post'>
           <label class="form_label">
               Title:
               <input type="text" name="title" value="{{list.title}}"><br>
           </label>
+          <label class="form_label">
+              Description:
+              <textarea name="description" rows="5" value="{{list.description if list.description else ''}}" placeholder="" style="vertical-align: middle;"></textarea><br>
+          </label>
           {%- for book in list.bestsellers -%}
             <label class="form_label">
                 Book {{loop.index}}:
-                <input type="text" name="book{{loop.index}}" value="{{book.title}}">
-                <button id="button{{loop.index}}" type="button" onclick="deleteClick();">Delete</button><br>
+                <input type="text" name="book{{loop.index}}" value="{{book.title}}"><button id="button{{loop.index}}" type="button" onclick="deleteClick(this.id);">Delete</button><br>
             </label>
           {% endfor %}
       </form>
-      <label class="form_label">
+      <label class="form_label" id="add_label">
           <button id="load" type="button">Add new book +</button><br>
       </label>
       <label>
