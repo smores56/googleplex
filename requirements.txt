@@ -6,3 +6,4 @@ peewee-async
 pyscrypt
 sanic
 XlsxWriter
+psycopg2-binary
