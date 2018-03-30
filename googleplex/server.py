@@ -7,16 +7,20 @@ from sanic.exceptions import Forbidden, NotFound, ServerError
 
 from .models import *
 from .util import *
-
+import json
 CONFIG = load_config()
 app = Sanic(__name__)
-
 
 @app.route('/')
 @app.route('/index')
 async def index(request):
     user = User.load_if_logged_in(request)
-    return render_template('index.html', user=user)
+    authors = {
+        "name" : []
+    }
+    for a in Author.select(Author.name):
+        authors['name'].append(str(a.name))
+    return render_template('index.html', user=user, results=json.dumps(authors))
 
 
 @app.route('/login', methods=['POST', 'GET'])
