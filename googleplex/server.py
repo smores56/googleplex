@@ -15,12 +15,18 @@ app = Sanic(__name__)
 @app.route('/index')
 async def index(request):
     user = User.load_if_logged_in(request)
-    authors = {
-        "name" : []
+    data = {
+        "authors" : [],
+        "lists" : [],
+        "books" : []
     }
     for a in Author.select(Author.name):
-        authors['name'].append(str(a.name))
-    return render_template('index.html', user=user, results=json.dumps(authors))
+        data['authors'].append(str(a.name))
+    for b in Bestseller.select(Bestseller.title):
+        data['books'].append(str(b.title))
+    for l in BestsellerList.select(BestsellerList.title):
+        data['lists'].append(str(l.title))
+    return render_template('index.html', user=user, results=json.dumps(data))
 
 
 @app.route('/login', methods=['POST', 'GET'])

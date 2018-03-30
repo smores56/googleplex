@@ -22,13 +22,13 @@
   </div>
 {% endblock %}
 {% block content %}
-  <input type="hidden" id="data" value="{{results}}">value="{{results}}"
+  <input type="hidden" id="data" value="{{results}}">
   <center class="search">
     <font size=8 style="padding: 10px;">Bestseller List Tracker</font>
     <div style="display: inline-flex;">
       <form action="/results" method="get">
         <input id="search" class="search_bar" type="text" size="40" name="search" placeholder="Search for lists">
-        <select name="type" class="search_dropdown">
+        <select id="type" name="type" class="search_dropdown">
           <option value="list">Lists</option>
           <option value="book">Books</option>
           <option value="author">Authors</option>
