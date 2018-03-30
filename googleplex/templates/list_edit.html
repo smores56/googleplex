@@ -6,6 +6,7 @@
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
   <link rel="stylesheet" href="/styles/author.css">
   <link rel="stylesheet" href="/styles/main.css">
+  <link rel="stylesheet" href="/styles/list.css">
 {% endblock %}
 {% block scripts %}
   <script src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
@@ -24,10 +25,10 @@
           </label>
           <label class="form_label">
               Description:
-              <textarea name="description" rows="5" value="{{list.description if list.description else ''}}" placeholder="" style="vertical-align: middle;"></textarea><br>
+              <textarea name="description" rows="5" cols="30" placeholder="" style="vertical-align: middle;">{{list.description if list.description else ''}}</textarea><br>
           </label>
           {%- for book in list.bestsellers -%}
-            <label class="form_label">
+            <label class="selectable_label">
                 Book {{loop.index}}:
                 <input type="text" name="book{{loop.index}}" value="{{book.title}}"><button id="button{{loop.index}}" type="button" onclick="deleteClick(this.id);">Delete</button><br>
             </label>

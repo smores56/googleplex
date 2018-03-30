@@ -382,10 +382,26 @@ async def bestseller_list(request):
     else:
         if request.method == "POST":
             form = request.form
-            title = request.form['title'][0]
-            for i in range(len(form) - 1):
+            for key in form:
+                print(key)
+            newTitle = request.form['title'][0]
+            description = request.form['description'][0]
+            # bestsellers = []
+            BestsellerListOrdering.clear_list(bestseller_list)
+            for i in range(len(form) - 2):
                 book_title = form['book' + str(i + 1)][0]
-                print(book_title)
+                bestseller = Bestseller.get_or_none(Bestseller.title == book_title)
+                if not bestseller:
+                    bestseller = Bestseller.create(title=book_title)
+
+                # bestsellers.append(bestseller)
+
+                BestsellerListOrdering.create(
+                    index=i + 1, bestseller=bestseller, bestseller_list=bestseller_list)
+
+
+            BestsellerList.update(title=newTitle, description=description).\
+                where(BestsellerList.id == list_id).execute()
 
             return redirect("/list?title={}&id={}".format(title, list_id))
         else:

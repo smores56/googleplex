@@ -229,6 +229,7 @@ class Bestseller(BaseModel):
         return Bestseller.get_or_none((Bestseller.title == book_title) and
                                       (Bestseller.id == book_id))
 
+
     def get_lists_with_this_bestseller(self):
         return [ordering.bestseller_list for ordering in
                 BestsellerListOrdering.select().where(BestsellerListOrdering.bestseller == self)]
@@ -244,6 +245,9 @@ class BestsellerListOrdering(BaseModel):
     bestseller = ForeignKeyField(model=Bestseller, on_delete='CASCADE')
     index = IntegerField()
 
+    @classmethod
+    def clear_list(cls, bestseller_list):
+        BestsellerListOrdering.delete().where(BestsellerListOrdering.bestseller_list == bestseller_list).execute()
 
 class File(BaseModel):
     bestseller_list = ForeignKeyField(model=BestsellerList, on_delete='CASCADE')

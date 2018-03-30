@@ -24,7 +24,7 @@
           </label>
           <label class="form_label">
               Description:
-              <textarea name="description" rows="5" value="{{bestseller.description if bestseller.description else ''}}" placeholder="" style="vertical-align: middle;"></textarea>
+              <textarea type="textarea" name="description" rows="5" cols="30" placeholder="" style="vertical-align: middle;">{{bestseller.description if bestseller.description else ''}}</textarea>
           </label>
           <label class="form_label">
               <input type="submit" value="Update Entry"/>

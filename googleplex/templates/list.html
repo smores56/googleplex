@@ -48,54 +48,42 @@ $(document).ready(function(){
       {% if list.description %}<p>{{ list.description }}</p> {% endif %}
       <p><a href="/list_edit?title={{ list.title }}&id={{ list.id }}">Edit</a></p>
 
+      <div id="tablestuff">
+        <table id="{{ list.title }}">
+          <thead valign="top">
+            <th>#</th>
+            <th>Book Title</th>
+            <th>Book Author</th>
+
+          </thead>
+          <tbody>
+          {%- for book in list.bestsellers -%}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td>
+                  <a href="/book?title={{ book.title }}&id={{ book.id }}">{{ book.title }}</a>
+              </td>
+              <td>
+                  <a href="/book?title={{ book.author.name }}&id={{ book.id }}">{{ book.author.name}}</a>
+              </td>
+              <br>
+            </tr>
+          {% endfor %}
+          </tbody>
+          </table>
+          <br><br>
+
+          {% if file %}
+            {% if file.is_image %}
+              <h3>The Image of this Bestseller List</h3>
+              <img width="70%" height="500" src="/uploaded/{{ file.bestseller_list.id }}-{{ file.name }}">
+            {% else %}
+              <h3>The File for this Bestseller List</h3>
+              <object width="70%" height="500" data="/uploaded/{{ file.bestseller_list.id }}-{{ file.name }}"></object>
+            {% endif %}
+          {% else %}
+          {% endif %}
+      </div>
   </div>
 
-  <div id="tablestuff">
-    <table id="{{ list.title }}">
-      <thead valign="top">
-        <th>#</th>
-        <th>Book Title</th>
-        <th>Book Author</th>
-
-      </thead>
-      <tbody>
-      {%- for book in list.bestsellers -%}
-        <tr>
-          <td>{{ loop.index }}</td>
-          <td>
-              <a href="/book?title={{ book.title }}&id={{ book.id }}">{{ book.title }}</a>
-          </td>
-          <td>
-              <a href="/book?title={{ book.author.name }}&id={{ book.id }}">{{ book.author.name}}</a>
-          </td>
-          <br>
-        </tr>
-      {% endfor %}
-      </tbody>
-      </table>
-      <br><br>
-
-      {% if file %}
-        {% if file.is_image %}
-          <h3>The Image of this Bestseller List</h3>
-          <img width="70%" height="500" src="/uploaded/{{ file.bestseller_list.id }}-{{ file.name }}">
-        {% else %}
-          <h3>The File for this Bestseller List</h3>
-          <object width="70%" height="500" data="/uploaded/{{ file.bestseller_list.id }}-{{ file.name }}"></object>
-        {% endif %}
-      {% else %}
-        <!-- <h3>Books on this List</h3>
-        <tbody>
-        {%- for book in list.bestsellers -%}
-          <tr>
-            <td>{{ loop.index }}:</td>
-            <td>
-                <a href="/book?title={{ book.title }}&id={{ book.id }}">{{ book.title }}</a>
-            </td>
-            <br>
-          </tr>
-        {% endfor %}
-        </tbody> -->
-      {% endif %}
-  </div>
 {% endblock %}

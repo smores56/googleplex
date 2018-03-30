@@ -6,20 +6,17 @@ var whiteBackground = "#FFFFFF";
 
 $(document).ready(function() {
   // put your Javascript here
-  labels = document.getElementsByClassName("form_label");
+  labels = document.getElementsByClassName("selectable_label");
 
   for (var i = 0; i < labels.length; i++) {
-      label = labels[i];
-      if (label.id != "add_label") {
-          label.addEventListener('click', function(event) {
-              if (this == event.target) {
-                  event.stopPropagation();
-                  return false;
-              } else {
-                  switchSelect(this);
-              }
-          }, false);
-      }
+      labels[i].addEventListener('click', function(event) {
+          if (event.target !== event.currentTarget) {
+              event.stopPropagation();
+              return false;
+          } else {
+              switchSelect(this);
+          }
+      }, false);
   }
 
   $("#load").click(function() {
@@ -31,7 +28,7 @@ $(document).ready(function() {
     label.classList.add("form_label");
     label.innerHTML = "                Book " + num_bestsellers + ":\n ";
     label.addEventListener('click', function(event) {
-        if (this == event.target) {
+        if (event.target !== event.currentTarget) {
             event.stopPropagation();
             return false;
         } else {
@@ -74,20 +71,20 @@ $(document).ready(function() {
           if (bestseller == "") {
               var logStr = "Book " + i + " is empty, please delete it before submitting the list.";
               alert(logStr);
+              return false;
           }
       }
+
+      document.forms['list_form'].submit();
   })
 
 });
 
 function switchSelect(object) {
-    console.log(object);
     if (!prevSelected) {
-        console.log("Switch select 1");
         object.style.backgroundColor = greenBackground;
         prevSelected = object;
     } else {
-        console.log("Switch select 2");
         //swap object and prevSelected here
         objectText = object.children[0].value;
         object.children[0].value = prevSelected.children[0].value;

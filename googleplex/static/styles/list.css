@@ -25,6 +25,11 @@ tr:nth-child(even) {
 
 #tablestuff {
 
-    margin-top: 180px;
-    margin-left: 140px;
+    margin-top: 90px;
+    margin-left: 70px;
+}
+
+.selectable_label {
+    display: block;
+    margin-bottom: 20px;
 }
