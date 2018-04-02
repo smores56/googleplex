@@ -53,14 +53,21 @@ $(document).ready(function(){
 
       <div id="tablestuff">
         <table id="{{ bestseller.title }}">
+          <thead valign="top" style="display:none">
+
+              <th>Author:{% if bestseller.author %} {{ bestseller.author.name }}{% else %} Unknown{% endif %}</th>
+              <th>Published: {% if bestseller.authored_date %}{{bestseller.authored_date | datetime_fmt}}{% else %}No Date{% endif %}</th>
+
+
+          </thead>
           <thead valign="top">
-            <th>#</th>
+            <th>Number</th>
             <th>List</th>
           </thead>
           <tbody>
             {%- for list in bestseller.get_lists_with_this_bestseller() -%}
             <tr>
-              <td>{{ loop.index }}:</td>
+              <td>{{ loop.index }}</td>
               <td>
               <a href="/list?title={{ list.title }}&id={{ list.id }}">{{ list.title }}</a>
               </td>
