@@ -46,7 +46,6 @@ $(document).ready(function(){
       {% if list.author or list.author_date %}Originally authored {% if list.author_date %}on {{ list.author_date }}
       {% endif %}{% if list.author %}by {{ list.author.name }}{% endif %}{% endif %}
       {% if list.description %}<p>{{ list.description }}</p> {% endif %}
-      <p><a href="/list_edit?title={{ list.title }}&id={{ list.id }}">Edit</a></p>
 
       <div id="tablestuff">
         <table id="{{ list.title }}">
@@ -71,7 +70,8 @@ $(document).ready(function(){
           {% endfor %}
           </tbody>
           </table>
-          <br><br>
+
+
 
           {% if file %}
             {% if file.is_image %}
@@ -83,7 +83,10 @@ $(document).ready(function(){
             {% endif %}
           {% else %}
           {% endif %}
+
       </div>
+       <br><br>
+          <a href="/list_edit?title={{ list.title }}&id={{ list.id }}">Edit</a>
   </div>
 
 {% endblock %}
