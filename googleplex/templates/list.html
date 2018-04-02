@@ -50,7 +50,7 @@ $(document).ready(function(){
       <div id="tablestuff">
         <table id="{{ list.title }}">
           <thead valign="top">
-            <th>#</th>
+            <th>Number</th>
             <th>Book Title</th>
             <th>Book Author</th>
 
@@ -63,7 +63,9 @@ $(document).ready(function(){
                   <a href="/book?title={{ book.title }}&id={{ book.id }}">{{ book.title }}</a>
               </td>
               <td>
+                 {%if book.author.name %}
                   <a href="/book?title={{ book.author.name }}&id={{ book.id }}">{{ book.author.name}}</a>
+                  {% else %}Unknown Author{% endif %}
               </td>
               <br>
             </tr>
