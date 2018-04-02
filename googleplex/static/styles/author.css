@@ -10,3 +10,33 @@
     display: block;
     margin-bottom: 20px;
 }
+
+table {
+    position: absolute;
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 70%;
+    margin-bottom: 100px;
+
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+#tablestuff {
+
+    margin-top: 20px;
+    margin-left: 70px;
+}
+
+.selectable_label {
+    display: block;
+    margin-bottom: 20px;
+}
