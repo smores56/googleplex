@@ -3,6 +3,16 @@ $(document).ready(function() {
   // $("div").slice(0, 2).show(); // select the first ten
 
   var num_bestsellers = 1;
+  var data  = JSON.parse($(" #data ").val());
+
+  for (i = 1; i < num_bestsellers + 1; i++) {
+    $("#title" + i).autocomplete({
+      source: data['books']
+    });
+    $("#author" + i).autocomplete({
+      source: data['authors']
+    });
+  }
 
   $("#load").click(function() {
     num_bestsellers++;
@@ -59,7 +69,6 @@ $(document).ready(function() {
       }
     });
   });
-
 
   $('#remove').on('click', function() {
     for (i = 0; i < 3; i++) {

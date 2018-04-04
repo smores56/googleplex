@@ -433,17 +433,17 @@ async def logout(request):
 
 @app.exception(NotFound)
 async def page_not_found(request, exception):
-    return render_template('page_not_found.html', error=str(exception))
+    return render_template('page_not_found.html', error=str(exception), autoResults=json.dumps(data))
 
 
 @app.exception(Forbidden)
 async def access_forbidden(request, exception):
-    return render_template('access_forbidden.html', error=str(exception))
+    return render_template('access_forbidden.html', error=str(exception), autoResults=json.dumps(data))
 
 
 @app.exception(ServerError)
 async def internal_error(request, exception):
-    return render_template('internal_error.html', error=str(exception))
+    return render_template('internal_error.html', error=str(exception), autoResults=json.dumps(data))
 
 
 @app.middleware('response')

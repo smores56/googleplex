@@ -1,7 +1,5 @@
 $(document).ready(function() {
-    console.log($(" #data ").val())
     var data  = JSON.parse($(" #data ").val());
-    console.log($( '#type option:selected').text())
 
     $( "#search" ).autocomplete({
                source: data['lists']
