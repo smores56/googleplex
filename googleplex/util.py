@@ -140,3 +140,18 @@ def send_email(recipient, subject, content):
             lambda _: asyncio.ensure_future(smtp.login(config['EMAIL_USER'], config['EMAIL_PASS']),
                                             loop=loop).add_done_callback(
                 lambda _: asyncio.ensure_future(smtp.send_message(message), loop=loop))))
+
+def autocomplete():
+    data = {
+        "authors" : [],
+        "lists" : [],
+        "books" : []
+    }
+    for a in models.Author.select(models.Author.name):
+        data['authors'].append(str(a.name))
+    for b in models.Bestseller.select(models.Bestseller.title):
+        data['books'].append(str(b.title))
+    for l in models.BestsellerList.select(models.BestsellerList.title):
+        data['lists'].append(str(l.title))
+    return data
+

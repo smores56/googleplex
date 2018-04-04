@@ -11,22 +11,14 @@ import json
 CONFIG = load_config()
 app = Sanic(__name__)
 
+data = autocomplete()
+
+
 @app.route('/')
 @app.route('/index')
 async def index(request):
     user = User.load_if_logged_in(request)
-    data = {
-        "authors" : [],
-        "lists" : [],
-        "books" : []
-    }
-    for a in Author.select(Author.name):
-        data['authors'].append(str(a.name))
-    for b in Bestseller.select(Bestseller.title):
-        data['books'].append(str(b.title))
-    for l in BestsellerList.select(BestsellerList.title):
-        data['lists'].append(str(l.title))
-    return render_template('index.html', user=user, results=json.dumps(data))
+    return render_template('index.html', user=user, autoResults=json.dumps(data))
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -41,7 +33,7 @@ async def login(request):
     if request.method == 'GET':
         flash = request.cookies.pop('flash', None)
         user = User.load_if_logged_in(request)
-        return redirect('/') if user else render_template('login.html', flash=flash, user=user)
+        return redirect('/') if user else render_template('login.html', flash=flash, user=user, autoResults=json.dumps(data))
 
     else:
         email = request.form.get('email')
@@ -101,7 +93,7 @@ async def registration(request):
         user = User.load_if_logged_in(request)
         flash = request.cookies.get('flash', None)
         return redirect('/') if user else render_template('registration.html',
-                                                          user=user, flash=flash)
+                                                          user=user, flash=flash, autoResults=json.dumps(data))
 
     else:
         user, error = User.register(request.form)
@@ -132,7 +124,7 @@ async def password_reset(request):
 
         else:
             return render_template('password_reset.html', flash=request.cookies.get('flash'),
-                                   link=active_link)
+                                   link=active_link, autoResults=json.dumps(data))
 
     else:
         active_link_str = request.form.get('link', '')
@@ -185,14 +177,14 @@ async def activate_account(request):
 @app.route('/profile')
 @authorized()
 async def profile(request, user):
-    return render_template('profile.html', user=user)
+    return render_template('profile.html', user=user, autoResults=json.dumps(data))
 
 
 @app.route('/submit', methods=['GET', 'POST'])
 @authorized()
 async def submit(request, user):
     if request.method == 'GET':
-        return render_template('submit.html', user=user)
+        return render_template('submit.html', user=user, autoResults=json.dumps(data))
 
     else:
         list_type = request.args.get('type', 'manual')
@@ -216,7 +208,7 @@ async def submit(request, user):
 @authorized()
 async def manual_submit(request, user):
     if request.method == 'GET':
-        return render_template('manual_submit.html', user=user)
+        return render_template('manual_submit.html', user=user, autoResults=json.dumps(data))
 
     else:
         return json({'list_id': BestsellerList.from_json(request.json, user).id})
@@ -267,7 +259,7 @@ async def preview(request, user):
             vals['image_path'] = bs_image.path.split('/', 2)[2]
             vals['image_name'] = bs_image.name
 
-        return render_template('preview.html', user=user, **vals)
+        return render_template('preview.html', user=user, **vals, autoResults=json.dumps(data))
 
 
 @app.route('/results')
@@ -284,7 +276,7 @@ async def results(request):
         print("here 1")
         results = Bestseller.search(search)
 
-    return render_template('results.html', user=user, **results)
+    return render_template('results.html', user=user, **results, autoResults=json.dumps(data))
 
 
 @app.route('/book')
@@ -297,7 +289,7 @@ async def book(request):
         raise NotFound('The specified bestseller could not be found in our system.')
 
     else:
-        return render_template('book.html', bestseller=bestseller, user=user)
+        return render_template('book.html', bestseller=bestseller, user=user, autoResults=json.dumps(data))
 
 
 @app.route('/book_edit', methods=["GET", "POST"])
@@ -331,7 +323,7 @@ async def book_edit(request):
 
             return redirect("/book?title={}&id={}".format(title, book_id))
         else:
-            return render_template('book_edit.html', bestseller=bestseller, user=user)
+            return render_template('book_edit.html', bestseller=bestseller, user=user, autoResults=json.dumps(data))
 
 
 @app.route('/author_edit', methods=["GET", "POST"])
@@ -363,7 +355,7 @@ async def author_edit(request):
 
             return redirect("/author?name={}".format(name))
         else:
-            return render_template('author_edit.html', author=author, user=user)
+            return render_template('author_edit.html', author=author, user=user, autoResults=json.dumps(data))
 
 
 @app.route('/list')
@@ -377,7 +369,7 @@ async def bestseller_list(request):
 
     else:
         bs_file = File.get_or_none(bestseller_list=bestseller_list)
-        return render_template('list.html', list=bestseller_list, user=user, file=bs_file)
+        return render_template('list.html', list=bestseller_list, user=user, file=bs_file, autoResults=json.dumps(data))
 
 
 @app.route('/list_edit', methods=["GET", "POST"])
@@ -415,7 +407,7 @@ async def bestseller_list(request):
 
             return redirect("/list?title={}&id={}".format(title, list_id))
         else:
-            return render_template('list_edit.html', list=bestseller_list, user=user)
+            return render_template('list_edit.html', list=bestseller_list, user=user, autoResults=json.dumps(data))
 
 
 @app.route('/author')
@@ -427,7 +419,7 @@ async def book(request):
         raise NotFound('The specified author could not be found in our system.')
 
     else:
-        return render_template('author.html', author=author, user=user)
+        return render_template('author.html', author=author, user=user, autoResults=json.dumps(data))
 
 
 @app.route('/logout')

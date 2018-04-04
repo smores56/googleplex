@@ -2,13 +2,6 @@
 {% block title %}Home{% endblock %}
 {% block style %}
   <link rel="stylesheet" href="/styles/index.css">
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
-  <link rel="stylesheet" href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css">
-{% endblock %}
-{% block scripts %}
-  <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
-  <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-  <script src= "scripts/index.js"></script>
 {% endblock %}
 {% block header %}
   <div id="header" class="w3-bar w3-black"> <!-- header bar -->
@@ -22,7 +15,7 @@
   </div>
 {% endblock %}
 {% block content %}
-  <input type="hidden" id="data" value="{{results}}">
+  <input type="hidden" id="data" value="{{ autoResults }}">
   <center class="search">
     <font size=8 style="padding: 10px;">Bestseller List Tracker</font>
     <div style="display: inline-flex;">
