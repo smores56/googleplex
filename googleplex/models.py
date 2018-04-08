@@ -125,6 +125,9 @@ class User(BaseModel):
         except DoesNotExist as e:
             return (None, 'An unknown error occurred: %s' % e)
 
+    @property
+    def submittedLists(self):
+        return list(BestsellerList.select().where(BestsellerList.contributor == self))
 
 class BestsellerList(BaseModel):
     author = ForeignKeyField(null=True, model=Author, on_delete='SET NULL')

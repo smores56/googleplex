@@ -1,62 +1,3 @@
-/*.search {
-    display: inline-flex;
-    flex-direction: column;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);
-    margin: auto;
-}
-
-.search_bar {
-    border: 2px solid #dadada;
-    border-radius: 0px;
-    margin: 2px;
-}
-
-.search_bar:focus {
-    outline: none;
-    border-color: #9ecaed;
-    box-shadow: 0 0 10px #9ecaed;
-}
-
-.search_bar_top {
-    display: inline-flex;
-    margin: auto;
-}
-
-.search_button {
-    background-image: "static/images/search_img.png";
-    background-size: 28.29px 28.29px;
-    height: 28.29px;
-    width: 28.29px;
-    margin: 2px;
-    border: none;
-    cursor:pointer;
-    overflow: hidden;
-}
-
-.search_button:focus, .search_button:active, .search_button:hover {
-    background-image: "static/images/search_img_mouse_over.png";
-    background-size: 28.29px 28.29px;
-}
-
-.search_button_dark {
-    background-image: "static/images/search_img_dark.png";
-    background-size: 28.29px 28.29px;
-    height: 28.29px;
-    width: 28.29px;
-    margin: 2px;
-    border: none;
-    cursor:pointer;
-    overflow: hidden;
-}
-
-.search_button_dark:focus, .search_button_dark:active, .search_button_dark:hover {
-    background-image: "static/images/search_img_mouse_over_dark.png";
-    background-size: 28.29px 28.29px;
-}*/
-
 .container {
   font-family: 'Roboto', sans-serif;
   position: absolute;
@@ -69,26 +10,14 @@
   cursor: pointer;
 }
 
-.switch {
-  position: absolute;
-  width: 50%;
-  height: 100%;
-  background-color: #000;
-  transition: all 0.15s ease;
-  left: 0;
-  z-index: 1;
+.main_flex {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
 }
-
-.container.activity {
-
-  border: thin solid #000;
-}
-
-.container.activity .switch {
-  left: 50%;
-  background-color: #000;
-}
-
 
 .label {
   position: absolute;
@@ -113,32 +42,41 @@
   user-select: none;
 }
 
+.left_child {
+    height: 100%;
+    width: 50%;
+    left: 0;
+    top: 0;
+}
+
+.right_child {
+    height: 100%;
+    width: 50%;
+    right: 0;
+    top: 0;
+}
 .profile_box {
-    /*display: inline-flex;*/
     font: "Roboto";
     position: absolute;
-    top: 30%;
-    left: 50%;
+    left: 25%;
+    top: 50%;
     transform: translateX(-50%) translateY(-50%);
     margin: auto;
     background-color: #dadada;
-    overflow: hidden;
     border-radius: 10px;
-    /*padding: 10px;*/
+    padding: 10px;
 }
 
 .activity_page {
   font: "Roboto";
-  /*position: relative;
-  top: 0%;*/
-  height: 100%;
-  /*left: 50%;
-  transform: translateX(-50%) translateY(-50%);*/
+  position: absolute;
+  left: 75%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
   margin: auto;
   background-color: #dadada;
-  overflow: hidden;
   border-radius: 10px;
-  padding: 5px;
+  padding: 10px;
 }
 
 ul {

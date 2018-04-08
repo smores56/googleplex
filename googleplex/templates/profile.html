@@ -5,62 +5,33 @@
 {% block style %}
   <link rel="stylesheet" href="/styles/profile.css">
 {% endblock %}
-{% block scripts %}
-  <script src="/scripts/profile.js"></script>
-{% endblock %}
 {% block content %}
-  <!-- toggle switch -->
-  <center>
-    <div class="container" id="container" onclick="onContainerClick(this)">
-      <div class="label left unselectable" id="profileLabel" style="color: white;">Profile</div>
-      <div class="label right unselectable" id="activityLabel">Activity</div>
-      <div class="switch" id="switch"></div>
-    </div>
-    <br/>
-  </center>
+<div class='flex-container main_flex'>
+  <div class="left_child">
+      <div class="profile_box">
+          <center><b>User Information</b></center>
+        <table cellpadding=10px>
+          <tr>
+            <td>
+              <font size="2">Name:<br/></font>
+              {{user.first_name}} {{user.last_name}} <br/>
+              <font size="2">E-mail:<br/></font>
+              {{user.email}}
+            </td>
+          </tr>
+        </table>
+      </div>
+  </div>
+  <div class="right_child">
+      <div class="activity_page">
+        <center><b>Submitted Lists</b></center>
+        <div class="w3-bar-block w3-transparent">
+            {%- for list in user.submittedLists -%}
+            <div class="w3-bar-item w3-hover-black"><a href="/list?title={{list.title}}&id={{list.id}}">{{list.title}}</div>
+          {% endfor %}
+        </div>
+      </div>
+  </div>
+</div>
 
-  <!-- Information box-->
-  <center class="profile_box" id="profileTable">
-    <table cellpadding=10px>
-      <tr>
-        <td>
-          <font size="2">Username:<br/></font>
-          gburdell <br/>
-          <font size="2">Name:<br/></font>
-          George Burdell <br/>
-          <font size="2">E-mail:<br/></font>
-          gburdell@gatech.edu
-        </td>
-        <td>
-          <img src="/images/profile_picture.jpg" height=150px width=150px>
-        </td>
-      </tr>
-    </table>
-  </center>
-
-  <center id="activityPage" hidden=true>
-    <table cellspacing="150">
-      <tr>
-        <td width=400px height=750px>
-          <center class="activity_page">
-            <b>Saved Searches</b>
-            <div class="w3-bar-block w3-transparent">
-              <div class="w3-bar-item w3-hover-black">William Shakespeare</div>
-              <div class="w3-bar-item w3-hover-black">Green Eggs and Ham</div>
-            </div>
-          </center>
-        </td>
-        <td width=400px height=750px>
-          <center class="activity_page">
-            <b>Submitted Lists</b>
-            <div class="w3-bar-block w3-transparent">
-              <div class="w3-bar-item w3-hover-black">New York Times Bestsellers List: 2017</div>
-              <div class="w3-bar-item w3-hover-black">New York Times Bestsellers List: 2016</div>
-              <div class="w3-bar-item w3-hover-black">Publishers Weekly Bestsellers List: 2017</div>
-            </div>
-          </center>
-        </td>
-      </tr>
-    </table>
-  </center>
 {% endblock %}
