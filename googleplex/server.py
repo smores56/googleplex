@@ -179,6 +179,9 @@ async def activate_account(request):
 async def profile(request, user):
     return render_template('profile.html', user=user, autoResults=json.dumps(data))
 
+@app.route('/faq')
+async def faq(request):
+    return render_template('faq.html')
 
 @app.route('/submit', methods=['GET', 'POST'])
 @authorized()
