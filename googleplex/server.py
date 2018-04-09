@@ -271,12 +271,12 @@ async def results(request):
     search = request.args.get('search', '')
     searchType = request.args.get('type', 'list')
 
+    ## Get results based on type of search
     if searchType == "list":
         results = BestsellerList.search(search)
     elif searchType == "author":
         results = Author.search(search)
     elif searchType == "book":
-        print("here 1")
         results = Bestseller.search(search)
 
     return render_template('results.html', user=user, **results, autoResults=json.dumps(data))
@@ -305,25 +305,34 @@ async def book_edit(request):
         raise NotFound("The specified bestseller could not be found in our system.")
 
     else:
+        # if its a POST request, we are editing an entry in the DB
         if request.method == "POST":
+            # Get the description, title, and author name from the form, need ternaries because
+            # forms dont add <key, value> pairs for empty values
             description = request.form['description'][0] if "description" in request.form.keys(
             ) else bestseller.description
             title = request.form['title'][0] if "title" in request.form.keys() else bestseller.title
             author_name = request.form['author'][0] if 'author' in request.form.keys() else None
+
+            # Try to format the date into our format, if it fails just use the date
+            # we already have
             try:
                 published_date = datetime.strptime(request.form['published'][0], '%Y-%m-%d')
             except:
                 published_date = bestseller.authored_date
 
+            # Find the author in the DB, if they don't exist then create a new author entry
             author = Author.get_author(author_name)
             if author is None and author_name is not None:
                 author_data = {'name': author_name}
                 author = models.Author.create(**author_data)
 
+            # Update the bestseller entry
             Bestseller.update(title=title, description=description, author=author,
                               authored_date=published_date
                               ).where(Bestseller.id == book_id).execute()
 
+            # Redirect the user back to the book's entry page
             return redirect("/book?title={}&id={}".format(title, book_id))
         else:
             return render_template('book_edit.html', bestseller=bestseller, user=user, autoResults=json.dumps(data))
@@ -338,21 +347,28 @@ async def author_edit(request):
         raise NotFound('The specified author could not be found in our system.')
 
     else:
+        # if its a POST request, we are editing an entry in the DB
         if request.method == "POST":
-            print(request.form)
+            # Get the name of the author
             keys = request.form.keys()
             name = request.form['name'][0] if 'name' in keys else author.name
+
+            # Try to translate the date into our format, if it fails fallback to the date in the DB
             try:
                 birth_date = datetime.strptime(request.form['birth_date'][0], '%Y-%m-%d')
             except:
                 birth_date = author.birth_date
 
+            # Try to translate the date into our format, if it fails fallback to the date in the DB
             try:
                 death_date = datetime.strptime(request.form['death_date'][0], '%Y-%m-%d')
             except:
                 death_date = author.death_date
+
+            # Get the ethnicity of the author
             ethnicity = request.form['ethnicity'][0] if 'ethnicity' in keys else author.ethnicity
 
+            # Update the entry and redirect the user to the author's entry page
             Author.update(name=name, birth_date=birth_date, death_date=death_date,
                           ethnicity=ethnicity).where(Author.name == name).execute()
 
@@ -385,26 +401,28 @@ async def bestseller_list(request):
         raise NotFound('The specified bestseller list could not be found in our system.')
 
     else:
+        # if its a POST request, we are editing an entry in the DB
         if request.method == "POST":
             form = request.form
-            for key in form:
-                print(key)
+            # Get the list title and description
             newTitle = request.form['title'][0]
-            description = request.form['description'][0]
-            # bestsellers = []
+            description = request.form['description'][0] if 'description' in form.keys() else bestseller_list.name
+
+            # Empty the bestseller list so we can add in the edited list
             BestsellerListOrdering.clear_list(bestseller_list)
+
+            # Loop through all the book titles, if the book does not exist add an entry
+            # Add an entry to link the book to the list
             for i in range(len(form) - 2):
                 book_title = form['book' + str(i + 1)][0]
                 bestseller = Bestseller.get_or_none(Bestseller.title == book_title)
                 if not bestseller:
                     bestseller = Bestseller.create(title=book_title)
 
-                # bestsellers.append(bestseller)
-
                 BestsellerListOrdering.create(
                     index=i + 1, bestseller=bestseller, bestseller_list=bestseller_list)
 
-
+            # Update the list and redirect the user back to the list's page
             BestsellerList.update(title=newTitle, description=description).\
                 where(BestsellerList.id == list_id).execute()
 
