@@ -5,14 +5,13 @@ $(document).ready(function() {
   var num_bestsellers = 1;
   var data  = JSON.parse($(" #data ").val());
 
-  for (i = 1; i < num_bestsellers + 1; i++) {
-    $("#title" + i).autocomplete({
+    $(".title").autocomplete({
       source: data['books']
     });
-    $("#author" + i).autocomplete({
+    $(".author").autocomplete({
       source: data['authors']
     });
-  }
+
 
   $("#load").click(function() {
     num_bestsellers++;
@@ -22,24 +21,31 @@ $(document).ready(function() {
               <tr>
                 <td>
                   <span class="col-lg-3" style="text-align:left">Title: </span>
-                  <input type="text" id="title` + num_bestsellers + `">
+                  <input type="text" class="title" id="title` + num_bestsellers + `">
                 </td>
               </tr>
               <tr>
                 <td>
                   <span class="col-lg-4" style="text-align:left">Author: </span>
-                  <input type="text" id="author` + num_bestsellers + `">
+                  <input type="text" class="author" id="author` + num_bestsellers + `">
                 </td>
               </tr>
               <tr>
                 <td>
                   <span class="col-lg-4" style="text-align:left">Date Published: </span>
-                  <input type="date" id="authored_date` + num_bestsellers + `">
+                  <input type="date" class="date" id="authored_date` + num_bestsellers + `">
                 </td>
               </tr>
             </table>
           </td>
         </tr>`);
+
+        $(".title").autocomplete({
+          source: data['books']
+        });
+        $(".author").autocomplete({
+          source: data['authors']
+        });
   });
 
   $('#manual-submit').submit(function(ev) {
