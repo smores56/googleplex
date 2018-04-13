@@ -1,87 +1,9 @@
-.container {
-  font-family: 'Roboto', sans-serif;
-  position: absolute;
-  top: 10%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%);
-  width: 150px;
-  height: 30px;
-  border: thin solid #000;
-  cursor: pointer;
-}
-
-.main_flex {
-    display: flex;
-    flex-direction: row;
-    position: relative;
-    height: 100vh;
-    width: 100%;
-    overflow: hidden;
-}
-
-.label {
-  position: absolute;
-  width: 50%;
-  height: 100%;
-  text-align: center;
-  padding-top: 5px;
-  z-index: 2;
-}
-
-.label.right {
-  left: 50%;
-  z-index: 2;
-}
-
-.unselectable {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-.left_child {
-    height: 100%;
-    width: 50%;
-    left: 0;
-    top: 0;
-}
-
-.right_child {
-    height: 100%;
-    width: 50%;
-    right: 0;
-    top: 0;
-}
-.profile_box {
-    font: "Roboto";
-    position: absolute;
-    left: 25%;
-    top: 50%;
-    transform: translateX(-50%) translateY(-50%);
+.center {
     margin: auto;
+    width: 50%;
+    position: relative;
+    top: 50%;
     background-color: #dadada;
     border-radius: 10px;
-    padding: 10px;
-}
-
-.activity_page {
-  font: "Roboto";
-  position: absolute;
-  left: 75%;
-  top: 50%;
-  transform: translateX(-50%) translateY(-50%);
-  margin: auto;
-  background-color: #dadada;
-  border-radius: 10px;
-  padding: 10px;
-}
-
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 10px;
-  display: block;
+    transform: translateY(50%);
 }

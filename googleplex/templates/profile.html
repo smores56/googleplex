@@ -6,32 +6,29 @@
   <link rel="stylesheet" href="/styles/profile.css">
 {% endblock %}
 {% block content %}
-<div class='flex-container main_flex'>
-  <div class="left_child">
-      <div class="profile_box">
-          <center><b>User Information</b></center>
-        <table cellpadding=10px>
-          <tr>
-            <td>
-              <font size="2">Name:<br/></font>
-              {{user.first_name}} {{user.last_name}} <br/>
-              <font size="2">E-mail:<br/></font>
-              {{user.email}}
-            </td>
-          </tr>
-        </table>
-      </div>
-  </div>
-  <div class="right_child">
-      <div class="activity_page">
-        <center><b>Submitted Lists</b></center>
+<div class='container center'>
+  <div class="row">
+    <div class="col">
+      <font size="5"><center><b>User Information</b></center></font><br />
+      <tr>
+        <td>
+          <font size="2" style="font-weight: bold;">Name:<br/></font>
+          {{user.first_name}} {{user.last_name}} <br /><br />
+          <font size="2" style="font-weight: bold;">E-mail:<br/></font>
+          {{user.email}}
+        </td>
+      </tr>
+    </div>
+    <div class="col">
+      <font size="5"><center><b>Submitted Lists</b></center></font><br />
         <div class="w3-bar-block w3-transparent">
-            {%- for list in user.submittedLists -%}
-            <div class="w3-bar-item w3-hover-black"><a href="/list?title={{list.title}}&id={{list.id}}">{{list.title}}</div>
+          {%- for list in user.submittedLists -%}
+            <div class="w3-bar-item w3-hover">
+              <font size="3"><a href="/list?title={{list.title}}&id={{list.id}}" />{{list.title}}</font>
+            </div>
           {% endfor %}
         </div>
-      </div>
+    </div>
   </div>
 </div>
-
 {% endblock %}
