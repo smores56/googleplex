@@ -38,3 +38,6 @@ label + input {
 .search_dropdown {
     border: none;
 }
+p {
+    text-align: left;
+}

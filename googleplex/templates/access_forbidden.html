@@ -2,8 +2,25 @@
 
 {% extends "overlay.html" %}
 {% block title %}Access Forbidden{% endblock %}
+{% block style %}
+<style>
+.text-center {
+  height: 90px;
+  line-height: 90px;
+  text-align: center;
+  margin: auto;
+  padding-top: 150px;
+}
+img {
+  max-width: 100px;
+  height: 100px;
+}
+</style>
+{% endblock %}
 {% block content %}
-  <h2>You are not authorized to visit this page.</h2>
+<div class="text-center">
+  <img src="images/forbidden.jpg" /><h2>You are not authorized to visit this page.</h2>
   <!-- <p>{{ error }}</p> -->
   <p><a href="/">Click here</a> to go to the home page.</p>
+</div>
 {% endblock %}

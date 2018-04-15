@@ -3,7 +3,18 @@
 {% extends "overlay.html" %}
 {% block title %}Log In{% endblock %}
 {% block style %}
-  <link rel="stylesheet" href="/styles/login.css">
+  <!-- <link rel="stylesheet" href="/styles/login.css"> -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+  <style type="text/css">
+    .login_box {
+      border-radius: 10px;
+      width: 340px;
+      margin: 50px auto;
+      background: #dadada;
+      box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+      padding: 30px;
+  }
+  </style>
 {% endblock %}
 {% block scripts %}
   <script src="/scripts/scrypt-async.min.js"></script>
@@ -13,25 +24,29 @@
   <!-- Submission box-->
   <div id="login">
     <center class="login_box" id="submissionBox">
-      <h2> Log In </h2>
+      <h2>Login</h2><br/>
       <form id="login-form" onsubmit="submit_login();" action="/login" method="post">
-          Email:
-          <input type="email" align="right" name="email" id="email">
-          <br><br><br>
-          Password:
-          <input type="password" align="right" id="password">
-          <input type="text" align="right" name="pass_hash" id="pass_hash" hidden>
-          <br><br>
-          <input type="submit" align="right" value="Log In">
-          <br><br>
-          <input type="checkbox" align="right" name="remember" value="remember"> Remember me
+        <div class="form-group">
+            <input type="email" class="form-control" placeholder="Email" name="email" id="email" required="required">
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" id="password" placeholder="Password" required="required">
+        </div>
+        <input type="text" align="right" name="pass_hash" id="pass_hash" hidden>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block">Log in</button>
+        </div>
+        <div class="clearfix">
+            <label class="pull-left checkbox-inline"><input type="checkbox" name="remember" value="remember"> Remember me</label>
+            <a href="/password_reset" class="pull-right">Forgot Password?</a>
+        </div>
       </form>
-      {% if flash %}
-      <a style="color:red;">{{ flash }}</a>
-      {% endif %}
-      <br>
-      <a href="/password_reset">Forgot your username or password?</a><br>
-      <a href="/registration">Don't have an account? Sign up here.</a>
+      <p class="text-center"><a href="/registration">Create an Account</a></p>
     </center>
   </div>
+  <center>
+    {% if flash %}
+      <a style="color:red;">{{ flash }}</a>
+    {% endif %}
+  </center>
 {% endblock %}
