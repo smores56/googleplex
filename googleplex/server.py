@@ -181,7 +181,8 @@ async def profile(request, user):
 
 @app.route('/faq')
 async def faq(request):
-    return render_template('faq.html')
+    user = User.load_if_logged_in(request)
+    return render_template('faq.html',user=user)
 
 @app.route('/submit', methods=['GET', 'POST'])
 @authorized()
