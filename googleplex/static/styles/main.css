@@ -21,6 +21,7 @@ tr:nth-child(odd)  { background-color: #CCCCFF; }
                      border: 1px solid #aacbe2; }
 .error             { background: #f0d6d6; padding: 0.5em; }*/
 .left              { width: 200px; float: left; background: #f0f0f0; }
+.right             { width: 700px; float: left; background: #f0f0f0; }
 
 .search_bar {
     border: 2px solid #dadada;
