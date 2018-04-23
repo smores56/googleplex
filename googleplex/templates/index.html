@@ -20,15 +20,22 @@
   <center class="search">
     <font size=8 style="padding: 10px;">Bestseller List Tracker</font>
     <div style="display: inline-flex;">
-      <form action="/results" method="get">
-        <input id="search" class="search_bar" type="text" size="40" name="search" placeholder="Search for lists">
-        <select id="type" name="type" class="search_dropdown">
-          <option value="list">Lists</option>
-          <option value="book">Books</option>
-          <option value="author">Authors</option>
-        </select>
-        <input type="submit" class="search_button" value="Search">
-      </form>
+      <form class="form-inline" action="/results" method="get">
+            <input id="search" class="form-control mb-2 mr-sm-2" type="text" size="40" name="search" placeholder="Search for lists">
+
+            <div class="form-check mb-2 mr-sm-2">
+            <select class="form-control form-control-sm" id="type" name="type" >
+              <option value="list">Lists</option>
+              <option value="book">Books</option>
+              <option value="author">Authors</option>
+            </select>
+            </div>
+
+            <div class="form-check mb-2 mr-sm-2">
+            <button type="submit" class="btn btn-primary btn-sm">Search</button>
+             </div>
+
+          </form>
     </div>
   </center>
 {% endblock %}

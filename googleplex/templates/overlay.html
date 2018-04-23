@@ -3,6 +3,7 @@
 <html lang="en">
   <head>
     <title>{% block title %}{% endblock %} - Bestseller Archive</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css">
@@ -12,19 +13,26 @@
   <body>
 {% block header %}
     <div id="header" class="w3-bar w3-black"> <!-- header bar -->
-      <a href="/" class="w3-bar-item w3-button w3-left w3-hover-none w3-hover-text-white w3-padding-16">Bestseller Archive</a>
-      <span class="w3-bar-item w3-left w3-hover-none w3-center">
+      <img src="/images/logo.png" class="w3-bar-item w3-button w3-left w3-hover-none w3-hover-text-white w3-padding-16" width="150px" height="70px"></img>
+      <span class="w3-bar-item w3-hover-none w3-center" style="margin-top: 10px; margin-left: 180px">
         <center class="search">
-          <div style="display: inline-flex;">
-            <form action="/results" method="get">
-              <input id="search" class="search_bar" type="text" size="40" name="search" placeholder="Search for lists">
-              <select name="type" id="type" class="search_dropdown">
-                <option value="list">Lists</option>
-                <option value="book">Books</option>
-                <option value="author">Authors</option>
-              </select>
-              <input type="submit" class="search_button" value="Search">
-            </form>
+          <div>
+            <form class="form-inline" action="/results" method="get">
+            <input id="search" class="form-control mb-2 mr-sm-2" type="text" size="40" name="search" placeholder="Search for lists">
+
+            <div class="form-check mb-2 mr-sm-2">
+            <select class="form-control form-control-sm" id="type" name="type" >
+              <option value="list">Lists</option>
+              <option value="book">Books</option>
+              <option value="author">Authors</option>
+            </select>
+            </div>
+
+            <div class="form-check mb-2 mr-sm-2">
+            <button type="submit" class="btn btn-primary btn-sm">Search</button>
+             </div>
+
+          </form>
           </div>
         </center>
       </span>
