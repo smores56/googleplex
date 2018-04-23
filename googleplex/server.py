@@ -179,10 +179,12 @@ async def activate_account(request):
 async def profile(request, user):
     return render_template('profile.html', user=user, autoResults=json.dumps(data))
 
+
 @app.route('/faq')
 async def faq(request):
     user = User.load_if_logged_in(request)
-    return render_template('faq.html',user=user)
+    return render_template('faq.html', user=user)
+
 
 @app.route('/submit', methods=['GET', 'POST'])
 @authorized()
@@ -272,7 +274,7 @@ async def results(request):
     search = request.args.get('search', '')
     searchType = request.args.get('type', 'list')
 
-    ## Get results based on type of search
+    # Get results based on type of search
     if searchType == "list":
         results = BestsellerList.search(search)
     elif searchType == "author":
@@ -407,7 +409,8 @@ async def bestseller_list(request):
             form = request.form
             # Get the list title and description
             newTitle = request.form['title'][0]
-            description = request.form['description'][0] if 'description' in form.keys() else bestseller_list.name
+            description = request.form['description'][0] if 'description' in form.keys(
+            ) else bestseller_list.name
 
             # Empty the bestseller list so we can add in the edited list
             BestsellerListOrdering.clear_list(bestseller_list)

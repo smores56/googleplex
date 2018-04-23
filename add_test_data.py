@@ -16,7 +16,8 @@ user_data = {
     'last_name': 'Burdell',
     'pass_hash': '8cdcca28a063f17be8476b8d899aa22cf9593dbd5db4b23a6d93d2a00b0c2295',
     'position': 'Living Legend',
-    'premium': True
+    'premium': True,
+    'active': True
 }
 
 models.User.create(**user_data)
