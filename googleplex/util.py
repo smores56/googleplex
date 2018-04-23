@@ -64,8 +64,8 @@ def authorized(premium=False, admin=False):
         async def decorated_function(request, *args, **kwargs):
             user = models.User.load_if_logged_in(request)  # load user if they are logged in
 
-            # the user exists and is authorized
-            if user and (not premium or user.premium) and (not admin or user.admin):
+            # the user exists, is active, and is authorized
+            if user and user.active and (not premium or user.premium) and (not admin or user.admin):
                 resp = await f(request, user, *args, **kwargs)
                 return resp
 
@@ -141,11 +141,12 @@ def send_email(recipient, subject, content):
                                             loop=loop).add_done_callback(
                 lambda _: asyncio.ensure_future(smtp.send_message(message), loop=loop))))
 
+
 def autocomplete():
     data = {
-        "authors" : [],
-        "lists" : [],
-        "books" : []
+        "authors": [],
+        "lists": [],
+        "books": []
     }
     for a in models.Author.select(models.Author.name):
         data['authors'].append(str(a.name))
@@ -154,4 +155,3 @@ def autocomplete():
     for l in models.BestsellerList.select(models.BestsellerList.title):
         data['lists'].append(str(l.title))
     return data
-
