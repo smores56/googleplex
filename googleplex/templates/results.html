@@ -11,7 +11,8 @@
   <script src="/scripts/filter_results.js"></script>
 {% endblock %}
 {% block content %}
-  <div class="left">
+
+  <div class="left" style="margin-left: 30px;margin-top: 30px;border-radius: 10px;">
     <b>Filter By Year:</b>
       <div class="checkbox" id="filter">
 				<label>
@@ -86,7 +87,7 @@
 
   </div>
 
-  <div class="right">
+  <div class="right" style="margin-left: 150px;margin-top: 30px;border-radius: 10px;">
   <h1>{{ num_results }} Search Result{% if num_results != 1 %}s{% endif %} Found{% if search | length > 0 %} For "{{ search }}"{% endif %}:</h1>
   <table class="table table-striped">
     <tbody>
