@@ -2,7 +2,8 @@ from datetime import timedelta, datetime, date
 import os
 from peewee import DoesNotExist
 from sanic import Sanic
-from sanic.response import *
+from sanic.response import redirect
+from sanic.response import json as json_resp
 from sanic.exceptions import Forbidden, NotFound, ServerError
 
 from .models import *
@@ -217,7 +218,7 @@ async def manual_submit(request, user):
         return render_template('manual_submit.html', user=user, autoResults=json.dumps(data))
 
     else:
-        return json({'list_id': BestsellerList.from_json(request.json, user).id})
+        return json_resp({'list_id': BestsellerList.from_json(request.json, user).id})
 
 
 @app.route('/preview', methods=['GET', 'POST'])
