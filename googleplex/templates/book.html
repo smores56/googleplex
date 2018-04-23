@@ -3,37 +3,33 @@
 {% extends "overlay.html" %}
 {% block title %}{{ bestseller.title }}{% endblock %}
 {% block style %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/TableExport/3.2.5/css/tableexport.min.css">
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
   <link rel="stylesheet" href="/styles/author.css">
   <link rel="stylesheet" href="/styles/main.css">
-  <link rel="stylesheet" href="/styles/book.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/TableExport/3.2.5/css/tableexport.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.12.6/xlsx.core.min.js"></script>
-  <script src="xlsx.core.js"></script>
+  <link rel="stylesheet" href="/styles/author.css">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.12.10/xlsx.core.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/TableExport/5.0.0/js/tableexport.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-  <script src="https://cdn.rawgit.com/eligrey/FileSaver.js/e9d941381475b5df8b7d7691013401e171014e89/FileSaver.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/TableExport/3.3.5/js/tableexport.min.js"></script>
 
   <script type="text/javascript">
-$(document).ready(function(){
- function ExportTable(){
-     $('table').tableExport({
-       headings: true,
-       footers: false,
-       formats: ["xlsx"],    // (String[]), filetypes for the export
-       fileName: "id",                    // (id, String), filename for the downloaded file
-       bootstrap: true,                   // (Boolean), style buttons using bootstrap
-       position: "top" ,                // (top, bottom), position of the caption element relative to table
-       ignoreRows: null,                  // (Number, Number[]), row indices to exclude from the exported file
-       ignoreCols: null,                 // (Number, Number[]), column indices to exclude from the exported file
-       ignoreCSS: ".tableexport-ignore"   // (selector, selector[]), selector(s) to exclude from the exported file
-     });
-
-
-   }
-   ExportTable();
-});
-</script>
+  $(document).ready(function(){
+    TableExport(document.getElementsByTagName("table"), {
+      headers: true,                              // (Boolean), display table headers (th or td elements) in the <thead>, (default: true)
+      footers: true,                              // (Boolean), display table footers (th or td elements) in the <tfoot>, (default: false)
+      formats: ['xlsx', 'csv', 'txt'],            // (String[]), filetype(s) for the export, (default: ['xlsx', 'csv', 'txt'])
+      filename: 'id',                             // (id, String), filename for the downloaded file, (default: 'id')
+      bootstrap: false,                           // (Boolean), style buttons using bootstrap, (default: true)
+      exportButtons: true,                        // (Boolean), automatically generate the built-in export buttons for each of the specified formats (default: true)
+      position: 'bottom',                         // (top, bottom), position of the caption element relative to table, (default: 'bottom')
+      ignoreRows: null,                           // (Number, Number[]), row indices to exclude from the exported file(s) (default: null)
+      ignoreCols: null,                           // (Number, Number[]), column indices to exclude from the exported file(s) (default: null)
+      trimWhitespace: true                        // (Boolean), remove all leading/trailing newlines, spaces, and tabs from cell text in the exported file(s) (default: false)
+  });
+  });
+  </script>
 
 {% endblock %}
 {% block content %}
